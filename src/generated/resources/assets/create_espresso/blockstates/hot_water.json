@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "create_espresso:block/translucent_water"
+    }
+  }
+}

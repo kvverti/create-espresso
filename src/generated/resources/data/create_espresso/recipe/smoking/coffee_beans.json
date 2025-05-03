@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smoking",
+  "category": "food",
+  "cookingtime": 100,
+  "experience": 0.2,
+  "ingredient": {
+    "item": "create_espresso:coffee_pit"
+  },
+  "result": {
+    "count": 1,
+    "id": "create_espresso:coffee_beans"
+  }
+}

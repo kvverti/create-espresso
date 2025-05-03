@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "create_espresso:item/pour_over_coffee_bottle"
+  }
+}

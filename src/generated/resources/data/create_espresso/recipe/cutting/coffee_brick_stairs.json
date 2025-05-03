@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "create_espresso:coffee_bricks"
+  },
+  "result": {
+    "count": 1,
+    "id": "create_espresso:coffee_brick_stairs"
+  }
+}

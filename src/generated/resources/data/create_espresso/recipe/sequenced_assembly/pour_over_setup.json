@@ -1,0 +1,83 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:glass_bottle"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "id": "create_espresso:pour_over_coffee_setup"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_espresso:incomplete_pour_over_coffee_setup"
+        },
+        {
+          "item": "create_espresso:coffee_filter"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_espresso:incomplete_pour_over_coffee_setup"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_espresso:incomplete_pour_over_coffee_setup"
+        },
+        {
+          "item": "create_espresso:coffee_grounds"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_espresso:incomplete_pour_over_coffee_setup"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "create_espresso:incomplete_pour_over_coffee_setup"
+        },
+        {
+          "item": "create_espresso:coffee_grounds"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_espresso:incomplete_pour_over_coffee_setup"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "create_espresso:incomplete_pour_over_coffee_setup"
+        },
+        {
+          "type": "fluid_stack",
+          "amount": 250,
+          "fluid": "create_espresso:hot_water"
+        }
+      ],
+      "results": [
+        {
+          "id": "create_espresso:incomplete_pour_over_coffee_setup"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "create_espresso:incomplete_pour_over_coffee_setup"
+  }
+}

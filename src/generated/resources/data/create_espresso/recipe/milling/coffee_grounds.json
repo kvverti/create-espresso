@@ -1,0 +1,14 @@
+{
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "create_espresso:coffee_beans"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "id": "create_espresso:coffee_grounds"
+    }
+  ]
+}

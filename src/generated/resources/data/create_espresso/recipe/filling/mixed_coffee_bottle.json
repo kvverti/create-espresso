@@ -1,0 +1,19 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "type": "fluid_stack",
+      "amount": 250,
+      "fluid": "create_espresso:mixed_coffee"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "id": "create_espresso:mixed_coffee_bottle"
+    }
+  ]
+}
