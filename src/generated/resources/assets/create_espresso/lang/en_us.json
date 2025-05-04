@@ -7,7 +7,7 @@
   "block.create_espresso.hot_water": "Hot Water",
   "create_espresso.drink.create_espresso.cold_brew": "Cold Brew",
   "create_espresso.drink.create_espresso.dirty_cold_brew": "Dirty Cold Brew",
-  "create_espresso.drink.create_espresso.empty": "Empty",
+  "create_espresso.drink.create_espresso.empty": "Uncraftable",
   "create_espresso.drink.create_espresso.espresso": "Espresso",
   "create_espresso.drink.create_espresso.pour_over": "Pour Over",
   "fluid_type.create_espresso.espresso": "Coffee",

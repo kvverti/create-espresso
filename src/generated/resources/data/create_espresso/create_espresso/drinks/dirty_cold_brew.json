@@ -1,4 +1,15 @@
 {
   "type": "coffee",
-  "effects": []
+  "effects": [
+    {
+      "duration": 100,
+      "id": "minecraft:poison",
+      "neoforge:cures": [
+        "protected_by_totem",
+        "honey",
+        "milk"
+      ],
+      "show_icon": true
+    }
+  ]
 }

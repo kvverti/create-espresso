@@ -5,6 +5,8 @@ import java.util.List;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 
 public final class BuiltinEspressoDrinks {
     public static final ResourceKey<Drink> EMPTY =
@@ -24,7 +26,9 @@ public final class BuiltinEspressoDrinks {
 
     static void bootstrapDrinks(BootstrapContext<Drink> ctx) {
         ctx.register(EMPTY, Drink.EMPTY);
-        ctx.register(DIRTY_COLD_BREW, new Drink(Drink.Type.COFFEE, List.of()));
+        ctx.register(DIRTY_COLD_BREW, new Drink(Drink.Type.COFFEE, List.of(
+            new MobEffectInstance(MobEffects.POISON, 100)
+        )));
         ctx.register(COLD_BREW, new Drink(Drink.Type.COFFEE, List.of()));
         ctx.register(POUR_OVER, new Drink(Drink.Type.COFFEE, List.of()));
         ctx.register(ESPRESSO, new Drink(Drink.Type.COFFEE, List.of()));
