@@ -1,0 +1,31 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "type": "fluid_stack",
+      "amount": 250,
+      "components": {
+        "create_espresso:drink": {
+          "type": "create_espresso:dirty_cold_brew"
+        }
+      },
+      "fluid": "create_espresso:drink"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "amount": 250,
+      "components": {
+        "create_espresso:drink": {
+          "type": "create_espresso:cold_brew"
+        }
+      },
+      "id": "create_espresso:drink"
+    },
+    {
+      "count": 6,
+      "id": "create_espresso:spent_coffee_grounds"
+    }
+  ]
+}

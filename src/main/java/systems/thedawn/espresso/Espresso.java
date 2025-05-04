@@ -61,8 +61,6 @@ public class Espresso {
             output.accept(EspressoItems.USED_COFFEE_FILTER);
             output.accept(EspressoItems.COFFEE_BRICK);
             output.accept(EspressoItems.HOT_WATER_BUCKET);
-            output.accept(EspressoItems.MIXED_COFFEE_BOTTLE);
-            output.accept(EspressoItems.POUR_OVER_COFFEE_BOTTLE);
         }).build());
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
@@ -72,6 +70,7 @@ public class Espresso {
         EspressoItems.ITEMS.register(modEventBus);
         EspressoFluids.FLUID_TYPES.register(modEventBus);
         EspressoFluids.FLUIDS.register(modEventBus);
+        EspressoDataComponentTypes.DATA_COMPONENT_TYPES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us

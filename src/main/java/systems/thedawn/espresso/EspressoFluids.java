@@ -43,21 +43,12 @@ public class EspressoFluids {
             .bucket(EspressoItems.HOT_WATER_BUCKET);
     }
 
-    public static final DeferredHolder<Fluid, VirtualFluid> SOURCE_MIXED_COFFEE =
-        FLUIDS.register("mixed_coffee", () -> VirtualFluid.createSource(mixedCoffeeProperties()));
-    public static final DeferredHolder<Fluid, VirtualFluid> FLOWING_MIXED_COFFEE =
-        FLUIDS.register("flowing_mixed_coffee", () -> VirtualFluid.createFlowing(mixedCoffeeProperties()));
+    public static final DeferredHolder<Fluid, VirtualFluid> SOURCE_DRINK =
+        FLUIDS.register("drink", () -> VirtualFluid.createSource(drinkProperties()));
+    public static final DeferredHolder<Fluid, VirtualFluid> FLOWING_DRINK =
+        FLUIDS.register("flowing_drink", () -> VirtualFluid.createFlowing(drinkProperties()));
 
-    private static BaseFlowingFluid.Properties mixedCoffeeProperties() {
-        return new BaseFlowingFluid.Properties(ESPRESSO, SOURCE_MIXED_COFFEE, FLOWING_MIXED_COFFEE);
-    }
-
-    public static final DeferredHolder<Fluid, VirtualFluid> SOURCE_POUR_OVER =
-        FLUIDS.register("pour_over", () -> VirtualFluid.createSource(pourOverProperties()));
-    public static final DeferredHolder<Fluid, VirtualFluid> FLOWING_POUR_OVER =
-        FLUIDS.register("flowing_pour_over", () -> VirtualFluid.createFlowing(pourOverProperties()));
-
-    private static BaseFlowingFluid.Properties pourOverProperties() {
-        return new BaseFlowingFluid.Properties(ESPRESSO, SOURCE_POUR_OVER, FLOWING_POUR_OVER);
+    private static BaseFlowingFluid.Properties drinkProperties() {
+        return new BaseFlowingFluid.Properties(ESPRESSO, SOURCE_DRINK, FLOWING_DRINK);
     }
 }

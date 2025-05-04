@@ -1,0 +1,7 @@
+{
+  "package": "systems.thedawn.espresso.mixin",
+  "required": true,
+  "mixins": [
+    "ProcessingFixMixin"
+  ]
+}

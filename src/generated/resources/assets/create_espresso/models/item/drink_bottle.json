@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "create_espresso:item/mixed_coffee_bottle"
+    "layer0": "create_espresso:item/drink_bottle"
   }
 }

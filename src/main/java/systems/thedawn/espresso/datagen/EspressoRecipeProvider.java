@@ -15,23 +15,18 @@ import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipeBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
+import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredItem;
-import systems.thedawn.espresso.Espresso;
-import systems.thedawn.espresso.EspressoFluids;
-import systems.thedawn.espresso.EspressoItems;
+import systems.thedawn.espresso.*;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.material.Fluid;
 
 public class EspressoRecipeProvider extends RecipeProvider {
     public EspressoRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
@@ -50,7 +45,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
 
         this.buildCoffeeToolRecipes(recipeOutput);
         this.buildCoffeePlantRecipes(recipeOutput);
-        this.buildMixedCoffeeRecipe(recipeOutput);
+        this.buildColdBrewCoffeeRecipe(recipeOutput);
         this.buildPourOverRecipe(recipeOutput);
 
         // coffee_beans -> coffee_grounds
@@ -164,24 +159,40 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "crafting/coffee_filter"));
     }
 
-    private void buildMixedCoffeeRecipe(RecipeOutput recipeOutput) {
-        // mix mixed coffee
-        new ProcessingRecipeBuilder<>(MixingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "mixed_coffee"))
-            .withItemIngredients(
-                Ingredient.of(EspressoItems.COFFEE_GROUNDS),
-                Ingredient.of(EspressoItems.COFFEE_GROUNDS),
-                Ingredient.of(EspressoItems.COFFEE_GROUNDS),
-                Ingredient.of(EspressoItems.COFFEE_GROUNDS))
-            .withFluidIngredients(FluidIngredient.fromFluid(EspressoFluids.SOURCE_HOT_WATER.value(), 250))
+    private void buildColdBrewCoffeeRecipe(RecipeOutput recipeOutput) {
+        var dirtyColdBrew = new DrinkComponent(BuiltinEspressoDrinks.DIRTY_COLD_BREW.location());
+        this.buildStandardDrinkBottleRecipes(recipeOutput, "dirty_cold_brew_bottle", dirtyColdBrew);
+
+        // mix dirty cold brew
+        var dirtyColdBrewFluid = new FluidStack(EspressoFluids.SOURCE_DRINK, 10);
+        dirtyColdBrewFluid.set(EspressoDataComponentTypes.DRINK, dirtyColdBrew);
+        new ProcessingRecipeBuilder<>(MixingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "dirty_cold_brew"))
+            .withItemIngredients(Ingredient.of(EspressoItems.COFFEE_GROUNDS))
+            .withFluidIngredients(FluidIngredient.fromTag(FluidTags.WATER, 10))
             .averageProcessingDuration()
-            .withItemOutputs(new ProcessingOutput(EspressoItems.SPENT_COFFEE_GROUNDS.value(), 4, 1f))
-            .withFluidOutputs(new FluidStack(EspressoFluids.SOURCE_MIXED_COFFEE, 250))
+            .withItemOutputs(new ProcessingOutput(EspressoItems.COFFEE_GROUNDS.value(), 1, 0.75f))
+            .withFluidOutputs(dirtyColdBrewFluid)
             .build(recipeOutput);
 
-        this.buildFillEmptyRecipes(recipeOutput, EspressoFluids.SOURCE_MIXED_COFFEE, EspressoItems.MIXED_COFFEE_BOTTLE);
+        // compact (clean) cold brew
+        var coldBrew = new DrinkComponent(BuiltinEspressoDrinks.COLD_BREW.location());
+        this.buildStandardDrinkBottleRecipes(recipeOutput, "cold_brew_bottle", coldBrew);
+        var dirtyColdBrewInput = new FluidStack(EspressoFluids.SOURCE_DRINK, 250);
+        dirtyColdBrewInput.set(EspressoDataComponentTypes.DRINK, dirtyColdBrew);
+        var coldBrewFluid = new FluidStack(EspressoFluids.SOURCE_DRINK, 250);
+        coldBrewFluid.set(EspressoDataComponentTypes.DRINK, coldBrew);
+        new ProcessingRecipeBuilder<>(CompactingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "cold_brew"))
+            .withFluidIngredients(FluidIngredient.fromFluidStack(dirtyColdBrewInput))
+            .averageProcessingDuration()
+            .withItemOutputs(new ProcessingOutput(EspressoItems.SPENT_COFFEE_GROUNDS.value(), 6, 1f))
+            .withFluidOutputs(coldBrewFluid)
+            .build(recipeOutput);
     }
 
     private void buildPourOverRecipe(RecipeOutput recipeOutput) {
+        var pourOver = new DrinkComponent(BuiltinEspressoDrinks.POUR_OVER.location());
+        this.buildStandardDrinkBottleRecipes(recipeOutput, "pour_over_bottle", pourOver);
+
         // pour over setup
         new SequencedAssemblyRecipeBuilder(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "pour_over_setup"))
             .require(Items.GLASS_BOTTLE)
@@ -199,33 +210,38 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .build(recipeOutput);
 
         // pour over bottle from setup
+        var pourOverBottle = new ItemStack(EspressoItems.DRINK_BOTTLE.value());
+        pourOverBottle.set(EspressoDataComponentTypes.DRINK, pourOver);
         new ProcessingRecipeBuilder<>(CuttingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "pour_over_bottle"))
             .withItemIngredients(Ingredient.of(EspressoItems.POUR_OVER_COFFEE_SETUP))
             .averageProcessingDuration()
             .withItemOutputs(
-                new ProcessingOutput(EspressoItems.POUR_OVER_COFFEE_BOTTLE.value(), 1, 1f),
+                new ProcessingOutput(pourOverBottle, 1f),
                 new ProcessingOutput(EspressoItems.SPENT_COFFEE_GROUNDS.value(), 2, 1f),
                 new ProcessingOutput(EspressoItems.USED_COFFEE_FILTER.value(), 1, 1f))
             .build(recipeOutput);
-
-        this.buildFillEmptyRecipes(recipeOutput, EspressoFluids.SOURCE_POUR_OVER, EspressoItems.POUR_OVER_COFFEE_BOTTLE);
     }
 
-    private void buildFillEmptyRecipes(RecipeOutput recipeOutput, DeferredHolder<Fluid, ?> fluid, DeferredItem<?> bottle) {
+    private void buildStandardDrinkBottleRecipes(RecipeOutput recipeOutput, String name, DrinkComponent component) {
         // drain bottle
-        new ProcessingRecipeBuilder<>(EmptyingRecipe::new, fluid.getId())
-            .withItemIngredients(Ingredient.of(bottle))
-            .withFluidOutputs(new FluidStack(fluid, 250))
+        var fluidStack = new FluidStack(EspressoFluids.SOURCE_DRINK, 250);
+        fluidStack.set(EspressoDataComponentTypes.DRINK, component);
+        var bottle = new ItemStack(EspressoItems.DRINK_BOTTLE.value());
+        bottle.set(EspressoDataComponentTypes.DRINK, component);
+
+        new ProcessingRecipeBuilder<>(EmptyingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, name))
+            .withItemIngredients(DataComponentIngredient.of(false, EspressoDataComponentTypes.DRINK, component, EspressoItems.DRINK_BOTTLE))
+            .withFluidOutputs(fluidStack)
             .averageProcessingDuration()
             .withItemOutputs(new ProcessingOutput(Items.GLASS_BOTTLE, 1, 1f))
             .build(recipeOutput);
 
         // fill bottle
-        new ProcessingRecipeBuilder<>(FillingRecipe::new, bottle.getId())
-            .withFluidIngredients(FluidIngredient.fromFluid(fluid.value(), 250))
+        new ProcessingRecipeBuilder<>(FillingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, name))
+            .withFluidIngredients(FluidIngredient.fromFluidStack(fluidStack))
             .withItemIngredients(Ingredient.of(Items.GLASS_BOTTLE))
             .averageProcessingDuration()
-            .withItemOutputs(new ProcessingOutput(bottle.value(), 1, 1f))
+            .withItemOutputs(new ProcessingOutput(bottle, 1f))
             .build(recipeOutput);
     }
 }

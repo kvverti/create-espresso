@@ -1,0 +1,29 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "type": "fluid_stack",
+      "amount": 250,
+      "components": {
+        "create_espresso:drink": {
+          "type": "create_espresso:dirty_cold_brew"
+        }
+      },
+      "fluid": "create_espresso:drink"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "components": {
+        "create_espresso:drink": {
+          "type": "create_espresso:dirty_cold_brew"
+        }
+      },
+      "id": "create_espresso:drink_bottle"
+    }
+  ]
+}

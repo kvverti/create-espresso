@@ -22,10 +22,9 @@ public class EspressoItemTagsProvider extends ItemTagsProvider {
         this.tag(AllTags.AllItemTags.UPRIGHT_ON_BELT.tag)
             .add(
                 EspressoItems.COFFEE_MUG.value(),
-                EspressoItems.MIXED_COFFEE_BOTTLE.value(),
+                EspressoItems.DRINK_BOTTLE.value(),
                 EspressoItems.INCOMPLETE_POUR_OVER_COFFEE_SETUP.value(),
-                EspressoItems.POUR_OVER_COFFEE_SETUP.value(),
-                EspressoItems.POUR_OVER_COFFEE_BOTTLE.value()
+                EspressoItems.POUR_OVER_COFFEE_SETUP.value()
             );
     }
 }

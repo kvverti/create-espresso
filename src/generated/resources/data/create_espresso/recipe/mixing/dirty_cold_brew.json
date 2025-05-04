@@ -1,0 +1,29 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create_espresso:coffee_grounds"
+    },
+    {
+      "type": "fluid_tag",
+      "amount": 10,
+      "fluid_tag": "minecraft:water"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "amount": 10,
+      "components": {
+        "create_espresso:drink": {
+          "type": "create_espresso:dirty_cold_brew"
+        }
+      },
+      "id": "create_espresso:drink"
+    },
+    {
+      "chance": 0.75,
+      "id": "create_espresso:coffee_grounds"
+    }
+  ]
+}
