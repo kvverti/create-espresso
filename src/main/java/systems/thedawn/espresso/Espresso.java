@@ -12,7 +12,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -21,13 +20,16 @@ import systems.thedawn.espresso.datagen.*;
 
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -61,7 +63,20 @@ public class Espresso {
             output.accept(EspressoItems.USED_COFFEE_FILTER);
             output.accept(EspressoItems.COFFEE_BRICK);
             output.accept(EspressoItems.HOT_WATER_BUCKET);
+            // drink bottles
+            var registries = parameters.holders();
+            output.accept(drinkBottle(BuiltinEspressoDrinks.DIRTY_COLD_BREW, registries));
+            output.accept(drinkBottle(BuiltinEspressoDrinks.COLD_BREW, registries));
+            output.accept(drinkBottle(BuiltinEspressoDrinks.POUR_OVER, registries));
+            output.accept(drinkBottle(BuiltinEspressoDrinks.ESPRESSO, registries));
         }).build());
+
+    private static ItemStack drinkBottle(ResourceKey<Drink> key, HolderLookup.Provider registries) {
+        var component = new DrinkComponent(registries.holderOrThrow(key));
+        var stack = new ItemStack(EspressoItems.DRINK_BOTTLE.value());
+        stack.set(EspressoDataComponentTypes.DRINK, component);
+        return stack;
+    }
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
