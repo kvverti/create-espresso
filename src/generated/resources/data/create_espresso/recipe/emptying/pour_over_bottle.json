@@ -5,7 +5,7 @@
       "type": "neoforge:components",
       "components": {
         "create_espresso:drink": {
-          "type": "create_espresso:pour_over"
+          "drink": "create_espresso:pour_over"
         }
       },
       "items": "create_espresso:drink_bottle"
@@ -17,7 +17,7 @@
       "amount": 250,
       "components": {
         "create_espresso:drink": {
-          "type": "create_espresso:pour_over"
+          "drink": "create_espresso:pour_over"
         }
       },
       "id": "create_espresso:drink"

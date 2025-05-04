@@ -7,6 +7,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
 public final class BuiltinEspressoDrinks {
+    public static final ResourceKey<Drink> EMPTY =
+        ResourceKey.create(EspressoRegistries.DRINKS, modLoc("empty"));
     public static final ResourceKey<Drink> DIRTY_COLD_BREW =
         ResourceKey.create(EspressoRegistries.DRINKS, modLoc("dirty_cold_brew"));
     public static final ResourceKey<Drink> COLD_BREW =
@@ -21,9 +23,10 @@ public final class BuiltinEspressoDrinks {
     }
 
     static void bootstrapDrinks(BootstrapContext<Drink> ctx) {
-        ctx.register(DIRTY_COLD_BREW, new Drink(List.of()));
-        ctx.register(COLD_BREW, new Drink(List.of()));
-        ctx.register(POUR_OVER, new Drink(List.of()));
-        ctx.register(ESPRESSO, new Drink(List.of()));
+        ctx.register(EMPTY, Drink.EMPTY);
+        ctx.register(DIRTY_COLD_BREW, new Drink(Drink.Type.COFFEE, List.of()));
+        ctx.register(COLD_BREW, new Drink(Drink.Type.COFFEE, List.of()));
+        ctx.register(POUR_OVER, new Drink(Drink.Type.COFFEE, List.of()));
+        ctx.register(ESPRESSO, new Drink(Drink.Type.COFFEE, List.of()));
     }
 }

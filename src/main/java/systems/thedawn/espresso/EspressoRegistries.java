@@ -15,6 +15,6 @@ public final class EspressoRegistries {
 
     @SubscribeEvent
     public static void dataPackRegistries(DataPackRegistryEvent.NewRegistry ev) {
-        ev.dataPackRegistry(DRINKS, Drink.CODEC, Drink.CODEC);
+        ev.dataPackRegistry(DRINKS, Drink.DIRECT_CODEC, Drink.DIRECT_CODEC);
     }
 }

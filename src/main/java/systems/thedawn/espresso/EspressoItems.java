@@ -2,6 +2,7 @@ package systems.thedawn.espresso;
 
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import systems.thedawn.espresso.item.DrinkItem;
 
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -22,7 +23,7 @@ public class EspressoItems {
         new Item.Properties().stacksTo(1)
     ));
     public static final DeferredItem<?> DRINK_BOTTLE =
-        ITEMS.registerSimpleItem("drink_bottle", new Item.Properties().stacksTo(1));
+        ITEMS.registerItem("drink_bottle", DrinkItem::new, new Item.Properties().stacksTo(1));
     public static final DeferredItem<?> POUR_OVER_COFFEE_SETUP =
         ITEMS.registerSimpleItem("pour_over_coffee_setup", new Item.Properties().stacksTo(1));
     public static final DeferredItem<?> INCOMPLETE_POUR_OVER_COFFEE_SETUP =

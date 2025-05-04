@@ -16,7 +16,7 @@
       "amount": 10,
       "components": {
         "create_espresso:drink": {
-          "type": "create_espresso:dirty_cold_brew"
+          "drink": "create_espresso:dirty_cold_brew"
         }
       },
       "id": "create_espresso:drink"

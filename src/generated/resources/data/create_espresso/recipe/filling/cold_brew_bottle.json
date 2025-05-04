@@ -9,7 +9,7 @@
       "amount": 250,
       "components": {
         "create_espresso:drink": {
-          "type": "create_espresso:cold_brew"
+          "drink": "create_espresso:cold_brew"
         }
       },
       "fluid": "create_espresso:drink"
@@ -20,7 +20,7 @@
     {
       "components": {
         "create_espresso:drink": {
-          "type": "create_espresso:cold_brew"
+          "drink": "create_espresso:cold_brew"
         }
       },
       "id": "create_espresso:drink_bottle"

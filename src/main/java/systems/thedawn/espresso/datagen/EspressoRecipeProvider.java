@@ -34,7 +34,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
     }
 
     @Override
-    protected void buildRecipes(RecipeOutput recipeOutput) {
+    protected void buildRecipes(RecipeOutput recipeOutput, HolderLookup.Provider registries) {
         // water -> hot water
         new ProcessingRecipeBuilder<>(MixingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "hot_water"))
             .withFluidIngredients(FluidIngredient.fromTag(FluidTags.WATER, 10))
@@ -45,8 +45,8 @@ public class EspressoRecipeProvider extends RecipeProvider {
 
         this.buildCoffeeToolRecipes(recipeOutput);
         this.buildCoffeePlantRecipes(recipeOutput);
-        this.buildColdBrewCoffeeRecipe(recipeOutput);
-        this.buildPourOverRecipe(recipeOutput);
+        this.buildColdBrewCoffeeRecipe(recipeOutput, registries);
+        this.buildPourOverRecipe(recipeOutput, registries);
 
         // coffee_beans -> coffee_grounds
         new ProcessingRecipeBuilder<>(MillingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "coffee_grounds"))
@@ -159,8 +159,8 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "crafting/coffee_filter"));
     }
 
-    private void buildColdBrewCoffeeRecipe(RecipeOutput recipeOutput) {
-        var dirtyColdBrew = new DrinkComponent(BuiltinEspressoDrinks.DIRTY_COLD_BREW.location());
+    private void buildColdBrewCoffeeRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries) {
+        var dirtyColdBrew = new DrinkComponent(registries.holderOrThrow(BuiltinEspressoDrinks.DIRTY_COLD_BREW));
         this.buildStandardDrinkBottleRecipes(recipeOutput, "dirty_cold_brew_bottle", dirtyColdBrew);
 
         // mix dirty cold brew
@@ -175,7 +175,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .build(recipeOutput);
 
         // compact (clean) cold brew
-        var coldBrew = new DrinkComponent(BuiltinEspressoDrinks.COLD_BREW.location());
+        var coldBrew = new DrinkComponent(registries.holderOrThrow(BuiltinEspressoDrinks.COLD_BREW));
         this.buildStandardDrinkBottleRecipes(recipeOutput, "cold_brew_bottle", coldBrew);
         var dirtyColdBrewInput = new FluidStack(EspressoFluids.SOURCE_DRINK, 250);
         dirtyColdBrewInput.set(EspressoDataComponentTypes.DRINK, dirtyColdBrew);
@@ -189,8 +189,8 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .build(recipeOutput);
     }
 
-    private void buildPourOverRecipe(RecipeOutput recipeOutput) {
-        var pourOver = new DrinkComponent(BuiltinEspressoDrinks.POUR_OVER.location());
+    private void buildPourOverRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries) {
+        var pourOver = new DrinkComponent(registries.holderOrThrow(BuiltinEspressoDrinks.POUR_OVER));
         this.buildStandardDrinkBottleRecipes(recipeOutput, "pour_over_bottle", pourOver);
 
         // pour over setup

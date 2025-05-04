@@ -2,19 +2,21 @@ package systems.thedawn.espresso;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.netty.buffer.ByteBuf;
 
+import net.minecraft.core.Holder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 
-public record DrinkComponent(ResourceLocation type) {
+public record DrinkComponent(Holder<Drink> drink) {
+    public static final DrinkComponent EMPTY = new DrinkComponent(Holder.direct(Drink.EMPTY));
+
     public static final Codec<DrinkComponent> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-        ResourceLocation.CODEC.fieldOf("type").forGetter(DrinkComponent::type)
+        Drink.CODEC.fieldOf("drink").forGetter(DrinkComponent::drink)
     ).apply(inst, DrinkComponent::new));
 
-    public static final StreamCodec<ByteBuf, DrinkComponent> STREAM_CODEC = StreamCodec.composite(
-        ResourceLocation.STREAM_CODEC,
-        DrinkComponent::type,
+    public static final StreamCodec<RegistryFriendlyByteBuf, DrinkComponent> STREAM_CODEC = StreamCodec.composite(
+        Drink.STREAM_CODEC,
+        DrinkComponent::drink,
         DrinkComponent::new
     );
 }

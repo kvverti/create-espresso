@@ -131,18 +131,15 @@ public class Espresso {
     public static class DataEvents {
         @SubscribeEvent
         public static void onDataGen(GatherDataEvent ev) {
+            ev.createDatapackRegistryObjects(
+                new RegistrySetBuilder().add(EspressoRegistries.DRINKS, BuiltinEspressoDrinks::bootstrapDrinks)
+            );
             var generator = ev.getGenerator();
             var output = generator.getPackOutput();
             var existingFileHelper = ev.getExistingFileHelper();
             var lookupProvider = ev.getLookupProvider();
 
             ev.createBlockAndItemTags(EspressoBlockTagsProvider::new, EspressoItemTagsProvider::new);
-
-            generator.addProvider(ev.includeServer(), new DatapackBuiltinEntriesProvider(
-                output,
-                lookupProvider,
-                new RegistrySetBuilder().add(EspressoRegistries.DRINKS, BuiltinEspressoDrinks::bootstrapDrinks),
-                Set.of(MODID)));
 
             generator.addProvider(ev.includeClient(), new EspressoBlockStateProvider(output, existingFileHelper));
             generator.addProvider(ev.includeClient(), new EspressoItemModelProvider(output, existingFileHelper));
