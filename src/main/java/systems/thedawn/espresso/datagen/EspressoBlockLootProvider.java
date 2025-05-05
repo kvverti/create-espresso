@@ -6,12 +6,15 @@ import java.util.stream.Collectors;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import systems.thedawn.espresso.EspressoBlocks;
 import systems.thedawn.espresso.EspressoItems;
+import systems.thedawn.espresso.block.CoffeePlantBlock;
 
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 
 public class EspressoBlockLootProvider extends BlockLootSubProvider {
     public EspressoBlockLootProvider(HolderLookup.Provider provider) {
@@ -29,10 +32,24 @@ public class EspressoBlockLootProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-        this.dropOther(EspressoBlocks.COFFEE_PLANT.value(), EspressoItems.COFFEE_CHERRY);
+        this.coffeePlantDrops();
+
         this.dropSelf(EspressoBlocks.COFFEE_BRICKS.value());
         this.add(EspressoBlocks.COFFEE_BRICK_SLAB.value(), this.createSlabItemTable(EspressoBlocks.COFFEE_BRICK_SLAB.value()));
         this.dropSelf(EspressoBlocks.COFFEE_BRICK_STAIRS.value());
         this.dropSelf(EspressoBlocks.COFFEE_MUG.value());
+    }
+
+    private void coffeePlantDrops() {
+        this.dropOther(EspressoBlocks.COFFEE_PLANT.value(), EspressoItems.COFFEE_CHERRY);
+        var lootTable = this.createCropDrops(
+            EspressoBlocks.GROWN_COFFEE_PLANT.value(),
+            EspressoItems.COFFEE_CHERRY.value(),
+            EspressoItems.COFFEE_CHERRY.value(),
+            LootItemBlockStatePropertyCondition.hasBlockStateProperties(EspressoBlocks.GROWN_COFFEE_PLANT.value())
+                .setProperties(StatePropertiesPredicate.Builder.properties()
+                    .hasProperty(CoffeePlantBlock.AGE, CoffeePlantBlock.MAX_AGE))
+        );
+        this.add(EspressoBlocks.GROWN_COFFEE_PLANT.value(), lootTable);
     }
 }

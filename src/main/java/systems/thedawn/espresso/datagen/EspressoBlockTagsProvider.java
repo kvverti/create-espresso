@@ -2,6 +2,7 @@ package systems.thedawn.espresso.datagen;
 
 import java.util.concurrent.CompletableFuture;
 
+import com.simibubi.create.AllTags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoBlocks;
@@ -24,5 +25,8 @@ public class EspressoBlockTagsProvider extends BlockTagsProvider {
                 EspressoBlocks.COFFEE_BRICK_SLAB.value(),
                 EspressoBlocks.COFFEE_BRICK_STAIRS.value()
             );
+        this.tag(AllTags.AllBlockTags.NON_HARVESTABLE.tag)
+            .replace(false)
+            .add(EspressoBlocks.COFFEE_PLANT.value());
     }
 }

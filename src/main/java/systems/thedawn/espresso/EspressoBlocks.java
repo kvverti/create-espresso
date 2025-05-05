@@ -18,17 +18,29 @@ public class EspressoBlocks {
         BlockBehaviour.Properties.of().liquid().replaceable().mapColor(MapColor.WATER)
     ));
 
-    public static final DeferredBlock<CoffeePlantBlock> COFFEE_PLANT = BLOCKS.registerBlock(
-        "coffee_plant",
-        CoffeePlantBlock::new,
-        BlockBehaviour.Properties.of()
+    public static final DeferredBlock<CoffeePlantBlock> GROWN_COFFEE_PLANT;
+    public static final DeferredBlock<CoffeePlantBlock> COFFEE_PLANT;
+
+    static {
+        var coffeePlantProps = BlockBehaviour.Properties.of()
+            .randomTicks()
             .instabreak()
             .noOcclusion()
             .noCollission()
             .isViewBlocking((state, level, pos) -> false)
             .isSuffocating((state, level, pos) -> false)
-            .sound(SoundType.CROP)
-    );
+            .sound(SoundType.CROP);
+        GROWN_COFFEE_PLANT = BLOCKS.registerBlock(
+            "grown_coffee_plant",
+            props -> new CoffeePlantBlock(null, props),
+            coffeePlantProps
+        );
+        COFFEE_PLANT = BLOCKS.registerBlock(
+            "coffee_plant",
+            props -> new CoffeePlantBlock(GROWN_COFFEE_PLANT.value(), props),
+            coffeePlantProps
+        );
+    }
 
     public static final DeferredBlock<?> COFFEE_BRICKS;
     public static final DeferredBlock<StairBlock> COFFEE_BRICK_STAIRS;

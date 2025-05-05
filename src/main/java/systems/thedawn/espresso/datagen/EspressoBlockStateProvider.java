@@ -2,7 +2,6 @@ package systems.thedawn.espresso.datagen;
 
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
-import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoBlocks;
@@ -22,6 +21,13 @@ public class EspressoBlockStateProvider extends BlockStateProvider {
         this.getVariantBuilder(EspressoBlocks.COFFEE_PLANT.value())
             .forAllStates(blockState -> {
                 var age = blockState.getValue(CoffeePlantBlock.AGE);
+                var stage_name = "block/coffee_plant_age_" + age;
+                var model = this.models().cross(stage_name, this.modLoc(stage_name)).renderType("cutout_mipped");
+                return ConfiguredModel.builder().modelFile(model).build();
+            });
+        this.getVariantBuilder(EspressoBlocks.GROWN_COFFEE_PLANT.value())
+            .forAllStates(blockState -> {
+                var age = 1 + CoffeePlantBlock.MAX_AGE + blockState.getValue(CoffeePlantBlock.AGE);
                 var stage_name = "block/coffee_plant_age_" + age;
                 var model = this.models().cross(stage_name, this.modLoc(stage_name)).renderType("cutout_mipped");
                 return ConfiguredModel.builder().modelFile(model).build();

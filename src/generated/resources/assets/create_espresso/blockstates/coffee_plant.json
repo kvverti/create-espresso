@@ -11,12 +11,6 @@
     },
     "age=3": {
       "model": "create_espresso:block/coffee_plant_age_3"
-    },
-    "age=4": {
-      "model": "create_espresso:block/coffee_plant_age_4"
-    },
-    "age=5": {
-      "model": "create_espresso:block/coffee_plant_age_5"
     }
   }
 }
