@@ -117,8 +117,9 @@ public class EspressoRecipeProvider extends RecipeProvider {
         new ProcessingRecipeBuilder<>(MixingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "mix_coffee_cherry"))
             .withItemIngredients(Ingredient.of(EspressoItems.COFFEE_CHERRY))
             .withItemOutputs(
-                new ProcessingOutput(EspressoItems.COFFEE_PASTE.value(), 1, 0.5f),
-                new ProcessingOutput(EspressoItems.COFFEE_PIT.value(), 1, 1f)
+                new ProcessingOutput(EspressoItems.COFFEE_PASTE.value(), 1, 1f),
+                new ProcessingOutput(EspressoItems.COFFEE_PASTE.value(), 1, 0.25f),
+                new ProcessingOutput(EspressoItems.COFFEE_PIT.value(), 1, 0.5f)
             )
             .build(recipeOutput);
 

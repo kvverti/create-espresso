@@ -7,10 +7,14 @@
   ],
   "results": [
     {
-      "chance": 0.5,
       "id": "create_espresso:coffee_paste"
     },
     {
+      "chance": 0.25,
+      "id": "create_espresso:coffee_paste"
+    },
+    {
+      "chance": 0.5,
       "id": "create_espresso:coffee_pit"
     }
   ]
