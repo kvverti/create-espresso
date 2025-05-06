@@ -4,6 +4,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import systems.thedawn.espresso.block.CoffeeMugBlock;
 import systems.thedawn.espresso.block.CoffeePlantBlock;
+import systems.thedawn.espresso.block.DrinkBlock;
 
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.*;
@@ -51,20 +52,22 @@ public class EspressoBlocks {
             .strength(1.0f, 3.0f)
             .mapColor(DyeColor.BROWN)
             .requiresCorrectToolForDrops();
-
         COFFEE_BRICKS = BLOCKS.registerSimpleBlock("coffee_bricks", props);
         COFFEE_BRICK_STAIRS = BLOCKS.registerBlock("coffee_brick_stairs",
             p -> new StairBlock(COFFEE_BRICKS.value().defaultBlockState(), p), props);
         COFFEE_BRICK_SLAB = BLOCKS.registerBlock("coffee_brick_slab", SlabBlock::new, props);
     }
 
-    public static final DeferredBlock<CoffeeMugBlock> COFFEE_MUG = BLOCKS.registerBlock(
-        "coffee_mug",
-        CoffeeMugBlock::new,
-        BlockBehaviour.Properties.of()
+    public static final DeferredBlock<CoffeeMugBlock> COFFEE_MUG;
+    public static final DeferredBlock<DrinkBlock> FILLED_COFFEE_MUG;
+
+    static {
+        var props = BlockBehaviour.Properties.of()
             .instabreak()
             .noOcclusion()
             .isSuffocating((state, world, pos) -> false)
-            .isViewBlocking((state, world, pos) -> false)
-    );
+            .isViewBlocking((state, world, pos) -> false);
+        COFFEE_MUG = BLOCKS.registerBlock("coffee_mug", CoffeeMugBlock::new, props);
+        FILLED_COFFEE_MUG = BLOCKS.registerBlock("filled_coffee_mug", DrinkBlock::new, props);
+    }
 }

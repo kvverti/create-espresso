@@ -39,6 +39,8 @@ public class EspressoTranslationProvider extends LanguageProvider {
         this.addItem(EspressoItems.POUR_OVER_COFFEE_SETUP, "Pour Over Coffee Setup");
         this.addBottle(Drink.Type.COFFEE, "Coffee Bottle");
         this.addBottle(Drink.Type.TEA, "Tea Bottle");
+        this.addMug(Drink.Type.COFFEE, "Coffee Mug");
+        this.addMug(Drink.Type.TEA, "Tea Mug");
         // fluids
         this.add("fluid_type.create_espresso.hot_water", "Hot Water");
         this.add("fluid_type.create_espresso.espresso", "Coffee");
@@ -52,6 +54,10 @@ public class EspressoTranslationProvider extends LanguageProvider {
 
     private void addBottle(Drink.Type type, String name) {
         this.add(DrinkItem.getDrinkDescriptionId(EspressoItems.DRINK_BOTTLE.value(), type), name);
+    }
+
+    private void addMug(Drink.Type type, String name) {
+        this.add(DrinkItem.getDrinkDescriptionId(EspressoItems.DRINK_MUG.value(), type), name);
     }
 
     private void addDrink(ResourceKey<Drink> key, String name) {

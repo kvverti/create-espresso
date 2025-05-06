@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import net.neoforged.neoforge.registries.DeferredHolder;
 import systems.thedawn.espresso.EspressoBlocks;
+import systems.thedawn.espresso.EspressoDataComponentTypes;
 import systems.thedawn.espresso.EspressoItems;
 import systems.thedawn.espresso.block.CoffeePlantBlock;
 
@@ -14,6 +15,7 @@ import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 
 public class EspressoBlockLootProvider extends BlockLootSubProvider {
@@ -33,6 +35,7 @@ public class EspressoBlockLootProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
         this.coffeePlantDrops();
+        this.drinkHolderDrops(EspressoBlocks.FILLED_COFFEE_MUG.value());
 
         this.dropSelf(EspressoBlocks.COFFEE_BRICKS.value());
         this.add(EspressoBlocks.COFFEE_BRICK_SLAB.value(), this.createSlabItemTable(EspressoBlocks.COFFEE_BRICK_SLAB.value()));
@@ -51,5 +54,12 @@ public class EspressoBlockLootProvider extends BlockLootSubProvider {
                     .hasProperty(CoffeePlantBlock.AGE, CoffeePlantBlock.MAX_AGE))
         );
         this.add(EspressoBlocks.GROWN_COFFEE_PLANT.value(), lootTable);
+    }
+
+    private void drinkHolderDrops(Block block) {
+        var lootTable = this.createSingleItemTable(block.asItem())
+            .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                .include(EspressoDataComponentTypes.DRINK.value()));
+        this.add(block, lootTable);
     }
 }

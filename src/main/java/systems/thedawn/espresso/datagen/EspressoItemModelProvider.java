@@ -30,6 +30,7 @@ public class EspressoItemModelProvider extends ItemModelProvider {
         this.basicItem(EspressoItems.COFFEE_FILTER.value());
         this.basicItem(EspressoItems.USED_COFFEE_FILTER.value());
         this.basicItem(EspressoItems.DRINK_BOTTLE.value());
+        this.basicItem(EspressoItems.DRINK_MUG.value());
         this.basicItem(EspressoItems.INCOMPLETE_POUR_OVER_COFFEE_SETUP.value());
         this.basicItem(EspressoItems.POUR_OVER_COFFEE_SETUP.value());
     }

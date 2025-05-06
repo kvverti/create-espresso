@@ -8,8 +8,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
 public record DrinkComponent(Holder<Drink> drink) {
-    public static final DrinkComponent EMPTY = new DrinkComponent(Holder.direct(Drink.EMPTY));
-
     public static final Codec<DrinkComponent> CODEC = RecordCodecBuilder.create(inst -> inst.group(
         Drink.CODEC.fieldOf("drink").forGetter(DrinkComponent::drink)
     ).apply(inst, DrinkComponent::new));

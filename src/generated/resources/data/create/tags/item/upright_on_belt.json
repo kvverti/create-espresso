@@ -2,6 +2,7 @@
   "values": [
     "create_espresso:coffee_mug",
     "create_espresso:drink_bottle",
+    "create_espresso:drink_mug",
     "create_espresso:incomplete_pour_over_coffee_setup",
     "create_espresso:pour_over_coffee_setup"
   ]

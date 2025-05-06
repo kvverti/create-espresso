@@ -83,6 +83,7 @@ public class Espresso {
     public Espresso(IEventBus modEventBus, ModContainer modContainer) {
         EspressoBlocks.BLOCKS.register(modEventBus);
         EspressoItems.ITEMS.register(modEventBus);
+        EspressoBlockEntityTypes.BLOCK_ENTITY_TYPES.register(modEventBus);
         EspressoFluids.FLUID_TYPES.register(modEventBus);
         EspressoFluids.FLUIDS.register(modEventBus);
         EspressoDataComponentTypes.DATA_COMPONENT_TYPES.register(modEventBus);

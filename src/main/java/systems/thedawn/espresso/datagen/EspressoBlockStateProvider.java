@@ -50,6 +50,16 @@ public class EspressoBlockStateProvider extends BlockStateProvider {
                     .rotationY(direction.get2DDataValue() * 90)
                     .build();
             });
+        this.getVariantBuilder(EspressoBlocks.FILLED_COFFEE_MUG.value())
+            .forAllStates(blockState -> {
+                var handedness = blockState.getValue(CoffeeMugBlock.CHIRALITY);
+                var model = handedness == HumanoidArm.LEFT ? coffee_mug_left : coffee_mug_right;
+                var direction = blockState.getValue(CoffeeMugBlock.FACING);
+                return ConfiguredModel.builder()
+                    .modelFile(model)
+                    .rotationY(direction.get2DDataValue() * 90)
+                    .build();
+            });
 
         this.registerFluidModels();
     }

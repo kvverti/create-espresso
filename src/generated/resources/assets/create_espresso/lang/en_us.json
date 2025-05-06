@@ -20,6 +20,8 @@
   "item.create_espresso.coffee_pit": "Coffee Pit",
   "item.create_espresso.drink_bottle.coffee": "Coffee Bottle",
   "item.create_espresso.drink_bottle.tea": "Tea Bottle",
+  "item.create_espresso.drink_mug.coffee": "Coffee Mug",
+  "item.create_espresso.drink_mug.tea": "Tea Mug",
   "item.create_espresso.hot_water_bucket": "Hot Water Bucket",
   "item.create_espresso.incomplete_pour_over_coffee_setup": "Incomplete Pour Over Coffee Setup",
   "item.create_espresso.pour_over_coffee_setup": "Pour Over Coffee Setup",
