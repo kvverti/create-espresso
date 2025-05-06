@@ -2,11 +2,11 @@ package systems.thedawn.espresso;
 
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import systems.thedawn.espresso.item.DrinkBottleItem;
 import systems.thedawn.espresso.item.DrinkItem;
 
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Blocks;
 
 public class EspressoItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Espresso.MODID);
@@ -24,7 +24,7 @@ public class EspressoItems {
         new Item.Properties().stacksTo(1)
     ));
     public static final DeferredItem<?> DRINK_BOTTLE =
-        ITEMS.registerItem("drink_bottle", props -> new DrinkItem(Blocks.AIR, props), new Item.Properties().stacksTo(1));
+        ITEMS.registerItem("drink_bottle", DrinkBottleItem::new, new Item.Properties().stacksTo(1));
     public static final DeferredItem<?> DRINK_MUG =
         ITEMS.registerItem("drink_mug", props -> new DrinkItem(EspressoBlocks.FILLED_COFFEE_MUG.value(), props), new Item.Properties().stacksTo(1));
     public static final DeferredItem<?> POUR_OVER_COFFEE_SETUP =

@@ -72,9 +72,9 @@ public class Espresso {
         }).build());
 
     private static ItemStack drinkBottle(ResourceKey<Drink> key, HolderLookup.Provider registries) {
-        var component = new DrinkComponent(registries.holderOrThrow(key));
+        var component = registries.holderOrThrow(key);
         var stack = new ItemStack(EspressoItems.DRINK_BOTTLE.value());
-        stack.set(EspressoDataComponentTypes.DRINK, component);
+        stack.set(EspressoDataComponentTypes.DRINK_BASE, component);
         return stack;
     }
 

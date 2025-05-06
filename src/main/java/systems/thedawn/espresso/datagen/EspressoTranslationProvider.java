@@ -2,7 +2,7 @@ package systems.thedawn.espresso.datagen;
 
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import systems.thedawn.espresso.*;
-import systems.thedawn.espresso.item.DrinkItem;
+import systems.thedawn.espresso.item.DrinkUtil;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
@@ -53,11 +53,11 @@ public class EspressoTranslationProvider extends LanguageProvider {
     }
 
     private void addBottle(Drink.Type type, String name) {
-        this.add(DrinkItem.getDrinkDescriptionId(EspressoItems.DRINK_BOTTLE.value(), type), name);
+        this.add(DrinkUtil.getDrinkDescriptionId(EspressoItems.DRINK_BOTTLE.value(), type), name);
     }
 
     private void addMug(Drink.Type type, String name) {
-        this.add(DrinkItem.getDrinkDescriptionId(EspressoItems.DRINK_MUG.value(), type), name);
+        this.add(DrinkUtil.getDrinkDescriptionId(EspressoItems.DRINK_MUG.value(), type), name);
     }
 
     private void addDrink(ResourceKey<Drink> key, String name) {

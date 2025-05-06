@@ -67,7 +67,7 @@ public class DrinkItem extends BlockItem {
     public String getDescriptionId(ItemStack stack) {
         var component = stack.get(EspressoDataComponentTypes.DRINK);
         var drinkType = component == null ? Drink.Type.COFFEE : component.drink().value().type();
-        return getDrinkDescriptionId(this, drinkType);
+        return DrinkUtil.getDrinkDescriptionId(this, drinkType);
     }
 
     @Override
@@ -83,9 +83,5 @@ public class DrinkItem extends BlockItem {
         var text = Drink.getDescription(key);
         tooltipComponents.add(text);
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-    }
-
-    public static String getDrinkDescriptionId(Item item, Drink.Type type) {
-        return String.format("%s.%s", item.getDescriptionId(), type.getSerializedName());
     }
 }

@@ -19,6 +19,7 @@ import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import systems.thedawn.espresso.*;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -161,12 +162,12 @@ public class EspressoRecipeProvider extends RecipeProvider {
     }
 
     private void buildColdBrewCoffeeRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries) {
-        var dirtyColdBrew = new DrinkComponent(registries.holderOrThrow(BuiltinEspressoDrinks.DIRTY_COLD_BREW));
+        var dirtyColdBrew = registries.holderOrThrow(BuiltinEspressoDrinks.DIRTY_COLD_BREW);
         this.buildStandardDrinkBottleRecipes(recipeOutput, "dirty_cold_brew_bottle", dirtyColdBrew);
 
         // mix dirty cold brew
         var dirtyColdBrewFluid = new FluidStack(EspressoFluids.SOURCE_DRINK, 10);
-        dirtyColdBrewFluid.set(EspressoDataComponentTypes.DRINK, dirtyColdBrew);
+        dirtyColdBrewFluid.set(EspressoDataComponentTypes.DRINK_BASE, dirtyColdBrew);
         new ProcessingRecipeBuilder<>(MixingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "dirty_cold_brew"))
             .withItemIngredients(Ingredient.of(EspressoItems.COFFEE_GROUNDS))
             .withFluidIngredients(FluidIngredient.fromTag(FluidTags.WATER, 10))
@@ -176,12 +177,12 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .build(recipeOutput);
 
         // compact (clean) cold brew
-        var coldBrew = new DrinkComponent(registries.holderOrThrow(BuiltinEspressoDrinks.COLD_BREW));
+        var coldBrew = registries.holderOrThrow(BuiltinEspressoDrinks.COLD_BREW);
         this.buildStandardDrinkBottleRecipes(recipeOutput, "cold_brew_bottle", coldBrew);
         var dirtyColdBrewInput = new FluidStack(EspressoFluids.SOURCE_DRINK, 250);
-        dirtyColdBrewInput.set(EspressoDataComponentTypes.DRINK, dirtyColdBrew);
+        dirtyColdBrewInput.set(EspressoDataComponentTypes.DRINK_BASE, dirtyColdBrew);
         var coldBrewFluid = new FluidStack(EspressoFluids.SOURCE_DRINK, 250);
-        coldBrewFluid.set(EspressoDataComponentTypes.DRINK, coldBrew);
+        coldBrewFluid.set(EspressoDataComponentTypes.DRINK_BASE, coldBrew);
         new ProcessingRecipeBuilder<>(CompactingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "cold_brew"))
             .withFluidIngredients(FluidIngredient.fromFluidStack(dirtyColdBrewInput))
             .averageProcessingDuration()
@@ -191,7 +192,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
     }
 
     private void buildPourOverRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries) {
-        var pourOver = new DrinkComponent(registries.holderOrThrow(BuiltinEspressoDrinks.POUR_OVER));
+        var pourOver = registries.holderOrThrow(BuiltinEspressoDrinks.POUR_OVER);
         this.buildStandardDrinkBottleRecipes(recipeOutput, "pour_over_bottle", pourOver);
 
         // pour over setup
@@ -212,7 +213,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
 
         // pour over bottle from setup
         var pourOverBottle = new ItemStack(EspressoItems.DRINK_BOTTLE.value());
-        pourOverBottle.set(EspressoDataComponentTypes.DRINK, pourOver);
+        pourOverBottle.set(EspressoDataComponentTypes.DRINK_BASE, pourOver);
         new ProcessingRecipeBuilder<>(CuttingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "pour_over_bottle"))
             .withItemIngredients(Ingredient.of(EspressoItems.POUR_OVER_COFFEE_SETUP))
             .averageProcessingDuration()
@@ -223,15 +224,15 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .build(recipeOutput);
     }
 
-    private void buildStandardDrinkBottleRecipes(RecipeOutput recipeOutput, String name, DrinkComponent component) {
+    private void buildStandardDrinkBottleRecipes(RecipeOutput recipeOutput, String name, Holder<Drink> component) {
         // drain bottle
         var fluidStack = new FluidStack(EspressoFluids.SOURCE_DRINK, 250);
-        fluidStack.set(EspressoDataComponentTypes.DRINK, component);
+        fluidStack.set(EspressoDataComponentTypes.DRINK_BASE, component);
         var bottle = new ItemStack(EspressoItems.DRINK_BOTTLE.value());
-        bottle.set(EspressoDataComponentTypes.DRINK, component);
+        bottle.set(EspressoDataComponentTypes.DRINK_BASE, component);
 
         new ProcessingRecipeBuilder<>(EmptyingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, name))
-            .withItemIngredients(DataComponentIngredient.of(false, EspressoDataComponentTypes.DRINK, component, EspressoItems.DRINK_BOTTLE))
+            .withItemIngredients(DataComponentIngredient.of(false, EspressoDataComponentTypes.DRINK_BASE, component, EspressoItems.DRINK_BOTTLE))
             .withFluidOutputs(fluidStack)
             .averageProcessingDuration()
             .withItemOutputs(new ProcessingOutput(Items.GLASS_BOTTLE, 1, 1f))

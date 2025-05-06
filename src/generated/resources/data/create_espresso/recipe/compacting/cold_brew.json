@@ -5,9 +5,7 @@
       "type": "fluid_stack",
       "amount": 250,
       "components": {
-        "create_espresso:drink": {
-          "drink": "create_espresso:dirty_cold_brew"
-        }
+        "create_espresso:drink_base": "create_espresso:dirty_cold_brew"
       },
       "fluid": "create_espresso:drink"
     }
@@ -17,9 +15,7 @@
     {
       "amount": 250,
       "components": {
-        "create_espresso:drink": {
-          "drink": "create_espresso:cold_brew"
-        }
+        "create_espresso:drink_base": "create_espresso:cold_brew"
       },
       "id": "create_espresso:drink"
     },

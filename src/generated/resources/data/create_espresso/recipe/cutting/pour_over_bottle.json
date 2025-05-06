@@ -9,9 +9,7 @@
   "results": [
     {
       "components": {
-        "create_espresso:drink": {
-          "drink": "create_espresso:pour_over"
-        }
+        "create_espresso:drink_base": "create_espresso:pour_over"
       },
       "id": "create_espresso:drink_bottle"
     },
