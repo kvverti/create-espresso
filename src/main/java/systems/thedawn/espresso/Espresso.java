@@ -17,6 +17,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 import systems.thedawn.espresso.datagen.*;
+import systems.thedawn.espresso.drink.BuiltinDrinkModifiers;
 import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
 import systems.thedawn.espresso.drink.Drink;
 
@@ -153,6 +154,7 @@ public class Espresso {
         public static void onDataGen(GatherDataEvent ev) {
             ev.createDatapackRegistryObjects(
                 new RegistrySetBuilder().add(EspressoRegistries.DRINKS, BuiltinEspressoDrinks::bootstrapDrinks)
+                    .add(EspressoRegistries.DRINK_MODIFIERS, BuiltinDrinkModifiers::bootstrapModifiers)
             );
             var generator = ev.getGenerator();
             var output = generator.getPackOutput();

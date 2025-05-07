@@ -4,6 +4,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import systems.thedawn.espresso.drink.Drink;
+import systems.thedawn.espresso.drink.DrinkModifier;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -13,9 +14,12 @@ import net.minecraft.resources.ResourceLocation;
 public final class EspressoRegistries {
     public static final ResourceKey<Registry<Drink>> DRINKS =
         ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "drinks"));
+    public static final ResourceKey<Registry<DrinkModifier>> DRINK_MODIFIERS =
+        ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "drink_modifiers"));
 
     @SubscribeEvent
     public static void dataPackRegistries(DataPackRegistryEvent.NewRegistry ev) {
         ev.dataPackRegistry(DRINKS, Drink.DIRECT_CODEC, Drink.DIRECT_CODEC);
+        ev.dataPackRegistry(DRINK_MODIFIERS, DrinkModifier.DIRECT_CODEC, DrinkModifier.DIRECT_CODEC);
     }
 }

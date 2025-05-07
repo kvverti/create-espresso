@@ -272,7 +272,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
         var drinkFluid = new FluidStack(EspressoFluids.SOURCE_DRINK, amount);
         var filledContainerStack = new ItemStack(filledContainer.value());
         drinkFluid.set(EspressoDataComponentTypes.DRINK_BASE, drinkBase);
-        filledContainerStack.set(EspressoDataComponentTypes.DRINK, new DrinkComponent(drinkBase, DrinkComponent.BaseLevel.SINGLE));
+        filledContainerStack.set(EspressoDataComponentTypes.DRINK, DrinkComponent.initial(drinkBase));
         new ProcessingRecipeBuilder<>(FillingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, name))
             .withItemIngredients(Ingredient.of(emptyContainer.value()))
             .withFluidIngredients(FluidIngredient.fromFluidStack(drinkFluid))
