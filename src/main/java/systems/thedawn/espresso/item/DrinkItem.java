@@ -4,8 +4,10 @@ import java.util.List;
 
 import systems.thedawn.espresso.BuiltinEspressoDrinks;
 import systems.thedawn.espresso.Drink;
+import systems.thedawn.espresso.DrinkComponent;
 import systems.thedawn.espresso.EspressoDataComponentTypes;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -42,7 +44,7 @@ public class DrinkItem extends BlockItem {
         if(!level.isClientSide()) {
             var component = stack.get(EspressoDataComponentTypes.DRINK);
             if(component != null) {
-                var effects = component.drink().value().effects();
+                var effects = component.base().value().effects();
                 for(var effectInstance : effects) {
                     livingEntity.addEffect(new MobEffectInstance(effectInstance));
                 }
@@ -66,22 +68,26 @@ public class DrinkItem extends BlockItem {
     @Override
     public String getDescriptionId(ItemStack stack) {
         var component = stack.get(EspressoDataComponentTypes.DRINK);
-        var drinkType = component == null ? Drink.Type.COFFEE : component.drink().value().type();
+        var drinkType = component == null ? Drink.Type.COFFEE : component.base().value().type();
         return DrinkUtil.getDrinkDescriptionId(this, drinkType);
     }
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         var component = stack.get(EspressoDataComponentTypes.DRINK);
-        var key = BuiltinEspressoDrinks.EMPTY;
         if(component != null) {
-            var k = component.drink().getKey();
-            if(k != null) {
-                key = k;
+            var key = component.base().getKey();
+            if(key == null) {
+                key = BuiltinEspressoDrinks.EMPTY;
+            }
+            var text = Drink.getDescription(key);
+            tooltipComponents.add(text);
+            if(component.level() != DrinkComponent.BaseLevel.SINGLE) {
+                var level = Component.translatable(component.level().getDescriptionId())
+                    .withStyle(ChatFormatting.GRAY);
+                tooltipComponents.add(level);
             }
         }
-        var text = Drink.getDescription(key);
-        tooltipComponents.add(text);
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
 }

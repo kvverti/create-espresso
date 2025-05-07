@@ -37,6 +37,7 @@ public class EspressoTranslationProvider extends LanguageProvider {
         this.addItem(EspressoItems.HOT_WATER_BUCKET, "Hot Water Bucket");
         this.addItem(EspressoItems.INCOMPLETE_POUR_OVER_COFFEE_SETUP, "Incomplete Pour Over Coffee Setup");
         this.addItem(EspressoItems.POUR_OVER_COFFEE_SETUP, "Pour Over Coffee Setup");
+        this.addItem(EspressoItems.ICE_CUBES, "Ice Cubes");
         this.addBottle(Drink.Type.COFFEE, "Coffee Bottle");
         this.addBottle(Drink.Type.TEA, "Tea Bottle");
         this.addMug(Drink.Type.COFFEE, "Coffee Mug");
@@ -50,6 +51,10 @@ public class EspressoTranslationProvider extends LanguageProvider {
         this.addDrink(BuiltinEspressoDrinks.COLD_BREW, "Cold Brew");
         this.addDrink(BuiltinEspressoDrinks.POUR_OVER, "Pour Over");
         this.addDrink(BuiltinEspressoDrinks.ESPRESSO, "Espresso");
+        // levels
+        this.addDrinkLevel(DrinkComponent.BaseLevel.SINGLE, "Single");
+        this.addDrinkLevel(DrinkComponent.BaseLevel.DOUBLE, "Double");
+        this.addDrinkLevel(DrinkComponent.BaseLevel.TRIPLE, "Triple");
     }
 
     private void addBottle(Drink.Type type, String name) {
@@ -62,5 +67,9 @@ public class EspressoTranslationProvider extends LanguageProvider {
 
     private void addDrink(ResourceKey<Drink> key, String name) {
         this.add(Drink.getDescriptionId(key), name);
+    }
+
+    private void addDrinkLevel(DrinkComponent.BaseLevel level, String name) {
+        this.add(level.getDescriptionId(), name);
     }
 }

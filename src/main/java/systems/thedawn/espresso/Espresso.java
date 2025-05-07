@@ -87,6 +87,8 @@ public class Espresso {
         EspressoFluids.FLUID_TYPES.register(modEventBus);
         EspressoFluids.FLUIDS.register(modEventBus);
         EspressoDataComponentTypes.DATA_COMPONENT_TYPES.register(modEventBus);
+        EspressoRecipeTypes.RECIPE_TYPES.register(modEventBus);
+        EspressoRecipeTypes.RECIPE_SERIALIZERS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us

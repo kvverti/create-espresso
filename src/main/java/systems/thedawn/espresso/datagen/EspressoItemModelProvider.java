@@ -33,5 +33,6 @@ public class EspressoItemModelProvider extends ItemModelProvider {
         this.basicItem(EspressoItems.DRINK_MUG.value());
         this.basicItem(EspressoItems.INCOMPLETE_POUR_OVER_COFFEE_SETUP.value());
         this.basicItem(EspressoItems.POUR_OVER_COFFEE_SETUP.value());
+        this.basicItem(EspressoItems.ICE_CUBES.value());
     }
 }
