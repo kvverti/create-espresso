@@ -52,7 +52,10 @@ public class SpoutCustomRecipeMixin {
         var input = new DrinkLevelingRecipeInput(stack, availableFluid);
         var recipe = world.getRecipeManager().getRecipeFor(EspressoRecipeTypes.DRINK_LEVEL.value(), input, world).orElse(null);
         if(recipe != null) {
-            return recipe.value().assemble(input, world.registryAccess());
+            var output = recipe.value().assemble(input, world.registryAccess());
+            input.drinkFluid().shrink(recipe.value().fillAmount());
+            stack.shrink(1);
+            return output;
         }
         return original.call(world, requiredAmount, stack, availableFluid);
     }

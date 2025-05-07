@@ -67,8 +67,6 @@ public class DrinkLevelingRecipe implements Recipe<DrinkLevelingRecipeInput> {
         if(component != null) {
             var outputStack = stack.copy();
             outputStack.set(EspressoDataComponentTypes.DRINK, component.incrementLevel());
-            input.drinkFluid().shrink(this.amount);
-            stack.shrink(1);
             return outputStack;
         }
         return ItemStack.EMPTY;
