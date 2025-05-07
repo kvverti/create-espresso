@@ -2,9 +2,7 @@ package systems.thedawn.espresso.datagen;
 
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import systems.thedawn.espresso.*;
-import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
-import systems.thedawn.espresso.drink.Drink;
-import systems.thedawn.espresso.drink.DrinkComponent;
+import systems.thedawn.espresso.drink.*;
 import systems.thedawn.espresso.item.DrinkUtil;
 
 import net.minecraft.data.PackOutput;
@@ -58,6 +56,11 @@ public class EspressoTranslationProvider extends LanguageProvider {
         this.addDrinkLevel(DrinkComponent.BaseLevel.SINGLE, "Single");
         this.addDrinkLevel(DrinkComponent.BaseLevel.DOUBLE, "Double");
         this.addDrinkLevel(DrinkComponent.BaseLevel.TRIPLE, "Triple");
+        // modifiers
+        this.addModifier(BuiltinDrinkModifiers.ICE, "Iced");
+        this.addModifier(BuiltinDrinkModifiers.MILK, "Milk");
+        this.addModifier(BuiltinDrinkModifiers.BUBBLES, "Bubbles");
+        this.addModifier(BuiltinDrinkModifiers.CHOCOLATE, "Chocolate");
     }
 
     private void addBottle(Drink.Type type, String name) {
@@ -74,5 +77,9 @@ public class EspressoTranslationProvider extends LanguageProvider {
 
     private void addDrinkLevel(DrinkComponent.BaseLevel level, String name) {
         this.add(level.getDescriptionId(), name);
+    }
+
+    private void addModifier(ResourceKey<DrinkModifier> key, String name) {
+        this.add(DrinkModifier.getDescriptionId(key), name);
     }
 }

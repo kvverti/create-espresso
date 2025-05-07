@@ -19,7 +19,8 @@
       "components": {
         "create_espresso:drink": {
           "drink": "create_espresso:cold_brew",
-          "level": "single"
+          "level": "single",
+          "modifiers": []
         }
       },
       "id": "create_espresso:drink_mug"

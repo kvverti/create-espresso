@@ -19,7 +19,8 @@
       "components": {
         "create_espresso:drink": {
           "drink": "create_espresso:pour_over",
-          "level": "single"
+          "level": "single",
+          "modifiers": []
         }
       },
       "id": "create_espresso:drink_mug"

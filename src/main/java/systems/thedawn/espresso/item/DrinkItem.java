@@ -6,6 +6,7 @@ import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
 import systems.thedawn.espresso.drink.Drink;
 import systems.thedawn.espresso.drink.DrinkComponent;
 import systems.thedawn.espresso.EspressoDataComponentTypes;
+import systems.thedawn.espresso.drink.DrinkModifier;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -86,6 +87,12 @@ public class DrinkItem extends BlockItem {
                 var level = Component.translatable(component.level().getDescriptionId())
                     .withStyle(ChatFormatting.GRAY);
                 tooltipComponents.add(level);
+            }
+            for(var modifier : component.modifiers()) {
+                if(modifier.getKey() != null) {
+                    var modifierText = DrinkModifier.getDescription(modifier.getKey());
+                    tooltipComponents.add(modifierText);
+                }
             }
         }
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);

@@ -7,11 +7,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import systems.thedawn.espresso.EspressoRegistries;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFileCodec;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.effect.MobEffectInstance;
 
@@ -27,6 +30,14 @@ public record DrinkModifier(Optional<BaseTransform> transform, List<MobEffectIns
         RegistryFileCodec.create(EspressoRegistries.DRINK_MODIFIERS, DIRECT_CODEC);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<DrinkModifier>> STREAM_CODEC =
         ByteBufCodecs.holderRegistry(EspressoRegistries.DRINK_MODIFIERS);
+
+    public static String getDescriptionId(ResourceKey<DrinkModifier> key) {
+        return "create_espresso.modifier." + key.location().toLanguageKey();
+    }
+
+    public static Component getDescription(ResourceKey<DrinkModifier> key) {
+        return Component.translatable(getDescriptionId(key)).withStyle(ChatFormatting.GRAY);
+    }
 
     public record BaseTransform(Type type, float scale) {
         public static final Codec<BaseTransform> CODEC = RecordCodecBuilder.create(inst -> inst.group(

@@ -1,6 +1,7 @@
 package systems.thedawn.espresso.drink;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -45,6 +46,11 @@ public record DrinkComponent(Holder<Drink> base, BaseLevel level, List<Holder<Dr
             case DOUBLE, TRIPLE -> BaseLevel.TRIPLE;
         };
         return new DrinkComponent(this.base, level, this.modifiers);
+    }
+
+    public DrinkComponent addModifier(Holder<DrinkModifier> modifier) {
+        var newModifiers = Stream.concat(this.modifiers.stream(), Stream.of(modifier)).toList();
+        return new DrinkComponent(this.base, this.level, newModifiers);
     }
 
     public enum BaseLevel implements StringRepresentable {
