@@ -1,0 +1,8 @@
+{
+  "type": "create_espresso:level_drink",
+  "amount": 250,
+  "drink": "create_espresso:pour_over",
+  "holder": {
+    "item": "create_espresso:drink_mug"
+  }
+}

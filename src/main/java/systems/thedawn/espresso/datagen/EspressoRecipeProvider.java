@@ -1,5 +1,6 @@
 package systems.thedawn.espresso.datagen;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe;
@@ -18,13 +19,16 @@ import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import systems.thedawn.espresso.*;
+import systems.thedawn.espresso.recipe.DrinkLevelingRecipe;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -48,6 +52,8 @@ public class EspressoRecipeProvider extends RecipeProvider {
         this.buildCoffeePlantRecipes(recipeOutput);
         this.buildColdBrewCoffeeRecipe(recipeOutput, registries);
         this.buildPourOverRecipe(recipeOutput, registries);
+        this.buildMugLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.COLD_BREW, 250);
+        this.buildMugLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.POUR_OVER, 250);
 
         // coffee_beans -> coffee_grounds
         new ProcessingRecipeBuilder<>(MillingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "coffee_grounds"))
@@ -245,5 +251,34 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .averageProcessingDuration()
             .withItemOutputs(new ProcessingOutput(bottle, 1f))
             .build(recipeOutput);
+    }
+
+    private void buildMugLevelingRecipes(RecipeOutput recipeOutput, HolderLookup.Provider registries, ResourceKey<Drink> drinkKey, int amount) {
+        this.buildDrinkLevelingRecipes(recipeOutput, registries, EspressoItems.COFFEE_MUG, EspressoItems.DRINK_MUG, drinkKey, amount);
+    }
+
+    private void buildDrinkLevelingRecipes(RecipeOutput recipeOutput,
+                                           HolderLookup.Provider registries,
+                                           Holder<? extends Item> emptyContainer,
+                                           Holder<? extends Item> filledContainer,
+                                           ResourceKey<Drink> drinkKey,
+                                           int amount) {
+        var name = drinkKey.location().getPath() + "_" + Objects.requireNonNull(filledContainer.getKey()).location().getPath();
+        // initial filling
+        var drinkBase = registries.holderOrThrow(drinkKey);
+        var drinkFluid = new FluidStack(EspressoFluids.SOURCE_DRINK, amount);
+        var filledContainerStack = new ItemStack(filledContainer.value());
+        drinkFluid.set(EspressoDataComponentTypes.DRINK_BASE, drinkBase);
+        filledContainerStack.set(EspressoDataComponentTypes.DRINK, new DrinkComponent(drinkBase, DrinkComponent.BaseLevel.SINGLE));
+        new ProcessingRecipeBuilder<>(FillingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, name))
+            .withItemIngredients(Ingredient.of(emptyContainer.value()))
+            .withFluidIngredients(FluidIngredient.fromFluidStack(drinkFluid))
+            .averageProcessingDuration()
+            .withItemOutputs(new ProcessingOutput(filledContainerStack, 1f))
+            .build(recipeOutput);
+
+        // leveling
+        var levelingRecipe = new DrinkLevelingRecipe(Ingredient.of(filledContainer.value()), drinkBase, amount);
+        recipeOutput.accept(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "drink_leveling/" + name), levelingRecipe, null);
     }
 }
