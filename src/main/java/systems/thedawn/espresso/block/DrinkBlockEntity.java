@@ -1,10 +1,9 @@
 package systems.thedawn.espresso.block;
 
-import com.mojang.datafixers.util.Pair;
 import org.jetbrains.annotations.Nullable;
-import systems.thedawn.espresso.drink.DrinkComponent;
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
 import systems.thedawn.espresso.EspressoDataComponentTypes;
+import systems.thedawn.espresso.drink.DrinkComponent;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -43,9 +42,8 @@ public class DrinkBlockEntity extends BlockEntity {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         var drinkComponent = tag.getCompound(DRINK_COMPONENT);
-        this.drinkData = DrinkComponent.CODEC.decode(NbtOps.INSTANCE, drinkComponent)
+        this.drinkData = DrinkComponent.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), drinkComponent)
             .resultOrPartial()
-            .map(Pair::getFirst)
             .orElse(null);
     }
 
@@ -53,7 +51,7 @@ public class DrinkBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         if(this.drinkData != null) {
-            var drinkCompound = DrinkComponent.CODEC.encodeStart(NbtOps.INSTANCE, this.drinkData)
+            var drinkCompound = DrinkComponent.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), this.drinkData)
                 .resultOrPartial();
             drinkCompound.ifPresent(compound -> tag.put(DRINK_COMPONENT, compound));
         }
