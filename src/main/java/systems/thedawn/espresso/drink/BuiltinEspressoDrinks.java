@@ -1,6 +1,10 @@
-package systems.thedawn.espresso;
+package systems.thedawn.espresso.drink;
 
 import java.util.List;
+
+import systems.thedawn.espresso.Espresso;
+import systems.thedawn.espresso.EspressoRegistries;
+import systems.thedawn.espresso.drink.Drink;
 
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -24,7 +28,7 @@ public final class BuiltinEspressoDrinks {
         return ResourceLocation.fromNamespaceAndPath(Espresso.MODID, name);
     }
 
-    static void bootstrapDrinks(BootstrapContext<Drink> ctx) {
+    public static void bootstrapDrinks(BootstrapContext<Drink> ctx) {
         ctx.register(EMPTY, Drink.EMPTY);
         ctx.register(DIRTY_COLD_BREW, new Drink(Drink.Type.COFFEE, List.of(
             new MobEffectInstance(MobEffects.POISON, 100)

@@ -3,6 +3,7 @@ package systems.thedawn.espresso;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
+import systems.thedawn.espresso.drink.Drink;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

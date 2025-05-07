@@ -1,4 +1,4 @@
-package systems.thedawn.espresso;
+package systems.thedawn.espresso.drink;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

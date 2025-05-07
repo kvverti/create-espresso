@@ -2,8 +2,8 @@ package systems.thedawn.espresso.item;
 
 import java.util.List;
 
-import systems.thedawn.espresso.BuiltinEspressoDrinks;
-import systems.thedawn.espresso.Drink;
+import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
+import systems.thedawn.espresso.drink.Drink;
 import systems.thedawn.espresso.EspressoDataComponentTypes;
 
 import net.minecraft.network.chat.Component;

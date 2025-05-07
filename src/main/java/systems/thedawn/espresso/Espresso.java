@@ -17,6 +17,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 import systems.thedawn.espresso.datagen.*;
+import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
+import systems.thedawn.espresso.drink.Drink;
 
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;

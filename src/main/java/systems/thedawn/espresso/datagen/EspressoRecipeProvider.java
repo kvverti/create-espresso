@@ -19,6 +19,9 @@ import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import systems.thedawn.espresso.*;
+import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
+import systems.thedawn.espresso.drink.Drink;
+import systems.thedawn.espresso.drink.DrinkComponent;
 import systems.thedawn.espresso.recipe.DrinkLevelingRecipe;
 
 import net.minecraft.core.Holder;

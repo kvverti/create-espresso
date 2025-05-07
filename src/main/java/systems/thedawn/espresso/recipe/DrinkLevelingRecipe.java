@@ -4,6 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import systems.thedawn.espresso.*;
+import systems.thedawn.espresso.drink.Drink;
+import systems.thedawn.espresso.drink.DrinkComponent;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;

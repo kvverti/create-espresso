@@ -2,6 +2,8 @@ package systems.thedawn.espresso;
 
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import systems.thedawn.espresso.drink.Drink;
+import systems.thedawn.espresso.drink.DrinkComponent;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;

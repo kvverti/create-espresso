@@ -1,6 +1,6 @@
 package systems.thedawn.espresso.item;
 
-import systems.thedawn.espresso.Drink;
+import systems.thedawn.espresso.drink.Drink;
 
 import net.minecraft.world.item.Item;
 

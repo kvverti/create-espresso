@@ -2,7 +2,7 @@ package systems.thedawn.espresso.block;
 
 import com.mojang.datafixers.util.Pair;
 import org.jetbrains.annotations.Nullable;
-import systems.thedawn.espresso.DrinkComponent;
+import systems.thedawn.espresso.drink.DrinkComponent;
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
 import systems.thedawn.espresso.EspressoDataComponentTypes;
 

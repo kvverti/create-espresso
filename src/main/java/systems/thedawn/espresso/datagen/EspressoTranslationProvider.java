@@ -2,6 +2,9 @@ package systems.thedawn.espresso.datagen;
 
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import systems.thedawn.espresso.*;
+import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
+import systems.thedawn.espresso.drink.Drink;
+import systems.thedawn.espresso.drink.DrinkComponent;
 import systems.thedawn.espresso.item.DrinkUtil;
 
 import net.minecraft.data.PackOutput;

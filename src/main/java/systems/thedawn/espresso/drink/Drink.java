@@ -1,9 +1,10 @@
-package systems.thedawn.espresso;
+package systems.thedawn.espresso.drink;
 
 import java.util.List;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import systems.thedawn.espresso.EspressoRegistries;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
