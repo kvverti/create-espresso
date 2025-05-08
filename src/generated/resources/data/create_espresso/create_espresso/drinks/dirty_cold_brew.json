@@ -5,6 +5,11 @@
       "duration": 100,
       "id": "minecraft:poison",
       "show_icon": true
+    },
+    {
+      "duration": 100,
+      "id": "minecraft:nausea",
+      "show_icon": true
     }
   ]
 }

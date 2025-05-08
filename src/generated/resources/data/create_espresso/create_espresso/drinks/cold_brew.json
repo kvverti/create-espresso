@@ -1,4 +1,10 @@
 {
   "type": "coffee",
-  "effects": []
+  "effects": [
+    {
+      "duration": 1200,
+      "id": "minecraft:speed",
+      "show_icon": true
+    }
+  ]
 }

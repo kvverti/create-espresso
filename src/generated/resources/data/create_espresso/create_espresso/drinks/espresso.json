@@ -1,4 +1,15 @@
 {
   "type": "coffee",
-  "effects": []
+  "effects": [
+    {
+      "duration": 3000,
+      "id": "minecraft:speed",
+      "show_icon": true
+    },
+    {
+      "duration": 3000,
+      "id": "minecraft:regeneration",
+      "show_icon": true
+    }
+  ]
 }

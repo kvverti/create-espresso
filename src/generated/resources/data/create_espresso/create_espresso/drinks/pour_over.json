@@ -1,4 +1,15 @@
 {
   "type": "coffee",
-  "effects": []
+  "effects": [
+    {
+      "duration": 1500,
+      "id": "minecraft:speed",
+      "show_icon": true
+    },
+    {
+      "duration": 1500,
+      "id": "minecraft:night_vision",
+      "show_icon": true
+    }
+  ]
 }

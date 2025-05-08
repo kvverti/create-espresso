@@ -32,11 +32,28 @@ public final class BuiltinEspressoDrinks {
     public static void bootstrapDrinks(BootstrapContext<Drink> ctx) {
         ctx.register(EMPTY, Drink.EMPTY);
         ctx.register(DIRTY_COLD_BREW, new Drink(Drink.Type.COFFEE, List.of(
-            effectInstance(MobEffects.POISON, 100)
+            effectInstance(MobEffects.POISON, seconds(5)),
+            effectInstance(MobEffects.CONFUSION, seconds(5))
         )));
-        ctx.register(COLD_BREW, new Drink(Drink.Type.COFFEE, List.of()));
-        ctx.register(POUR_OVER, new Drink(Drink.Type.COFFEE, List.of()));
-        ctx.register(ESPRESSO, new Drink(Drink.Type.COFFEE, List.of()));
+        ctx.register(COLD_BREW, new Drink(Drink.Type.COFFEE, List.of(
+            effectInstance(MobEffects.MOVEMENT_SPEED, minutes(1))
+        )));
+        ctx.register(POUR_OVER, new Drink(Drink.Type.COFFEE, List.of(
+            effectInstance(MobEffects.MOVEMENT_SPEED, minutes(1) + seconds(15)),
+            effectInstance(MobEffects.NIGHT_VISION, minutes(1) + seconds(15))
+        )));
+        ctx.register(ESPRESSO, new Drink(Drink.Type.COFFEE, List.of(
+            effectInstance(MobEffects.MOVEMENT_SPEED, minutes(2) + seconds(30)),
+            effectInstance(MobEffects.REGENERATION, minutes(2) + seconds(30))
+        )));
+    }
+
+    private static int seconds(int seconds) {
+        return seconds * 20;
+    }
+
+    private static int minutes(int minutes) {
+        return seconds(minutes * 60);
     }
 
     /**
