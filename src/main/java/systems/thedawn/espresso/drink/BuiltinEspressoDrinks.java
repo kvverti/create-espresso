@@ -4,11 +4,12 @@ import java.util.List;
 
 import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoRegistries;
-import systems.thedawn.espresso.drink.Drink;
 
+import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
@@ -31,10 +32,20 @@ public final class BuiltinEspressoDrinks {
     public static void bootstrapDrinks(BootstrapContext<Drink> ctx) {
         ctx.register(EMPTY, Drink.EMPTY);
         ctx.register(DIRTY_COLD_BREW, new Drink(Drink.Type.COFFEE, List.of(
-            new MobEffectInstance(MobEffects.POISON, 100)
+            effectInstance(MobEffects.POISON, 100)
         )));
         ctx.register(COLD_BREW, new Drink(Drink.Type.COFFEE, List.of()));
         ctx.register(POUR_OVER, new Drink(Drink.Type.COFFEE, List.of()));
         ctx.register(ESPRESSO, new Drink(Drink.Type.COFFEE, List.of()));
+    }
+
+    /**
+     * Construct an effect instance without the default neoforge:cures component since
+     * it's non-determinstic and unnecessary to serialize.
+     */
+    private static MobEffectInstance effectInstance(Holder<MobEffect> effect, int duration) {
+        var instance = new MobEffectInstance(effect, duration);
+        instance.getCures().clear();
+        return instance;
     }
 }

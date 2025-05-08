@@ -4,11 +4,6 @@
     {
       "duration": 100,
       "id": "minecraft:poison",
-      "neoforge:cures": [
-        "milk",
-        "protected_by_totem",
-        "honey"
-      ],
       "show_icon": true
     }
   ]

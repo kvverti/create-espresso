@@ -19,10 +19,9 @@ import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import systems.thedawn.espresso.*;
-import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
-import systems.thedawn.espresso.drink.Drink;
-import systems.thedawn.espresso.drink.DrinkComponent;
+import systems.thedawn.espresso.drink.*;
 import systems.thedawn.espresso.recipe.DrinkLevelingRecipe;
+import systems.thedawn.espresso.recipe.DrinkModificationRecipe;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -57,6 +56,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
         this.buildPourOverRecipe(recipeOutput, registries);
         this.buildMugLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.COLD_BREW, 250);
         this.buildMugLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.POUR_OVER, 250);
+        this.buildMugModificationRecipe(recipeOutput, registries, EspressoItems.ICE_CUBES, BuiltinDrinkModifiers.ICE);
 
         // coffee_beans -> coffee_grounds
         new ProcessingRecipeBuilder<>(MillingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "coffee_grounds"))
@@ -283,5 +283,23 @@ public class EspressoRecipeProvider extends RecipeProvider {
         // leveling
         var levelingRecipe = new DrinkLevelingRecipe(Ingredient.of(filledContainer.value()), drinkBase, amount);
         recipeOutput.accept(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "drink_leveling/" + name), levelingRecipe, null);
+    }
+
+    private void buildMugModificationRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries, Holder<? extends Item> applied, ResourceKey<DrinkModifier> modifier) {
+        this.buildSpecificModificationRecipe(recipeOutput, registries, EspressoItems.DRINK_MUG, applied, modifier);
+    }
+
+    private void buildSpecificModificationRecipe(RecipeOutput recipeOutput,
+                                                 HolderLookup.Provider registries,
+                                                 Holder<? extends Item> container,
+                                                 Holder<? extends Item> applied,
+                                                 ResourceKey<DrinkModifier> modifier) {
+        var name = modifier.location().getPath() + "_" + Objects.requireNonNull(container.getKey()).location().getPath();
+        var modificationRecipe = new DrinkModificationRecipe(
+            Ingredient.of(container.value()),
+            registries.holderOrThrow(modifier),
+            Ingredient.of(applied.value()),
+            null);
+        recipeOutput.accept(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "drink_modification/" + name), modificationRecipe, null);
     }
 }
