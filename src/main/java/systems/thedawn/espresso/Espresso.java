@@ -68,6 +68,7 @@ public class Espresso {
             output.accept(EspressoItems.CRUSHED_ICE);
             output.accept(EspressoItems.COFFEE_BRICK);
             output.accept(EspressoItems.HOT_WATER_BUCKET);
+            output.accept(EspressoItems.HOT_MILK_BOTTLE);
             // drink bottles
             var registries = parameters.holders();
             output.accept(drinkBottle(BuiltinEspressoDrinks.DIRTY_COLD_BREW, registries));
