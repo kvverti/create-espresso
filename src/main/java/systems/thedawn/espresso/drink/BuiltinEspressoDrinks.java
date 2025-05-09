@@ -5,12 +5,9 @@ import java.util.List;
 import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoRegistries;
 
-import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
 public final class BuiltinEspressoDrinks {
@@ -32,37 +29,19 @@ public final class BuiltinEspressoDrinks {
     public static void bootstrapDrinks(BootstrapContext<Drink> ctx) {
         ctx.register(EMPTY, Drink.EMPTY);
         ctx.register(DIRTY_COLD_BREW, new Drink(Drink.Type.COFFEE, List.of(
-            effectInstance(MobEffects.POISON, seconds(5)),
-            effectInstance(MobEffects.CONFUSION, seconds(5))
+            DrinkUtil.effectInstance(MobEffects.POISON, DrinkUtil.seconds(5)),
+            DrinkUtil.effectInstance(MobEffects.CONFUSION, DrinkUtil.seconds(5))
         )));
         ctx.register(COLD_BREW, new Drink(Drink.Type.COFFEE, List.of(
-            effectInstance(MobEffects.MOVEMENT_SPEED, minutes(1))
+            DrinkUtil.effectInstance(MobEffects.MOVEMENT_SPEED, DrinkUtil.minutes(1))
         )));
         ctx.register(POUR_OVER, new Drink(Drink.Type.COFFEE, List.of(
-            effectInstance(MobEffects.MOVEMENT_SPEED, minutes(1) + seconds(15)),
-            effectInstance(MobEffects.NIGHT_VISION, minutes(1) + seconds(15))
+            DrinkUtil.effectInstance(MobEffects.MOVEMENT_SPEED, DrinkUtil.minutes(1) + DrinkUtil.seconds(15)),
+            DrinkUtil.effectInstance(MobEffects.NIGHT_VISION, DrinkUtil.minutes(1) + DrinkUtil.seconds(15))
         )));
         ctx.register(ESPRESSO, new Drink(Drink.Type.COFFEE, List.of(
-            effectInstance(MobEffects.MOVEMENT_SPEED, minutes(2) + seconds(30)),
-            effectInstance(MobEffects.REGENERATION, minutes(2) + seconds(30))
+            DrinkUtil.effectInstance(MobEffects.MOVEMENT_SPEED, DrinkUtil.minutes(2) + DrinkUtil.seconds(30)),
+            DrinkUtil.effectInstance(MobEffects.REGENERATION, DrinkUtil.minutes(2) + DrinkUtil.seconds(30))
         )));
-    }
-
-    private static int seconds(int seconds) {
-        return seconds * 20;
-    }
-
-    private static int minutes(int minutes) {
-        return seconds(minutes * 60);
-    }
-
-    /**
-     * Construct an effect instance without the default neoforge:cures component since
-     * it's non-determinstic and unnecessary to serialize.
-     */
-    private static MobEffectInstance effectInstance(Holder<MobEffect> effect, int duration) {
-        var instance = new MobEffectInstance(effect, duration);
-        instance.getCures().clear();
-        return instance;
     }
 }

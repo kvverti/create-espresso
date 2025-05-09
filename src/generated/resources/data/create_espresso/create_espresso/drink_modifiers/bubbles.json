@@ -1,1 +1,6 @@
-{}
+{
+  "transform": {
+    "type": "strengthen",
+    "level": 1
+  }
+}

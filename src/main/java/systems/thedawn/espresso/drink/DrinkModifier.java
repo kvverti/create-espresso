@@ -39,13 +39,30 @@ public record DrinkModifier(Optional<BaseTransform> transform, List<MobEffectIns
         return Component.translatable(getDescriptionId(key)).withStyle(ChatFormatting.GRAY);
     }
 
-    public record BaseTransform(Type type, float scale) {
-        public static final Codec<BaseTransform> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            StringRepresentable.fromEnum(Type::values).fieldOf("type").forGetter(BaseTransform::type),
-            Codec.FLOAT.fieldOf("scale").forGetter(BaseTransform::scale)
-        ).apply(inst, BaseTransform::new));
+    public sealed interface BaseTransform {
+        Codec<BaseTransform> CODEC = StringRepresentable.fromEnum(Type::values)
+            .dispatch(BaseTransform::type, type -> switch(type) {
+                case LENGTHEN -> Codec.FLOAT.fieldOf("scale").xmap(Lengthen::new, Lengthen::scale);
+                case STRENGTHEN -> Codec.INT.fieldOf("level").xmap(Strengthen::new, Strengthen::level);
+            });
 
-        public enum Type implements StringRepresentable {
+        Type type();
+
+        record Lengthen(float scale) implements BaseTransform {
+            @Override
+            public Type type() {
+                return Type.LENGTHEN;
+            }
+        }
+
+        record Strengthen(int level) implements BaseTransform {
+            @Override
+            public Type type() {
+                return Type.STRENGTHEN;
+            }
+        }
+
+        enum Type implements StringRepresentable {
             LENGTHEN,
             STRENGTHEN;
 
