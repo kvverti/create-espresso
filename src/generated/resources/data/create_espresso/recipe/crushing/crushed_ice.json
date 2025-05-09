@@ -1,0 +1,18 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "create_espresso:ice_cubes"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "id": "create_espresso:crushed_ice"
+    },
+    {
+      "chance": 0.25,
+      "id": "create_espresso:crushed_ice"
+    }
+  ]
+}

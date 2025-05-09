@@ -39,6 +39,7 @@ public class EspressoTranslationProvider extends LanguageProvider {
         this.addItem(EspressoItems.INCOMPLETE_POUR_OVER_COFFEE_SETUP, "Incomplete Pour Over Coffee Setup");
         this.addItem(EspressoItems.POUR_OVER_COFFEE_SETUP, "Pour Over Coffee Setup");
         this.addItem(EspressoItems.ICE_CUBES, "Ice Cubes");
+        this.addItem(EspressoItems.CRUSHED_ICE, "Crushed Ice");
         this.addBottle(Drink.Type.COFFEE, "Coffee Bottle");
         this.addBottle(Drink.Type.TEA, "Tea Bottle");
         this.addMug(Drink.Type.COFFEE, "Coffee Mug");

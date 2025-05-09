@@ -48,7 +48,7 @@ public class Espresso {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ESPRESSO_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
         .title(Component.translatable("itemGroup.create_espresso")) //The language key for the title of your CreativeModeTab
         .withTabsBefore(CreativeModeTabs.COMBAT)
-        .icon(() -> EspressoItems.COFFEE_BEANS.value().getDefaultInstance())
+        .icon(() -> EspressoItems.DRINK_MUG.value().getDefaultInstance())
         .displayItems((parameters, output) -> {
             // blocks
             output.accept(EspressoItems.COFFEE_BRICKS);
@@ -64,6 +64,8 @@ public class Espresso {
             output.accept(EspressoItems.SPENT_COFFEE_GROUNDS);
             output.accept(EspressoItems.COFFEE_FILTER);
             output.accept(EspressoItems.USED_COFFEE_FILTER);
+            output.accept(EspressoItems.ICE_CUBES);
+            output.accept(EspressoItems.CRUSHED_ICE);
             output.accept(EspressoItems.COFFEE_BRICK);
             output.accept(EspressoItems.HOT_WATER_BUCKET);
             // drink bottles

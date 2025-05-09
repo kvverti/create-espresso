@@ -18,7 +18,10 @@ import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipeB
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
-import systems.thedawn.espresso.*;
+import systems.thedawn.espresso.Espresso;
+import systems.thedawn.espresso.EspressoDataComponentTypes;
+import systems.thedawn.espresso.EspressoFluids;
+import systems.thedawn.espresso.EspressoItems;
 import systems.thedawn.espresso.drink.*;
 import systems.thedawn.espresso.recipe.DrinkLevelingRecipe;
 import systems.thedawn.espresso.recipe.DrinkModificationRecipe;
@@ -52,6 +55,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
 
         this.buildCoffeeToolRecipes(recipeOutput);
         this.buildCoffeePlantRecipes(recipeOutput);
+        this.buildIceRecipes(recipeOutput);
         this.buildColdBrewCoffeeRecipe(recipeOutput, registries);
         this.buildPourOverRecipe(recipeOutput, registries);
         this.buildMugLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.COLD_BREW, 250);
@@ -168,6 +172,24 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .define('#', Items.PAPER)
             .unlockedBy("x", has(Items.PAPER))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "crafting/coffee_filter"));
+    }
+
+    private void buildIceRecipes(RecipeOutput recipeOutput) {
+        // #ice -> ice cubes
+        new ProcessingRecipeBuilder<>(CuttingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "ice_cubes"))
+            .withItemIngredients(Ingredient.of(Items.ICE))
+            .averageProcessingDuration()
+            .withItemOutputs(new ProcessingOutput(EspressoItems.ICE_CUBES.value(), 6, 1f))
+            .build(recipeOutput);
+
+        // ice cubes -> crushed ice
+        new ProcessingRecipeBuilder<>(CrushingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "crushed_ice"))
+            .withItemIngredients(Ingredient.of(EspressoItems.ICE_CUBES))
+            .averageProcessingDuration()
+            .withItemOutputs(
+                new ProcessingOutput(EspressoItems.CRUSHED_ICE.value(), 1, 1f),
+                new ProcessingOutput(EspressoItems.CRUSHED_ICE.value(), 1, 0.25f))
+            .build(recipeOutput);
     }
 
     private void buildColdBrewCoffeeRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries) {

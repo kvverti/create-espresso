@@ -20,6 +20,7 @@ public class EspressoItems {
     public static final DeferredItem<?> COFFEE_FILTER = ITEMS.registerSimpleItem("coffee_filter");
     public static final DeferredItem<?> USED_COFFEE_FILTER = ITEMS.registerSimpleItem("used_coffee_filter");
     public static final DeferredItem<?> ICE_CUBES = ITEMS.registerSimpleItem("ice_cubes");
+    public static final DeferredItem<?> CRUSHED_ICE = ITEMS.registerSimpleItem("crushed_ice");
     public static final DeferredItem<?> HOT_WATER_BUCKET = ITEMS.register("hot_water_bucket", () -> new BucketItem(
         EspressoFluids.SOURCE_HOT_WATER.value(),
         new Item.Properties().stacksTo(1)

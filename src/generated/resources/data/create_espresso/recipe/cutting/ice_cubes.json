@@ -1,0 +1,15 @@
+{
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "minecraft:ice"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "count": 6,
+      "id": "create_espresso:ice_cubes"
+    }
+  ]
+}
