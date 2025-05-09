@@ -102,9 +102,11 @@ public class Espresso {
 
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD)
     public static class ClientEvents {
-        private static final ResourceLocation STILL_WATER = ResourceLocation.fromNamespaceAndPath("minecraft", "block/water_still");
-        private static final ResourceLocation FLOWING_WATER = ResourceLocation.fromNamespaceAndPath("minecraft", "block/water_flow");
-        private static final ResourceLocation WATER_OVERLAY = ResourceLocation.fromNamespaceAndPath("minecraft", "block/water_overlay");
+        private static final ResourceLocation STILL_WATER = ResourceLocation.withDefaultNamespace("block/water_still");
+        private static final ResourceLocation FLOWING_WATER = ResourceLocation.withDefaultNamespace("block/water_flow");
+        private static final ResourceLocation WATER_OVERLAY = ResourceLocation.withDefaultNamespace("block/water_overlay");
+        private static final ResourceLocation STILL_MILK = ResourceLocation.fromNamespaceAndPath("neoforge", "block/milk_still");
+        private static final ResourceLocation FLOWING_MILK = ResourceLocation.fromNamespaceAndPath("neoforge", "block/milk_flowing");
 
         @SubscribeEvent
         public static void onRegisterClientExtensions(RegisterClientExtensionsEvent ev) {
@@ -147,6 +149,17 @@ public class Espresso {
                     return WATER_OVERLAY;
                 }
             }, EspressoFluids.ESPRESSO);
+            ev.registerFluidType(new IClientFluidTypeExtensions() {
+                @Override
+                public ResourceLocation getStillTexture() {
+                    return STILL_MILK;
+                }
+
+                @Override
+                public ResourceLocation getFlowingTexture() {
+                    return FLOWING_MILK;
+                }
+            }, EspressoFluids.HOT_MILK);
         }
     }
 

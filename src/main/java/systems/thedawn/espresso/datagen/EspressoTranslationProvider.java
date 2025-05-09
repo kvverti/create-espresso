@@ -36,6 +36,7 @@ public class EspressoTranslationProvider extends LanguageProvider {
         this.addItem(EspressoItems.USED_COFFEE_FILTER, "Used Coffee Filter");
         this.addItem(EspressoItems.COFFEE_BRICK, "Coffee Brick");
         this.addItem(EspressoItems.HOT_WATER_BUCKET, "Hot Water Bucket");
+        this.addItem(EspressoItems.HOT_MILK_BOTTLE, "Hot Milk Bottle");
         this.addItem(EspressoItems.INCOMPLETE_POUR_OVER_COFFEE_SETUP, "Incomplete Pour Over Coffee Setup");
         this.addItem(EspressoItems.POUR_OVER_COFFEE_SETUP, "Pour Over Coffee Setup");
         this.addItem(EspressoItems.ICE_CUBES, "Ice Cubes");
@@ -47,6 +48,7 @@ public class EspressoTranslationProvider extends LanguageProvider {
         // fluids
         this.add("fluid_type.create_espresso.hot_water", "Hot Water");
         this.add("fluid_type.create_espresso.espresso", "Coffee");
+        this.add("fluid_type.create_espresso.hot_milk", "Hot Milk");
         // drinks
         this.addDrink(BuiltinEspressoDrinks.EMPTY, "Uncraftable");
         this.addDrink(BuiltinEspressoDrinks.DIRTY_COLD_BREW, "Dirty Cold Brew");

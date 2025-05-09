@@ -16,6 +16,7 @@ public class EspressoItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         this.basicItem(EspressoItems.HOT_WATER_BUCKET.value());
+        this.basicItem(EspressoItems.HOT_MILK_BOTTLE.value());
         this.basicItem(EspressoItems.COFFEE_CHERRY.value());
         this.basicItem(EspressoItems.COFFEE_PASTE.value());
         this.basicItem(EspressoItems.COFFEE_PIT.value());

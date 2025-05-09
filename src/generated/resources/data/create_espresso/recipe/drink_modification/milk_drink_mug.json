@@ -1,0 +1,12 @@
+{
+  "type": "create_espresso:modify_drink",
+  "applied_fluid": {
+    "type": "fluid_stack",
+    "amount": 125,
+    "fluid": "create_espresso:hot_milk"
+  },
+  "holder": {
+    "item": "create_espresso:drink_mug"
+  },
+  "modifier": "create_espresso:milk"
+}

@@ -25,6 +25,7 @@ public class EspressoItems {
         EspressoFluids.SOURCE_HOT_WATER.value(),
         new Item.Properties().stacksTo(1)
     ));
+    public static final DeferredItem<?> HOT_MILK_BOTTLE = ITEMS.registerSimpleItem("hot_milk_bottle");
     public static final DeferredItem<?> DRINK_BOTTLE =
         ITEMS.registerItem("drink_bottle", DrinkBottleItem::new, new Item.Properties().stacksTo(1));
     public static final DeferredItem<?> DRINK_MUG =

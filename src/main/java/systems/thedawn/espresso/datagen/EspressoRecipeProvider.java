@@ -16,6 +16,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipeBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import systems.thedawn.espresso.Espresso;
@@ -37,6 +38,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.material.Fluid;
 
 public class EspressoRecipeProvider extends RecipeProvider {
     public EspressoRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
@@ -53,6 +55,15 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .withFluidOutputs(new FluidStack(EspressoFluids.SOURCE_HOT_WATER, 10))
             .build(recipeOutput);
 
+        // milk -> hot milk
+        new ProcessingRecipeBuilder<>(MixingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "hot_milk"))
+            .withFluidIngredients(FluidIngredient.fromFluid(NeoForgeMod.MILK.value(), 10))
+            .requiresHeat(HeatCondition.HEATED)
+            .averageProcessingDuration()
+            .withFluidOutputs(new FluidStack(EspressoFluids.SOURCE_HOT_MILK, 10))
+            .build(recipeOutput);
+        this.buildStandardBottleRecipes(recipeOutput, EspressoFluids.SOURCE_HOT_MILK, EspressoItems.HOT_MILK_BOTTLE);
+
         this.buildCoffeeToolRecipes(recipeOutput);
         this.buildCoffeePlantRecipes(recipeOutput);
         this.buildIceRecipes(recipeOutput);
@@ -61,6 +72,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
         this.buildMugLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.COLD_BREW, 250);
         this.buildMugLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.POUR_OVER, 250);
         this.buildMugModificationRecipe(recipeOutput, registries, EspressoItems.ICE_CUBES, BuiltinDrinkModifiers.ICE);
+        this.buildMugModificationRecipe(recipeOutput, registries, EspressoFluids.SOURCE_HOT_MILK, 125, BuiltinDrinkModifiers.MILK);
 
         // coffee_beans -> coffee_grounds
         new ProcessingRecipeBuilder<>(MillingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "coffee_grounds"))
@@ -278,6 +290,22 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .build(recipeOutput);
     }
 
+    private void buildStandardBottleRecipes(RecipeOutput recipeOutput, Holder<? extends Fluid> fluid, Holder<? extends Item> filledBottle) {
+        var name = Objects.requireNonNull(filledBottle.getKey()).location().getPath();
+        new ProcessingRecipeBuilder<>(EmptyingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, name))
+            .withItemIngredients(Ingredient.of(filledBottle.value()))
+            .averageProcessingDuration()
+            .withItemOutputs(new ProcessingOutput(Items.GLASS_BOTTLE, 1, 1f))
+            .withFluidOutputs(new FluidStack(fluid.value(), 250))
+            .build(recipeOutput);
+        new ProcessingRecipeBuilder<>(FillingRecipe::new, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, name))
+            .withItemIngredients(Ingredient.of(Items.GLASS_BOTTLE))
+            .withFluidIngredients(FluidIngredient.fromFluid(fluid.value(), 250))
+            .averageProcessingDuration()
+            .withItemOutputs(new ProcessingOutput(filledBottle.value(), 1, 1f))
+            .build(recipeOutput);
+    }
+
     private void buildMugLevelingRecipes(RecipeOutput recipeOutput, HolderLookup.Provider registries, ResourceKey<Drink> drinkKey, int amount) {
         this.buildDrinkLevelingRecipes(recipeOutput, registries, EspressoItems.COFFEE_MUG, EspressoItems.DRINK_MUG, drinkKey, amount);
     }
@@ -311,6 +339,10 @@ public class EspressoRecipeProvider extends RecipeProvider {
         this.buildSpecificModificationRecipe(recipeOutput, registries, EspressoItems.DRINK_MUG, applied, modifier);
     }
 
+    private void buildMugModificationRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries, Holder<? extends Fluid> applied, int amount, ResourceKey<DrinkModifier> modifier) {
+        this.buildSpecificModificationRecipe(recipeOutput, registries, EspressoItems.DRINK_MUG, applied, amount, modifier);
+    }
+
     private void buildSpecificModificationRecipe(RecipeOutput recipeOutput,
                                                  HolderLookup.Provider registries,
                                                  Holder<? extends Item> container,
@@ -322,6 +354,21 @@ public class EspressoRecipeProvider extends RecipeProvider {
             registries.holderOrThrow(modifier),
             Ingredient.of(applied.value()),
             null);
+        recipeOutput.accept(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "drink_modification/" + name), modificationRecipe, null);
+    }
+
+    private void buildSpecificModificationRecipe(RecipeOutput recipeOutput,
+                                                 HolderLookup.Provider registries,
+                                                 Holder<? extends Item> container,
+                                                 Holder<? extends Fluid> applied,
+                                                 int amount,
+                                                 ResourceKey<DrinkModifier> modifier) {
+        var name = modifier.location().getPath() + "_" + Objects.requireNonNull(container.getKey()).location().getPath();
+        var modificationRecipe = new DrinkModificationRecipe(
+            Ingredient.of(container.value()),
+            registries.holderOrThrow(modifier),
+            null,
+            FluidIngredient.fromFluid(applied.value(), amount));
         recipeOutput.accept(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "drink_modification/" + name), modificationRecipe, null);
     }
 }

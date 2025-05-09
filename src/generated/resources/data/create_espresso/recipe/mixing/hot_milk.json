@@ -1,0 +1,18 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "type": "fluid_stack",
+      "amount": 10,
+      "fluid": "minecraft:milk"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "amount": 10,
+      "id": "create_espresso:hot_milk"
+    }
+  ]
+}

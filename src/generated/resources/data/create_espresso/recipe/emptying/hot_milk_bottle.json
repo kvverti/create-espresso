@@ -1,0 +1,18 @@
+{
+  "type": "create:emptying",
+  "ingredients": [
+    {
+      "item": "create_espresso:hot_milk_bottle"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "amount": 250,
+      "id": "create_espresso:hot_milk"
+    },
+    {
+      "id": "minecraft:glass_bottle"
+    }
+  ]
+}

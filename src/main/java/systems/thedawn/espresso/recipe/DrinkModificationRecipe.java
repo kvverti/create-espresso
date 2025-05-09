@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
+import net.neoforged.neoforge.fluids.FluidStack;
 import systems.thedawn.espresso.EspressoDataComponentTypes;
 import systems.thedawn.espresso.EspressoRecipeTypes;
 import systems.thedawn.espresso.drink.DrinkModifier;
@@ -23,7 +24,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
-public class DrinkModificationRecipe implements Recipe<DrinkModificationRecipeInput> {
+public class DrinkModificationRecipe implements FluidInputRecipe<DrinkModificationRecipeInput> {
     private final Ingredient drinkHolder;
     private final Holder<DrinkModifier> modifier;
     private final @Nullable Ingredient appliedItem;
@@ -77,6 +78,11 @@ public class DrinkModificationRecipe implements Recipe<DrinkModificationRecipeIn
     }
 
     @Override
+    public ItemStack assembleFromFluid(ItemStack input, FluidStack fluidInput, HolderLookup.Provider registries) {
+        return this.assemble(new DrinkModificationRecipeInput(input, null, fluidInput), registries);
+    }
+
+    @Override
     public boolean canCraftInDimensions(int width, int height) {
         return width * height > 1;
     }
@@ -97,6 +103,11 @@ public class DrinkModificationRecipe implements Recipe<DrinkModificationRecipeIn
     @Override
     public RecipeType<?> getType() {
         return EspressoRecipeTypes.DRINK_MODIFY.value();
+    }
+
+    @Override
+    public int fillAmount() {
+        return this.appliedFluid == null ? 0 : this.appliedFluid.getRequiredAmount();
     }
 
     public static class DynamicResult implements Recipe<DrinkModificationRecipeInput> {

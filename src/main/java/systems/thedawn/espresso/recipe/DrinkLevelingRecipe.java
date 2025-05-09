@@ -3,6 +3,7 @@ package systems.thedawn.espresso.recipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.neoforged.neoforge.fluids.FluidStack;
 import systems.thedawn.espresso.*;
 import systems.thedawn.espresso.drink.Drink;
 import systems.thedawn.espresso.drink.DrinkComponent;
@@ -19,7 +20,7 @@ import net.minecraft.world.level.Level;
 /**
  * Increases the base level of a drink by one, up to a maximum.
  */
-public class DrinkLevelingRecipe implements Recipe<DrinkLevelingRecipeInput> {
+public class DrinkLevelingRecipe implements FluidInputRecipe<DrinkLevelingRecipeInput> {
     /**
      * The item holding the drink.
      */
@@ -41,6 +42,7 @@ public class DrinkLevelingRecipe implements Recipe<DrinkLevelingRecipeInput> {
         this.amount = amount;
     }
 
+    @Override
     public int fillAmount() {
         return this.amount;
     }
@@ -70,6 +72,11 @@ public class DrinkLevelingRecipe implements Recipe<DrinkLevelingRecipeInput> {
             return outputStack;
         }
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack assembleFromFluid(ItemStack input, FluidStack fluidInput, HolderLookup.Provider registries) {
+        return this.assemble(new DrinkLevelingRecipeInput(input, fluidInput), registries);
     }
 
     @Override

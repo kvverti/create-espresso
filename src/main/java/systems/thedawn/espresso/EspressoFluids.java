@@ -31,6 +31,11 @@ public class EspressoFluids {
             .canDrown(true)
             .supportsBoating(false)
         ));
+    public static final DeferredHolder<FluidType, ?> HOT_MILK = FLUID_TYPES.register(
+        "hot_milk",
+        () -> new FluidType(FluidType.Properties.create()
+            .temperature(COFFEE_TEMPERATURE_KELVIN)
+        ));
 
     public static final DeferredHolder<Fluid, FlowingFluid> SOURCE_HOT_WATER =
         FLUIDS.register("hot_water", () -> new BaseFlowingFluid.Source(hotWaterProperties()));
@@ -50,5 +55,14 @@ public class EspressoFluids {
 
     private static BaseFlowingFluid.Properties drinkProperties() {
         return new BaseFlowingFluid.Properties(ESPRESSO, SOURCE_DRINK, FLOWING_DRINK);
+    }
+
+    public static final DeferredHolder<Fluid, VirtualFluid> SOURCE_HOT_MILK =
+        FLUIDS.register("hot_milk", () -> VirtualFluid.createSource(hotMilkProperties()));
+    public static final DeferredHolder<Fluid, VirtualFluid> FLOWING_HOT_MILK =
+        FLUIDS.register("flowing_hot_milk", () -> VirtualFluid.createFlowing(hotMilkProperties()));
+
+    private static BaseFlowingFluid.Properties hotMilkProperties() {
+        return new BaseFlowingFluid.Properties(HOT_MILK, SOURCE_HOT_MILK, FLOWING_HOT_MILK);
     }
 }

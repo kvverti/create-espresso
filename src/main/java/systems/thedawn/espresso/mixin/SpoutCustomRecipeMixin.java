@@ -13,8 +13,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import systems.thedawn.espresso.EspressoRecipeTypes;
-import systems.thedawn.espresso.recipe.DrinkLevelingRecipeInput;
+import systems.thedawn.espresso.recipe.RecipeUtil;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
@@ -33,10 +32,9 @@ public class SpoutCustomRecipeMixin {
         )
     )
     private static int espresso$getCustomFillingRecipeAmount(Level world, ItemStack stack, FluidStack availableFluid, Operation<Integer> original) {
-        var input = new DrinkLevelingRecipeInput(stack, availableFluid);
-        var recipe = world.getRecipeManager().getRecipeFor(EspressoRecipeTypes.DRINK_LEVEL.value(), input, world).orElse(null);
+        var recipe = RecipeUtil.findRecipe(world, stack, availableFluid);
         if(recipe != null) {
-            return recipe.value().fillAmount();
+            return recipe.fillAmount();
         }
         return original.call(world, stack, availableFluid);
     }
@@ -49,11 +47,10 @@ public class SpoutCustomRecipeMixin {
         )
     )
     private static ItemStack espresso$applyCustomFillingRecipe(Level world, int requiredAmount, ItemStack stack, FluidStack availableFluid, Operation<ItemStack> original) {
-        var input = new DrinkLevelingRecipeInput(stack, availableFluid);
-        var recipe = world.getRecipeManager().getRecipeFor(EspressoRecipeTypes.DRINK_LEVEL.value(), input, world).orElse(null);
+        var recipe = RecipeUtil.findRecipe(world, stack, availableFluid);
         if(recipe != null) {
-            var output = recipe.value().assemble(input, world.registryAccess());
-            input.drinkFluid().shrink(recipe.value().fillAmount());
+            var output = recipe.assembleFromFluid(stack, availableFluid, world.registryAccess());
+            availableFluid.shrink(recipe.fillAmount());
             stack.shrink(1);
             return output;
         }
@@ -80,10 +77,9 @@ class SpoutCustomRecipeAllowanceMixin extends BlockEntity {
         )
     )
     private boolean espresso$findCustomFillingRecipes(boolean ret, TransportedItemStack transported, TransportedItemStackHandlerBehaviour handler) {
-        if(!ret) {
-            var input = new DrinkLevelingRecipeInput(transported.stack, this.getCurrentFluidInTank());
-            var recipe = this.level.getRecipeManager().getRecipeFor(EspressoRecipeTypes.DRINK_LEVEL.value(), input, this.level);
-            return recipe.isPresent();
+        if(!ret && this.level != null) {
+            var recipe = RecipeUtil.findRecipe(this.level, transported.stack, this.getCurrentFluidInTank());
+            return recipe != null;
         }
         return ret;
     }
