@@ -1,5 +1,6 @@
 package systems.thedawn.espresso.item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
@@ -45,8 +46,7 @@ public class DrinkItem extends BlockItem {
         if(!level.isClientSide()) {
             var component = stack.get(EspressoDataComponentTypes.DRINK);
             if(component != null) {
-                var effects = component.base().value().effects();
-                for(var effectInstance : effects) {
+                for(var effectInstance : effects(component)) {
                     livingEntity.addEffect(new MobEffectInstance(effectInstance));
                 }
             }
@@ -58,6 +58,40 @@ public class DrinkItem extends BlockItem {
             return new ItemStack(Items.GLASS_BOTTLE);
         }
         return stack;
+    }
+
+    private static List<MobEffectInstance> effects(DrinkComponent drink) {
+        var effectsFromModifiers = new ArrayList<MobEffectInstance>();
+        var baseLengthScale = 1f;
+        var baseStrengthOffset = 0;
+        switch(drink.level()) {
+            case DOUBLE -> baseLengthScale = 2f;
+            case TRIPLE -> {
+                baseLengthScale = 2f;
+                baseStrengthOffset = 1;
+            }
+        }
+
+        for(var modifier : drink.modifiers()) {
+            effectsFromModifiers.addAll(modifier.value().additionalEffects());
+            var transform = modifier.value().transform().orElse(null);
+            switch(transform) {
+                case DrinkModifier.BaseTransform.Lengthen(var scale) -> baseLengthScale *= scale;
+                case DrinkModifier.BaseTransform.Strengthen(var level) -> baseStrengthOffset += level;
+                case null -> {
+                    // nothing
+                }
+            }
+        }
+        var effectList = new ArrayList<MobEffectInstance>();
+        // update base effects
+        for(var effectInstance : drink.base().value().effects()) {
+            var duration = effectInstance.getDuration();
+            var intensity = effectInstance.getAmplifier();
+            effectList.add(new MobEffectInstance(effectInstance.getEffect(), (int) (duration * baseLengthScale), intensity + baseStrengthOffset));
+        }
+        effectList.addAll(effectsFromModifiers);
+        return effectList;
     }
 
     // reset the base translation key to the one in Item.
