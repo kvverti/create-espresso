@@ -1,0 +1,9 @@
+{
+  "feature": "create_espresso:coffee_plant_patch",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 20
+    }
+  ]
+}

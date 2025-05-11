@@ -16,11 +16,15 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.slf4j.Logger;
 import systems.thedawn.espresso.datagen.*;
 import systems.thedawn.espresso.drink.BuiltinDrinkModifiers;
 import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
 import systems.thedawn.espresso.drink.Drink;
+import systems.thedawn.espresso.drink.DrinkComponent;
+import systems.thedawn.espresso.worldgen.BuiltinEspressoBiomeModifiers;
+import systems.thedawn.espresso.worldgen.BuiltinEspressoFeatures;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -78,12 +82,24 @@ public class Espresso {
             output.accept(drinkBottle(BuiltinEspressoDrinks.COLD_BREW, registries));
             output.accept(drinkBottle(BuiltinEspressoDrinks.POUR_OVER, registries));
             output.accept(drinkBottle(BuiltinEspressoDrinks.ESPRESSO, registries));
+            // drink mugs
+            output.accept(drinkMug(BuiltinEspressoDrinks.COLD_BREW, registries));
+            output.accept(drinkMug(BuiltinEspressoDrinks.POUR_OVER, registries));
+            output.accept(drinkMug(BuiltinEspressoDrinks.ESPRESSO, registries));
         }).build());
 
     private static ItemStack drinkBottle(ResourceKey<Drink> key, HolderLookup.Provider registries) {
         var component = registries.holderOrThrow(key);
         var stack = new ItemStack(EspressoItems.DRINK_BOTTLE.value());
         stack.set(EspressoDataComponentTypes.DRINK_BASE, component);
+        return stack;
+    }
+
+    private static ItemStack drinkMug(ResourceKey<Drink> key, HolderLookup.Provider registries) {
+        var drinkBase = registries.holderOrThrow(key);
+        var component = DrinkComponent.initial(drinkBase);
+        var stack = new ItemStack(EspressoItems.DRINK_MUG.value());
+        stack.set(EspressoDataComponentTypes.DRINK, component);
         return stack;
     }
 
@@ -183,6 +199,9 @@ public class Espresso {
             ev.createDatapackRegistryObjects(
                 new RegistrySetBuilder().add(EspressoRegistries.DRINKS, BuiltinEspressoDrinks::bootstrapDrinks)
                     .add(EspressoRegistries.DRINK_MODIFIERS, BuiltinDrinkModifiers::bootstrapModifiers)
+                    .add(Registries.CONFIGURED_FEATURE, BuiltinEspressoFeatures::bootstrapConfiguredFeatures)
+                    .add(Registries.PLACED_FEATURE, BuiltinEspressoFeatures::bootstrapPlacedFeatures)
+                    .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, BuiltinEspressoBiomeModifiers::bootstrapBiomeModifiers)
             );
             var generator = ev.getGenerator();
             var output = generator.getPackOutput();
@@ -195,9 +214,11 @@ public class Espresso {
             generator.addProvider(ev.includeClient(), new EspressoItemModelProvider(output, existingFileHelper));
             generator.addProvider(ev.includeClient(), new EspressoTranslationProvider(output));
             generator.addProvider(ev.includeClient(), new EspressoRecipeProvider(output, lookupProvider));
+            generator.addProvider(ev.includeClient(), new EspressoGlobalLootModifierProvider(output, lookupProvider));
             generator.addProvider(ev.includeClient(), new LootTableProvider(output, Set.of(),
                 List.of(
-                    new LootTableProvider.SubProviderEntry(EspressoBlockLootProvider::new, LootContextParamSets.BLOCK)
+                    new LootTableProvider.SubProviderEntry(EspressoBlockLootProvider::new, LootContextParamSets.BLOCK),
+                    new LootTableProvider.SubProviderEntry(EspressoChestLootProvider::new, LootContextParamSets.CHEST)
                 ),
                 lookupProvider
             ));

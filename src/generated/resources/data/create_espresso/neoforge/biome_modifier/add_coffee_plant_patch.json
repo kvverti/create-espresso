@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_jungle",
+  "features": "create_espresso:coffee_plant_patch",
+  "step": "vegetal_decoration"
+}
