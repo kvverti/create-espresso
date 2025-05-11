@@ -1,15 +1,21 @@
 package systems.thedawn.espresso.recipe;
 
 import javax.annotation.Nullable;
-
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
+import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoDataComponentTypes;
 import systems.thedawn.espresso.EspressoRecipeTypes;
+import systems.thedawn.espresso.EspressoRegistries;
+import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
+import systems.thedawn.espresso.drink.DrinkComponent;
 import systems.thedawn.espresso.drink.DrinkModifier;
 
 import net.minecraft.core.Holder;
@@ -35,6 +41,38 @@ public class DrinkModificationRecipe implements FluidInputRecipe<DrinkModificati
         this.modifier = modifier;
         this.appliedItem = appliedItem;
         this.appliedFluid = appliedFluid;
+    }
+
+    public List<ItemStack> holderStacks() {
+        return Arrays.stream(this.drinkHolder.getItems())
+            .flatMap(stack -> Espresso.getRegistry(EspressoRegistries.DRINKS)
+                .holders()
+                .filter(drinkBase -> drinkBase.getKey() != BuiltinEspressoDrinks.EMPTY)
+                .map(drinkBase -> {
+                    var component = DrinkComponent.initial(drinkBase);
+                    var inputStack = stack.copy();
+                    inputStack.set(EspressoDataComponentTypes.DRINK, component);
+                    return inputStack;
+                }))
+            .toList();
+    }
+
+    @Nullable
+    public Ingredient appliedItem() {
+        return this.appliedItem;
+    }
+
+    @Nullable
+    public FluidIngredient appliedFluid() {
+        return this.appliedFluid;
+    }
+
+    public ItemStack modifiedResultStack(ItemStack input) {
+        var component = Objects.requireNonNull(input.get(EspressoDataComponentTypes.DRINK));
+        component = component.addModifier(this.modifier);
+        var output = input.copy();
+        output.set(EspressoDataComponentTypes.DRINK, component);
+        return output;
     }
 
     @Override

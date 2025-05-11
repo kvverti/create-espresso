@@ -64,6 +64,8 @@ public class EspressoTranslationProvider extends LanguageProvider {
         this.addModifier(BuiltinDrinkModifiers.MILK, "Milk");
         this.addModifier(BuiltinDrinkModifiers.BUBBLES, "Bubbles");
         this.addModifier(BuiltinDrinkModifiers.CHOCOLATE, "Chocolate");
+        // jei
+        this.add("create_espresso.jei.modification.title", "Drink Modification");
     }
 
     private void addBottle(Drink.Type type, String name) {

@@ -1,6 +1,7 @@
 package systems.thedawn.espresso;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import com.mojang.logging.LogUtils;
@@ -21,9 +22,11 @@ import systems.thedawn.espresso.drink.BuiltinDrinkModifiers;
 import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
 import systems.thedawn.espresso.drink.Drink;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableProvider;
@@ -99,6 +102,15 @@ public class Espresso {
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+    }
+
+    /**
+     * Get a registry object on the physical client.
+     */
+    public static <T> Registry<T> getRegistry(ResourceKey<Registry<T>> key) {
+        return Objects.requireNonNull(Minecraft.getInstance().getConnection())
+            .registryAccess()
+            .registryOrThrow(key);
     }
 
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD)
