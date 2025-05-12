@@ -11,6 +11,8 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -18,6 +20,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.slf4j.Logger;
+import systems.thedawn.espresso.block.DrinkBlockEntity;
+import systems.thedawn.espresso.client.DrinkColorManager;
 import systems.thedawn.espresso.datagen.*;
 import systems.thedawn.espresso.drink.BuiltinDrinkModifiers;
 import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
@@ -138,6 +142,11 @@ public class Espresso {
         private static final ResourceLocation FLOWING_MILK = ResourceLocation.fromNamespaceAndPath("neoforge", "block/milk_flowing");
 
         @SubscribeEvent
+        public static void onRegisterClientReloadListeners(RegisterClientReloadListenersEvent ev) {
+            ev.registerReloadListener(DrinkColorManager.INSTANCE);
+        }
+
+        @SubscribeEvent
         public static void onRegisterClientExtensions(RegisterClientExtensionsEvent ev) {
             ItemBlockRenderTypes.setRenderLayer(EspressoFluids.SOURCE_HOT_WATER.value(), RenderType.TRANSLUCENT);
             ItemBlockRenderTypes.setRenderLayer(EspressoFluids.FLOWING_HOT_WATER.value(), RenderType.TRANSLUCENT);
@@ -190,6 +199,24 @@ public class Espresso {
                 }
             }, EspressoFluids.HOT_MILK);
         }
+
+        @SubscribeEvent
+        public static void onRegisterColorHandlers(RegisterColorHandlersEvent.Block ev) {
+            ev.register((state, level, pos, tintIndex) -> {
+                if(tintIndex == 0) {
+                    if(level != null && pos != null) {
+                        var drink = level.getBlockEntity(pos, EspressoBlockEntityTypes.DRINK.value())
+                            .map(DrinkBlockEntity::drink)
+                            .orElse(null);
+                        if(drink != null) {
+                            var baseLoc = Objects.requireNonNull(drink.base().getKey()).location();
+                            return DrinkColorManager.INSTANCE.getColor(baseLoc);
+                        }
+                    }
+                }
+                return -1;
+            }, EspressoBlocks.FILLED_COFFEE_MUG.value());
+        }
     }
 
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD)
@@ -210,6 +237,7 @@ public class Espresso {
 
             ev.createBlockAndItemTags(EspressoBlockTagsProvider::new, EspressoItemTagsProvider::new);
 
+            generator.addProvider(ev.includeClient(), new EspressoDrinkColorProvider(output));
             generator.addProvider(ev.includeClient(), new EspressoBlockStateProvider(output, existingFileHelper));
             generator.addProvider(ev.includeClient(), new EspressoItemModelProvider(output, existingFileHelper));
             generator.addProvider(ev.includeClient(), new EspressoTranslationProvider(output));

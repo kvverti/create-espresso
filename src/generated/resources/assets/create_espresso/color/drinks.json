@@ -1,0 +1,18 @@
+[
+  {
+    "color": 4794118,
+    "drink": "create_espresso:espresso"
+  },
+  {
+    "color": 4794118,
+    "drink": "create_espresso:pour_over"
+  },
+  {
+    "color": 4794118,
+    "drink": "create_espresso:cold_brew"
+  },
+  {
+    "color": 4794118,
+    "drink": "create_espresso:dirty_cold_brew"
+  }
+]

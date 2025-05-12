@@ -26,6 +26,10 @@ public class DrinkBlockEntity extends BlockEntity {
         super(EspressoBlockEntityTypes.DRINK.value(), pos, blockState);
     }
 
+    public @Nullable DrinkComponent drink() {
+        return this.drinkData;
+    }
+
     @Override
     protected void applyImplicitComponents(DataComponentInput componentInput) {
         super.applyImplicitComponents(componentInput);
