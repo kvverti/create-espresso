@@ -202,20 +202,7 @@ public class Espresso {
 
         @SubscribeEvent
         public static void onRegisterColorHandlers(RegisterColorHandlersEvent.Block ev) {
-            ev.register((state, level, pos, tintIndex) -> {
-                if(tintIndex == 0) {
-                    if(level != null && pos != null) {
-                        var drink = level.getBlockEntity(pos, EspressoBlockEntityTypes.DRINK.value())
-                            .map(DrinkBlockEntity::drink)
-                            .orElse(null);
-                        if(drink != null) {
-                            var baseLoc = Objects.requireNonNull(drink.base().getKey()).location();
-                            return DrinkColorManager.INSTANCE.getColor(baseLoc);
-                        }
-                    }
-                }
-                return -1;
-            }, EspressoBlocks.FILLED_COFFEE_MUG.value());
+            ev.register(DrinkColorManager::getColor, EspressoBlocks.FILLED_COFFEE_MUG.value());
         }
     }
 
