@@ -1,7 +1,10 @@
 package systems.thedawn.espresso.client;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collector;
 
 import com.google.gson.*;
 import com.mojang.logging.LogUtils;
@@ -13,6 +16,7 @@ import systems.thedawn.espresso.block.DrinkBlockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -71,23 +75,40 @@ public class DrinkColorManager implements ResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(ResourceManager resourceManager) {
-        try(var resource = resourceManager.openAsReader(DRINK_COLORS)) {
-            this.drinkColors = GSON.fromJson(resource, DrinkColorResource.class);
-        } catch(IOException | JsonParseException ex) {
-            // reset drink colors
-            LogUtils.getLogger().error("Error fetching drink base colors", ex);
-            this.drinkColors = new DrinkColorResource();
-        }
+        this.drinkColors = parseStack(resourceManager.getResourceStack(DRINK_COLORS));
 
         this.modifierOverrides.clear();
-        var allModifierResources = resourceManager.listResources(MODIFIER_BASE_LOOKUP, loc -> loc.getPath().endsWith(MODIFIER_SUFFIX));
+        var allModifierResources = resourceManager.listResourceStacks(MODIFIER_BASE_LOOKUP, loc -> loc.getPath().endsWith(MODIFIER_SUFFIX));
         for(var entry : allModifierResources.entrySet()) {
-            try(var reader = entry.getValue().openAsReader()) {
-                var colors = GSON.fromJson(reader, DrinkColorResource.class);
+            if(!entry.getValue().isEmpty()) {
+                var colors = parseStack(entry.getValue());
                 this.modifierOverrides.put(entry.getKey(), colors);
-            } catch(IOException | JsonParseException ex) {
-                LogUtils.getLogger().error("Error fetching drink modifier colors", ex);
             }
         }
+    }
+
+    private static DrinkColorResource parseStack(List<Resource> resources) {
+        return resources.stream()
+            .map(DrinkColorManager::parse)
+            .flatMap(Optional::stream)
+            .collect(toSingleResource());
+    }
+
+    private static Optional<DrinkColorResource> parse(Resource resource) {
+        try(var reader = resource.openAsReader()) {
+            return Optional.of(GSON.fromJson(reader, DrinkColorResource.class));
+        } catch(IOException | JsonParseException ex) {
+            var packId = resource.sourcePackId();
+            LogUtils.getLogger().error("Error fetching drink color file from pack: " + packId, ex);
+            return Optional.empty();
+        }
+    }
+
+    private static Collector<DrinkColorResource, ?, DrinkColorResource> toSingleResource() {
+        return Collector.of(
+            DrinkColorResource::new,
+            DrinkColorResource::combine,
+            DrinkColorResource::combine,
+            Collector.Characteristics.UNORDERED);
     }
 }

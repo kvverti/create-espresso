@@ -26,6 +26,11 @@ public class DrinkColorResource {
         return this.colorLookup.getOrDefault(drinkLoc, -1);
     }
 
+    DrinkColorResource combine(DrinkColorResource other) {
+        this.colorLookup.putAll(other.colorLookup);
+        return this;
+    }
+
     public static class Serializer extends TypeAdapter<DrinkColorResource> {
         private static final String DRINK = "drink";
         private static final String COLOR = "color";
