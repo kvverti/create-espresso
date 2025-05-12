@@ -38,22 +38,24 @@ public class EspressoBlockStateProvider extends BlockStateProvider {
         this.slabBlock(EspressoBlocks.COFFEE_BRICK_SLAB.value(), coffee_bricks, coffee_bricks);
         this.stairsBlock(EspressoBlocks.COFFEE_BRICK_STAIRS.value(), coffee_bricks);
 
-        var coffee_mug_right = this.models().getExistingFile(this.modLoc("block/coffee_mug_right"));
-        var coffee_mug_left = this.models().getExistingFile(this.modLoc("block/coffee_mug_left"));
+        var emptyMugRight = this.models().getExistingFile(this.modLoc("block/coffee_mug_right"));
+        var emptyMugLeft = this.models().getExistingFile(this.modLoc("block/coffee_mug_left"));
         this.getVariantBuilder(EspressoBlocks.COFFEE_MUG.value())
             .forAllStates(blockState -> {
                 var handedness = blockState.getValue(CoffeeMugBlock.CHIRALITY);
-                var model = handedness == HumanoidArm.LEFT ? coffee_mug_left : coffee_mug_right;
+                var model = handedness == HumanoidArm.LEFT ? emptyMugLeft : emptyMugRight;
                 var direction = blockState.getValue(CoffeeMugBlock.FACING);
                 return ConfiguredModel.builder()
                     .modelFile(model)
                     .rotationY(direction.get2DDataValue() * 90)
                     .build();
             });
+        var filledMugRight = this.models().getExistingFile(this.modLoc("block/filled_mug_right"));
+        var filledMugLeft = this.models().getExistingFile(this.modLoc("block/filled_mug_left"));
         this.getVariantBuilder(EspressoBlocks.FILLED_COFFEE_MUG.value())
             .forAllStates(blockState -> {
                 var handedness = blockState.getValue(CoffeeMugBlock.CHIRALITY);
-                var model = handedness == HumanoidArm.LEFT ? coffee_mug_left : coffee_mug_right;
+                var model = handedness == HumanoidArm.LEFT ? filledMugLeft : filledMugRight;
                 var direction = blockState.getValue(CoffeeMugBlock.FACING);
                 return ConfiguredModel.builder()
                     .modelFile(model)
