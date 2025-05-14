@@ -5,6 +5,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import systems.thedawn.espresso.block.CoffeeMugBlock;
 import systems.thedawn.espresso.block.CoffeePlantBlock;
 import systems.thedawn.espresso.block.DrinkBlock;
+import systems.thedawn.espresso.block.steeper.SteeperBlock;
 
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.*;
@@ -60,6 +61,7 @@ public class EspressoBlocks {
 
     public static final DeferredBlock<CoffeeMugBlock> COFFEE_MUG;
     public static final DeferredBlock<DrinkBlock> FILLED_COFFEE_MUG;
+    public static final DeferredBlock<SteeperBlock> STEEPER;
 
     static {
         var props = BlockBehaviour.Properties.of()
@@ -69,5 +71,6 @@ public class EspressoBlocks {
             .isViewBlocking((state, world, pos) -> false);
         COFFEE_MUG = BLOCKS.registerBlock("coffee_mug", CoffeeMugBlock::new, props);
         FILLED_COFFEE_MUG = BLOCKS.registerBlock("filled_coffee_mug", DrinkBlock::new, props);
+        STEEPER = BLOCKS.registerBlock("steeper", SteeperBlock::new, props);
     }
 }

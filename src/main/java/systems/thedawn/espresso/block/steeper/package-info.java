@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 @FieldsAreNonnullByDefault
-package systems.thedawn.espresso.block;
+package systems.thedawn.espresso.block.steeper;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

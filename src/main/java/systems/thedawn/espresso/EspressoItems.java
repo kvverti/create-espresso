@@ -30,6 +30,7 @@ public class EspressoItems {
         ITEMS.registerItem("drink_bottle", DrinkBottleItem::new, new Item.Properties().stacksTo(1));
     public static final DeferredItem<?> DRINK_MUG =
         ITEMS.registerItem("drink_mug", props -> new DrinkItem(EspressoBlocks.FILLED_COFFEE_MUG.value(), props), new Item.Properties().stacksTo(1));
+    public static final DeferredItem<?> STEEPER = ITEMS.registerSimpleBlockItem(EspressoBlocks.STEEPER);
     public static final DeferredItem<?> POUR_OVER_COFFEE_SETUP =
         ITEMS.registerSimpleItem("pour_over_coffee_setup", new Item.Properties().stacksTo(1));
     public static final DeferredItem<?> INCOMPLETE_POUR_OVER_COFFEE_SETUP =

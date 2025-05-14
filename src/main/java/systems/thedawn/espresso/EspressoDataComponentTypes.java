@@ -2,6 +2,7 @@ package systems.thedawn.espresso;
 
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import systems.thedawn.espresso.block.steeper.SteeperComponent;
 import systems.thedawn.espresso.drink.Drink;
 import systems.thedawn.espresso.drink.DrinkComponent;
 
@@ -24,5 +25,11 @@ public final class EspressoDataComponentTypes {
             DataComponentType.<DrinkComponent>builder()
                 .persistent(DrinkComponent.CODEC)
                 .networkSynchronized(DrinkComponent.STREAM_CODEC)
+                .build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<SteeperComponent>> STEEPING =
+        DATA_COMPONENT_TYPES.register("steeping", () ->
+            DataComponentType.<SteeperComponent>builder()
+                .persistent(SteeperComponent.CODEC)
+                .networkSynchronized(SteeperComponent.STREAM_CODEC)
                 .build());
 }
