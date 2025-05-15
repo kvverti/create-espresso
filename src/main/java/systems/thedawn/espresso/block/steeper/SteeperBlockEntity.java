@@ -58,6 +58,7 @@ public class SteeperBlockEntity extends BlockEntity {
         if(this.level != null && !this.level.isClientSide()) {
             var state = this.level.getBlockState(this.worldPosition);
             this.level.sendBlockUpdated(this.worldPosition, state, state, 2);
+            this.setChanged();
         }
     }
 
@@ -112,7 +113,7 @@ public class SteeperBlockEntity extends BlockEntity {
         return item;
     }
 
-    FluidStack getFilledFluid() {
+    public FluidStack getFilledFluid() {
         return this.steepingData.drinkFluid();
     }
 
@@ -127,6 +128,7 @@ public class SteeperBlockEntity extends BlockEntity {
             this.steepingTime = DONE_STEEPING;
         } else {
             this.steepingTime++;
+            this.setChanged();
         }
     }
 
@@ -144,6 +146,7 @@ public class SteeperBlockEntity extends BlockEntity {
         this.findRecipe().ifPresent(recipe -> {
             this.steepingTime = 0;
             this.maxSteepingTime = recipe.duration();
+            this.setChanged();
         });
     }
 

@@ -5,6 +5,7 @@ import java.util.concurrent.CompletableFuture;
 import com.simibubi.create.AllTags;
 import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoItems;
+import systems.thedawn.espresso.EspressoTags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -27,5 +28,7 @@ public class EspressoItemTagsProvider extends ItemTagsProvider {
                 EspressoItems.INCOMPLETE_POUR_OVER_COFFEE_SETUP.value(),
                 EspressoItems.POUR_OVER_COFFEE_SETUP.value()
             );
+        this.tag(EspressoTags.STEEPER_ENABLED_ITEMS)
+            .add(EspressoItems.COFFEE_GROUNDS.value());
     }
 }

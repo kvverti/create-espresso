@@ -1,0 +1,47 @@
+{
+  "parent": "block/block",
+  "render_type": "cutout",
+  "textures": {
+    "particle": "create_espresso:block/steeper_side",
+    "side": "create_espresso:block/steeper_side",
+    "inside": "create_espresso:block/steeper_inside",
+    "top": "create_espresso:block/steeper_top",
+    "bottom": "create_espresso:block/steeper_bottom"
+  },
+  "elements": [
+    {
+      "from": [3,0,3],
+      "to": [13,13,13],
+      "faces": {
+        "down": { "texture": "#bottom" },
+        "up": { "texture": "#top" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "west": { "texture": "#side" },
+        "east": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [4,10,4],
+      "to": [12,13,12],
+      "faces": {
+        "down": { "texture": "#top" },
+        "north": { "texture": "#inside" },
+        "south": { "texture": "#inside" },
+        "west": { "texture": "#inside" },
+        "east": { "texture": "#inside" }
+      }
+    },
+    {
+      "from": [7,3,7],
+      "to": [9,10,9],
+      "faces": {
+        "down": { "texture": "#top" },
+        "north": { "texture": "#inside" },
+        "south": { "texture": "#inside" },
+        "west": { "texture": "#inside" },
+        "east": { "texture": "#inside" }
+      }
+    }
+  ]
+}

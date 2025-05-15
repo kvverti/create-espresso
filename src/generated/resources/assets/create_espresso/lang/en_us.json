@@ -5,6 +5,7 @@
   "block.create_espresso.coffee_mug": "Coffee Mug",
   "block.create_espresso.coffee_plant": "Coffee Cherry",
   "block.create_espresso.hot_water": "Hot Water",
+  "block.create_espresso.steeper": "Steeper",
   "create_espresso.drink.create_espresso.cold_brew": "Cold Brew",
   "create_espresso.drink.create_espresso.dirty_cold_brew": "Dirty Cold Brew",
   "create_espresso.drink.create_espresso.empty": "Uncraftable",

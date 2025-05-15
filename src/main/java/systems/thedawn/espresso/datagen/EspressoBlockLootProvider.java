@@ -36,6 +36,7 @@ public class EspressoBlockLootProvider extends BlockLootSubProvider {
     protected void generate() {
         this.coffeePlantDrops();
         this.drinkHolderDrops(EspressoBlocks.FILLED_COFFEE_MUG.value());
+        this.steeperDrops();
 
         this.dropSelf(EspressoBlocks.COFFEE_BRICKS.value());
         this.add(EspressoBlocks.COFFEE_BRICK_SLAB.value(), this.createSlabItemTable(EspressoBlocks.COFFEE_BRICK_SLAB.value()));
@@ -61,5 +62,12 @@ public class EspressoBlockLootProvider extends BlockLootSubProvider {
             .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
                 .include(EspressoDataComponentTypes.DRINK.value()));
         this.add(block, lootTable);
+    }
+
+    private void steeperDrops() {
+        var lootTable = this.createSingleItemTable(EspressoBlocks.STEEPER.value())
+            .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                .include(EspressoDataComponentTypes.STEEPING.value()));
+        this.add(EspressoBlocks.STEEPER.value(), lootTable);
     }
 }

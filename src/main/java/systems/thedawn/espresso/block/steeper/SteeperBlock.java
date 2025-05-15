@@ -8,6 +8,7 @@ import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
+import systems.thedawn.espresso.EspressoTags;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.TransparentBlock;
@@ -25,6 +27,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class SteeperBlock extends TransparentBlock implements EntityBlock {
     public static final int FLUID_CAPACITY = 250;
@@ -45,6 +50,13 @@ public class SteeperBlock extends TransparentBlock implements EntityBlock {
             return (level1, pos, state1, blockEntity) -> ((SteeperBlockEntity) blockEntity).tick();
         }
         return EntityBlock.super.getTicker(level, state, blockEntityType);
+    }
+
+    private static final VoxelShape SHAPE = Shapes.box(3f / 16f, 0f, 3f / 16f, 13f / 16f, 13f / 16f, 13f / 16f);
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
     }
 
     /**
@@ -72,7 +84,7 @@ public class SteeperBlock extends TransparentBlock implements EntityBlock {
                         }
                     }
 
-                    if(resultFluid != null) {
+                    if(resultFluid != null && resultFluid.is(EspressoTags.STEEPER_ENABLED_FLUIDS)) {
                         if(!level.isClientSide()) {
                             be.fillWithFluid(resultFluid);
                             player.setItemInHand(hand, remainingItem);
@@ -103,7 +115,7 @@ public class SteeperBlock extends TransparentBlock implements EntityBlock {
                     }
                 }
 
-                if(be.canPlaceItem(stack)) {
+                if(stack.is(EspressoTags.STEEPER_ENABLED_ITEMS) && be.canPlaceItem(stack)) {
                     if(!level.isClientSide()) {
                         var placed = stack.copy();
                         placed.setCount(1);

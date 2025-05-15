@@ -63,6 +63,11 @@ public class EspressoBlockStateProvider extends BlockStateProvider {
                     .build();
             });
 
+        var steeper = this.models().getExistingFile(this.modLoc("block/steeper"));
+        this.getVariantBuilder(EspressoBlocks.STEEPER.value())
+            .partialState()
+            .setModels(ConfiguredModel.builder().modelFile(steeper).build());
+
         this.registerFluidModels();
     }
 

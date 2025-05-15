@@ -11,6 +11,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
@@ -20,8 +21,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.slf4j.Logger;
-import systems.thedawn.espresso.block.DrinkBlockEntity;
 import systems.thedawn.espresso.client.DrinkColorManager;
+import systems.thedawn.espresso.client.render.SteeperBlockEntityRenderer;
 import systems.thedawn.espresso.datagen.*;
 import systems.thedawn.espresso.drink.BuiltinDrinkModifiers;
 import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
@@ -204,6 +205,11 @@ public class Espresso {
         public static void onRegisterColorHandlers(RegisterColorHandlersEvent.Block ev) {
             ev.register(DrinkColorManager::getColor, EspressoBlocks.FILLED_COFFEE_MUG.value());
         }
+
+        @SubscribeEvent
+        public static void onRegisterEntityRenderers(EntityRenderersEvent.RegisterRenderers ev) {
+            ev.registerBlockEntityRenderer(EspressoBlockEntityTypes.STEEPER.value(), SteeperBlockEntityRenderer::new);
+        }
     }
 
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD)
@@ -224,6 +230,7 @@ public class Espresso {
 
             ev.createBlockAndItemTags(EspressoBlockTagsProvider::new, EspressoItemTagsProvider::new);
 
+            generator.addProvider(ev.includeClient(), new EspressoFluidTagsProvider(output, lookupProvider, existingFileHelper));
             generator.addProvider(ev.includeClient(), new EspressoDrinkColorProvider(output));
             generator.addProvider(ev.includeClient(), new EspressoBlockStateProvider(output, existingFileHelper));
             generator.addProvider(ev.includeClient(), new EspressoItemModelProvider(output, existingFileHelper));
