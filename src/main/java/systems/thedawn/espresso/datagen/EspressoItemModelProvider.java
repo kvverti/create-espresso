@@ -36,5 +36,6 @@ public class EspressoItemModelProvider extends ItemModelProvider {
         this.basicItem(EspressoItems.POUR_OVER_COFFEE_SETUP.value());
         this.basicItem(EspressoItems.ICE_CUBES.value());
         this.basicItem(EspressoItems.CRUSHED_ICE.value());
+        this.simpleBlockItem(EspressoBlocks.STEEPER.value());
     }
 }

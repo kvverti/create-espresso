@@ -3,6 +3,7 @@ package systems.thedawn.espresso.datagen;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
+import com.simibubi.create.AllItems;
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe;
 import com.simibubi.create.content.fluids.transfer.FillingRecipe;
 import com.simibubi.create.content.kinetics.crusher.CrushingRecipe;
@@ -184,6 +185,17 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .define('#', Items.PAPER)
             .unlockedBy("x", has(Items.PAPER))
             .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "crafting/coffee_filter"));
+
+        // steeper
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, EspressoItems.STEEPER, 1)
+            .pattern("---")
+            .pattern("O#O")
+            .pattern("OOO")
+            .define('-', AllItems.IRON_SHEET)
+            .define('O', Items.GLASS)
+            .define('#', Items.IRON_BARS)
+            .unlockedBy("x", has(Items.GLASS))
+            .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "crafting/steeper"));
     }
 
     private void buildIceRecipes(RecipeOutput recipeOutput) {

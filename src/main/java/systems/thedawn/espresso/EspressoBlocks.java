@@ -71,6 +71,13 @@ public class EspressoBlocks {
             .isViewBlocking((state, world, pos) -> false);
         COFFEE_MUG = BLOCKS.registerBlock("coffee_mug", CoffeeMugBlock::new, props);
         FILLED_COFFEE_MUG = BLOCKS.registerBlock("filled_coffee_mug", DrinkBlock::new, props);
-        STEEPER = BLOCKS.registerBlock("steeper", SteeperBlock::new, props);
+
+        var glassProps = BlockBehaviour.Properties.of()
+            .instabreak()
+            .noOcclusion()
+            .isSuffocating((state, level, pos) -> false)
+            .isViewBlocking((state, level, pos) -> false)
+            .sound(SoundType.GLASS);
+        STEEPER = BLOCKS.registerBlock("steeper", SteeperBlock::new, glassProps);
     }
 }

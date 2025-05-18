@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:iron_bars"
+    },
+    "-": {
+      "item": "create:iron_sheet"
+    },
+    "O": {
+      "item": "minecraft:glass"
+    }
+  },
+  "pattern": [
+    "---",
+    "O#O",
+    "OOO"
+  ],
+  "result": {
+    "count": 1,
+    "id": "create_espresso:steeper"
+  }
+}
