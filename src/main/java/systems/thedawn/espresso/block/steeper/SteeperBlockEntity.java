@@ -117,6 +117,10 @@ public class SteeperBlockEntity extends BlockEntity {
         return this.steepingData.drinkFluid();
     }
 
+    public ItemStack getDregs() {
+        return this.steepingData.dregs();
+    }
+
     void tick() {
         if(this.steepingTime == DONE_STEEPING) {
             return;

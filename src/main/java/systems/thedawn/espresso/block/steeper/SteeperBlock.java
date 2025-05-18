@@ -1,5 +1,7 @@
 package systems.thedawn.espresso.block.steeper;
 
+import java.util.List;
+
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe;
 import com.simibubi.create.content.fluids.transfer.FillingRecipe;
@@ -26,6 +28,8 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -156,5 +160,17 @@ public class SteeperBlock extends TransparentBlock implements EntityBlock {
             }
         }
         return null;
+    }
+
+    @Override
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+        var drops = super.getDrops(state, params);
+        if(params.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof SteeperBlockEntity steeper) {
+            var dregs = steeper.getDregs();
+            if(!dregs.isEmpty()) {
+                drops.add(dregs);
+            }
+        }
+        return drops;
     }
 }
