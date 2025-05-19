@@ -23,7 +23,7 @@ import net.minecraft.world.effect.MobEffectInstance;
  * @param effects the potion effects applied after drinking
  */
 public record Drink(Type type, List<MobEffectInstance> effects) {
-    public static final Drink EMPTY = new Drink(Type.COFFEE, List.of());
+    public static final Drink EMPTY = new Drink(Type.NONE, List.of());
 
     public static final Codec<Drink> DIRECT_CODEC =
         RecordCodecBuilder.create(inst -> inst.group(
@@ -44,12 +44,14 @@ public record Drink(Type type, List<MobEffectInstance> effects) {
     }
 
     public enum Type implements StringRepresentable {
+        NONE,
         COFFEE,
         TEA;
 
         @Override
         public String getSerializedName() {
             return switch(this) {
+                case NONE -> "none";
                 case COFFEE -> "coffee";
                 case TEA -> "tea";
             };
