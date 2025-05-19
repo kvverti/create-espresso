@@ -6,19 +6,24 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collector;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
 import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
+import systems.thedawn.espresso.EspressoDataComponentTypes;
 import systems.thedawn.espresso.block.DrinkBlockEntity;
+import systems.thedawn.espresso.drink.DrinkComponent;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -44,33 +49,47 @@ public class DrinkColorManager implements ResourceManagerReloadListener {
         return this.drinkColors.lookup(drinkLoc);
     }
 
-    public static int getColor(BlockState ignored, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos, int tintIndex) {
+    public static int getBlockColor(BlockState ignored, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos, int tintIndex) {
         if(tintIndex == 0) {
             if(level != null && pos != null) {
                 var drink = level.getBlockEntity(pos, EspressoBlockEntityTypes.DRINK.value())
                     .map(DrinkBlockEntity::drink)
                     .orElse(null);
                 if(drink != null) {
-                    var baseLoc = Objects.requireNonNull(drink.base().getKey()).location();
-                    var color = DrinkColorManager.INSTANCE.getBaseColor(baseLoc);
-                    for(var modifier : drink.modifiers()) {
-                        var modifierLoc = Objects.requireNonNull(modifier.getKey())
-                            .location()
-                            .withPrefix(MODIFIER_BASE)
-                            .withSuffix(MODIFIER_SUFFIX);
-                        var modifierColors = DrinkColorManager.INSTANCE.modifierOverrides.get(modifierLoc);
-                        if(modifierColors != null) {
-                            var overrideColor = modifierColors.lookup(baseLoc);
-                            if(overrideColor != -1) {
-                                color = overrideColor;
-                            }
-                        }
-                    }
-                    return color;
+                    return getColorFromDrinkComponent(drink);
                 }
             }
         }
         return -1;
+    }
+
+    public static int getItemColor(ItemStack stack, int tintIndex) {
+        if(tintIndex == 0) {
+            var component = stack.get(EspressoDataComponentTypes.DRINK);
+            if(component != null) {
+                return getColorFromDrinkComponent(component);
+            }
+        }
+        return -1;
+    }
+
+    private static int getColorFromDrinkComponent(DrinkComponent drink) {
+        var baseLoc = Objects.requireNonNull(drink.base().getKey()).location();
+        var color = DrinkColorManager.INSTANCE.getBaseColor(baseLoc);
+        for(var modifier : drink.modifiers()) {
+            var modifierLoc = Objects.requireNonNull(modifier.getKey())
+                .location()
+                .withPrefix(MODIFIER_BASE)
+                .withSuffix(MODIFIER_SUFFIX);
+            var modifierColors = DrinkColorManager.INSTANCE.modifierOverrides.get(modifierLoc);
+            if(modifierColors != null) {
+                var overrideColor = modifierColors.lookup(baseLoc);
+                if(overrideColor != -1) {
+                    color = overrideColor;
+                }
+            }
+        }
+        return color;
     }
 
     @Override

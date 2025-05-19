@@ -60,7 +60,7 @@ public class EspressoDrinkColorProvider implements DataProvider {
         this.registerColor(BuiltinEspressoDrinks.POUR_OVER, coffeeColor);
         this.registerColor(BuiltinEspressoDrinks.ESPRESSO, coffeeColor);
 
-        var latteColor = 0xf3b273;
+        var latteColor = 0xe7ae6b;
         var milkOverrides = new Object2IntOpenHashMap<ResourceLocation>();
         milkOverrides.put(BuiltinEspressoDrinks.DIRTY_COLD_BREW.location(), latteColor);
         milkOverrides.put(BuiltinEspressoDrinks.COLD_BREW.location(), latteColor);

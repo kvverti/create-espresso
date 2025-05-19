@@ -203,8 +203,13 @@ public class Espresso {
         }
 
         @SubscribeEvent
-        public static void onRegisterColorHandlers(RegisterColorHandlersEvent.Block ev) {
-            ev.register(DrinkColorManager::getColor, EspressoBlocks.FILLED_COFFEE_MUG.value());
+        public static void onRegisterBlockColorHandlers(RegisterColorHandlersEvent.Block ev) {
+            ev.register(DrinkColorManager::getBlockColor, EspressoBlocks.FILLED_COFFEE_MUG.value());
+        }
+
+        @SubscribeEvent
+        public static void onRegisterItemColorHandlers(RegisterColorHandlersEvent.Item ev) {
+            ev.register(DrinkColorManager::getItemColor, EspressoItems.DRINK_MUG.value());
         }
 
         @SubscribeEvent
