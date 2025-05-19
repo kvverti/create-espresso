@@ -7,6 +7,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
 import net.minecraft.resources.ResourceLocation;
@@ -43,7 +44,7 @@ public class DrinkColorResource {
                 out.name(DRINK);
                 out.value(entry.getKey().toString());
                 out.name(COLOR);
-                out.value(entry.getIntValue());
+                out.value(Integer.toHexString(entry.getIntValue()));
                 out.endObject();
             }
             out.endArray();
@@ -61,7 +62,13 @@ public class DrinkColorResource {
                 while(in.peek() != JsonToken.END_OBJECT) {
                     switch(in.nextName()) {
                         case DRINK -> drink = ResourceLocation.tryParse(in.nextString());
-                        case COLOR -> color = in.nextInt();
+                        case COLOR -> {
+                            try {
+                                color = Integer.parseInt(in.nextString(), 16);
+                            } catch(NumberFormatException ex) {
+                                LogUtils.getLogger().warn("Invalid color at " + in.getPreviousPath());
+                            }
+                        }
                         default -> in.skipValue();
                     }
                 }
