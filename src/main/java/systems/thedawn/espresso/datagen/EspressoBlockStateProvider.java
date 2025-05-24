@@ -7,6 +7,7 @@ import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoBlocks;
 import systems.thedawn.espresso.block.CoffeeMugBlock;
 import systems.thedawn.espresso.block.CoffeePlantBlock;
+import systems.thedawn.espresso.block.sieve.SieveBlock;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.entity.HumanoidArm;
@@ -67,6 +68,16 @@ public class EspressoBlockStateProvider extends BlockStateProvider {
         this.getVariantBuilder(EspressoBlocks.STEEPER.value())
             .partialState()
             .setModels(ConfiguredModel.builder().modelFile(steeper).build());
+
+        var sieve = this.models().getExistingFile(this.modLoc("block/sieve"));
+        this.getVariantBuilder(EspressoBlocks.SIEVE.value())
+            .forAllStates(blockState -> {
+                var facing = blockState.getValue(SieveBlock.FACING);
+                return ConfiguredModel.builder()
+                    .modelFile(sieve)
+                    .rotationY(facing.get2DDataValue() * 90)
+                    .build();
+            });
 
         this.registerFluidModels();
     }

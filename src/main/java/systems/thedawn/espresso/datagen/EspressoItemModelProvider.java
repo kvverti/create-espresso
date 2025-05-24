@@ -40,6 +40,7 @@ public class EspressoItemModelProvider extends ItemModelProvider {
         this.basicItem(EspressoItems.ICE_CUBES.value());
         this.basicItem(EspressoItems.CRUSHED_ICE.value());
         this.simpleBlockItem(EspressoBlocks.STEEPER.value());
+        this.simpleBlockItem(EspressoBlocks.SIEVE.value());
     }
 
     private void drinkMug() {

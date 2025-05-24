@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "create_espresso:block/sieve",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "create_espresso:block/sieve",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "create_espresso:block/sieve"
+    },
+    "facing=west": {
+      "model": "create_espresso:block/sieve",
+      "y": 90
+    }
+  }
+}

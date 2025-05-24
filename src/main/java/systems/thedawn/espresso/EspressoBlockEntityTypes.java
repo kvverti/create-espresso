@@ -3,6 +3,7 @@ package systems.thedawn.espresso;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import systems.thedawn.espresso.block.DrinkBlockEntity;
+import systems.thedawn.espresso.block.sieve.SieveBlockEntity;
 import systems.thedawn.espresso.block.steeper.SteeperBlockEntity;
 
 import net.minecraft.core.registries.Registries;
@@ -21,5 +22,10 @@ public final class EspressoBlockEntityTypes {
         BLOCK_ENTITY_TYPES.register("steeper", () ->
             BlockEntityType.Builder
                 .of(SteeperBlockEntity::new, EspressoBlocks.STEEPER.value())
+                .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SieveBlockEntity>> SIEVE =
+        BLOCK_ENTITY_TYPES.register("sieve", () ->
+            BlockEntityType.Builder
+                .of(SieveBlockEntity::new, EspressoBlocks.SIEVE.value())
                 .build(null));
 }

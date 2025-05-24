@@ -11,6 +11,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
@@ -21,6 +22,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.slf4j.Logger;
+import systems.thedawn.espresso.block.sieve.SieveBlockEntity;
 import systems.thedawn.espresso.client.DrinkColorManager;
 import systems.thedawn.espresso.client.render.SteeperBlockEntityRenderer;
 import systems.thedawn.espresso.datagen.*;
@@ -82,6 +84,7 @@ public class Espresso {
             output.accept(EspressoItems.HOT_WATER_BUCKET);
             output.accept(EspressoItems.HOT_MILK_BOTTLE);
             output.accept(EspressoItems.STEEPER);
+            output.accept(EspressoItems.SIEVE);
             // drink bottles
             var registries = parameters.holders();
             output.accept(drinkBottle(BuiltinEspressoDrinks.DIRTY_COLD_BREW, registries));
@@ -133,6 +136,14 @@ public class Espresso {
         return Objects.requireNonNull(Minecraft.getInstance().getConnection())
             .registryAccess()
             .registryOrThrow(key);
+    }
+
+    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD)
+    public static class CommonEvents {
+        @SubscribeEvent
+        public static void registerCapabilities(RegisterCapabilitiesEvent ev) {
+            SieveBlockEntity.registerCapabilities(ev);
+        }
     }
 
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD)

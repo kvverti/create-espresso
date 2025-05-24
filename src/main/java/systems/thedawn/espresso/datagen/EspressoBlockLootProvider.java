@@ -42,6 +42,7 @@ public class EspressoBlockLootProvider extends BlockLootSubProvider {
         this.dropSelf(EspressoBlocks.COFFEE_BRICK_STAIRS.value());
         this.dropSelf(EspressoBlocks.COFFEE_MUG.value());
         this.dropSelf(EspressoBlocks.STEEPER.value());
+        this.dropSelf(EspressoBlocks.SIEVE.value());
     }
 
     private void coffeePlantDrops() {

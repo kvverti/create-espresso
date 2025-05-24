@@ -32,6 +32,7 @@
   "item.create_espresso.drink_bottle.coffee": "Coffee Bottle",
   "item.create_espresso.drink_bottle.tea": "Tea Bottle",
   "item.create_espresso.drink_mug.coffee": "Coffee Mug",
+  "item.create_espresso.drink_mug.none": "Drink Mug",
   "item.create_espresso.drink_mug.tea": "Tea Mug",
   "item.create_espresso.hot_milk_bottle": "Hot Milk Bottle",
   "item.create_espresso.hot_water_bucket": "Hot Water Bucket",

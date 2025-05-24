@@ -5,6 +5,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import systems.thedawn.espresso.block.CoffeeMugBlock;
 import systems.thedawn.espresso.block.CoffeePlantBlock;
 import systems.thedawn.espresso.block.DrinkBlock;
+import systems.thedawn.espresso.block.sieve.SieveBlock;
 import systems.thedawn.espresso.block.steeper.SteeperBlock;
 
 import net.minecraft.world.item.DyeColor;
@@ -80,4 +81,7 @@ public class EspressoBlocks {
             .sound(SoundType.GLASS);
         STEEPER = BLOCKS.registerBlock("steeper", SteeperBlock::new, glassProps);
     }
+
+    public static final DeferredBlock<SieveBlock> SIEVE =
+        BLOCKS.registerBlock("sieve", SieveBlock::new, BlockBehaviour.Properties.of().noOcclusion().isSuffocating((state, level, pos) -> false));
 }
