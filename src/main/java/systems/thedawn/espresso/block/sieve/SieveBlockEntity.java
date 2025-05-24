@@ -65,6 +65,14 @@ public class SieveBlockEntity extends SmartBlockEntity {
         this.upperInventories = new CombinedInvWrapper(this.inputInventory, this.upperOutputInventory);
     }
 
+    public IItemHandler upperInventory() {
+        return this.upperInventories;
+    }
+
+    public IFluidHandler upperTank() {
+        return this.upperFluidTank.getCapability();
+    }
+
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         this.recipeFilter = new FilteringBehaviour(this, new SieveFilterSlot())

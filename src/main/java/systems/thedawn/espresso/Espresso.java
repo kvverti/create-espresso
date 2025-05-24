@@ -24,6 +24,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.slf4j.Logger;
 import systems.thedawn.espresso.block.sieve.SieveBlockEntity;
 import systems.thedawn.espresso.client.DrinkColorManager;
+import systems.thedawn.espresso.client.render.SieveBlockEntityRenderer;
 import systems.thedawn.espresso.client.render.SteeperBlockEntityRenderer;
 import systems.thedawn.espresso.datagen.*;
 import systems.thedawn.espresso.drink.BuiltinDrinkModifiers;
@@ -226,6 +227,7 @@ public class Espresso {
         @SubscribeEvent
         public static void onRegisterEntityRenderers(EntityRenderersEvent.RegisterRenderers ev) {
             ev.registerBlockEntityRenderer(EspressoBlockEntityTypes.STEEPER.value(), SteeperBlockEntityRenderer::new);
+            ev.registerBlockEntityRenderer(EspressoBlockEntityTypes.SIEVE.value(), SieveBlockEntityRenderer::new);
         }
     }
 
