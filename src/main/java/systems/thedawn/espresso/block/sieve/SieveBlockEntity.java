@@ -1,9 +1,7 @@
 package systems.thedawn.espresso.block.sieve;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
@@ -109,16 +107,26 @@ public class SieveBlockEntity extends SmartBlockEntity {
         return this.upperInventories;
     }
 
+    public IItemHandler lowerInventory() {
+        return this.lowerOutputInventory;
+    }
+
     public IFluidHandler upperTank() {
         return this.upperFluidTank.getCapability();
+    }
+
+    public IFluidHandler lowerTank() {
+        return this.lowerFluidTank.getCapability();
     }
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         this.recipeFilter = new FilteringBehaviour(this, new SieveFilterSlot())
             .forRecipes();
-        this.upperFluidTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, 1000, false);
-        this.lowerFluidTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, 1000, false);
+        this.upperFluidTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, 1000, false)
+            .whenFluidUpdates(() -> this.contentsChanged = true);
+        this.lowerFluidTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, 1000, false)
+            .whenFluidUpdates(() -> this.contentsChanged = true);
         this.beltInput = new DirectBeltInputBehaviour(this);
         behaviours.add(this.recipeFilter);
         behaviours.add(this.upperFluidTank);

@@ -45,9 +45,16 @@ public class SieveBlockEntityRenderer extends SmartBlockEntityRenderer<SieveBloc
                 poseStack.popPose();
             }
         }
+        var lowerItem = blockEntity.lowerInventory().getStackInSlot(0);
+        if(!lowerItem.isEmpty()) {
+            poseStack.pushPose();
+            poseStack.translate(0.5, 0.25, 0.5);
+            this.itemRenderer.renderStatic(lowerItem, ItemDisplayContext.GROUND, packedLight, packedOverlay, poseStack, bufferSource, blockEntity.getLevel(), 0);
+            poseStack.popPose();
+        }
 
-        var upperFluid = blockEntity.upperTank().getFluidInTank(0);
         // render fluids
+        var upperFluid = blockEntity.upperTank().getFluidInTank(0);
         if(!upperFluid.isEmpty()) {
             var amount = upperFluid.getAmount();
             var yMax = 0.75f - 0.00025f * (1000 - amount);
@@ -56,6 +63,18 @@ public class SieveBlockEntityRenderer extends SmartBlockEntityRenderer<SieveBloc
                 amount,
                 2f / 16f, 0.5f, 2f / 16f,
                 14f / 16f, yMax, 14f / 16f,
+                bufferSource, poseStack, packedLight, true, false
+            );
+        }
+        var lowerFluid = blockEntity.lowerTank().getFluidInTank(0);
+        if(!lowerFluid.isEmpty()) {
+            var amount = lowerFluid.getAmount();
+            var yMin = 0.25f + 0.00025f * (1000 - amount);
+            FluidRenderer.renderFluidBox(
+                lowerFluid.getFluid(),
+                amount,
+                2f / 16f, yMin, 2f / 16f,
+                14f / 16f, 0.5f, 14f / 16f,
                 bufferSource, poseStack, packedLight, true, false
             );
         }
