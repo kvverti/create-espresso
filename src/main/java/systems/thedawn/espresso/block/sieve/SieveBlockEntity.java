@@ -1,7 +1,11 @@
 package systems.thedawn.espresso.block.sieve;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -14,15 +18,24 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.Nullable;
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
 import systems.thedawn.espresso.EspressoBlocks;
+import systems.thedawn.espresso.EspressoRecipeTypes;
+import systems.thedawn.espresso.recipe.FilterCondition;
+import systems.thedawn.espresso.recipe.SieveRecipe;
+import systems.thedawn.espresso.recipe.SieveRecipeInput;
+import systems.thedawn.espresso.util.ItemHandlerListView;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -36,30 +49,57 @@ public class SieveBlockEntity extends SmartBlockEntity {
     private static final String FILTER_INV = "FilterInv";
     private static final String UPPER_OUTPUT_INV = "UpperOutputInv";
     private static final String LOWER_OUTPUT_INV = "LowerOutputInv";
+    private static final String REMAINING_TIME = "RemainingTime";
+    private static final String OUTPUT_BUFFER = "OutputBuffer";
 
+    // behaviors, set in the parent ctor
     private FilteringBehaviour recipeFilter;
     private SmartFluidTankBehaviour upperFluidTank;
     private SmartFluidTankBehaviour lowerFluidTank;
     private DirectBeltInputBehaviour beltInput;
 
+    // inventories
     private final SmartInventory inputInventory;
     private final SmartInventory filterInventory;
     private final SmartInventory upperOutputInventory;
     private final SmartInventory lowerOutputInventory;
     private final IItemHandler upperInventories;
 
+    /**
+     * A buffer to store remainder outputs that can't be placed in the upper output inventory.
+     */
+    private final List<ItemStack> outputBuffer = new ArrayList<>();
+
+    /**
+     * Maximum size of the output buffer. The sieve will not process items if the buffer becomes full.
+     */
+    private static final int MAX_OUTPUT_BUFFER_SIZE = 16;
+
+    /**
+     * The remaining processing time for the current recipe.
+     */
+    private int timeRemaining = -1;
+
+    // transient data - not serialized
+    private transient @Nullable SieveRecipe currentRecipe;
+    private transient boolean contentsChanged;
+
     public SieveBlockEntity(BlockPos pos, BlockState state) {
         super(EspressoBlockEntityTypes.SIEVE.value(), pos, state);
         this.inputInventory = new SmartInventory(3, this)
+            .whenContentsChanged(slot -> this.contentsChanged = true)
             .allowInsertion()
             .allowExtraction();
         this.filterInventory = new SmartInventory(1, this, 1, false)
+            .whenContentsChanged(slot -> this.contentsChanged = true)
             .allowInsertion()
             .allowExtraction();
         this.upperOutputInventory = new SmartInventory(3, this)
+            .whenContentsChanged(slot -> this.contentsChanged = true)
             .forbidInsertion()
             .allowExtraction();
-        this.lowerOutputInventory = new SmartInventory(3, this)
+        this.lowerOutputInventory = new SmartInventory(1, this)
+            .whenContentsChanged(slot -> this.contentsChanged = true)
             .forbidInsertion()
             .allowExtraction();
         this.upperInventories = new CombinedInvWrapper(this.inputInventory, this.upperOutputInventory);
@@ -115,12 +155,149 @@ public class SieveBlockEntity extends SmartBlockEntity {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        if(this.timeRemaining > 0) {
+            this.timeRemaining--;
+        }
+    }
+
+    @Override
+    public void lazyTick() {
+        if(this.timeRemaining == 0) {
+            this.setRecipe();
+            if(this.currentRecipe != null && this.outputBuffer.size() < MAX_OUTPUT_BUFFER_SIZE) {
+                if(this.tryAcceptOutputs(true)) {
+                    this.tryAcceptOutputs(false);
+                    this.shrinkInputs();
+                }
+            }
+            this.timeRemaining = -1;
+        }
+        if(this.contentsChanged) {
+            this.pullOutputBuffer();
+            // verify any recipe is still valid
+            this.setRecipe();
+            if(this.timeRemaining < 0 && this.currentRecipe != null) {
+                this.timeRemaining = this.currentRecipe.duration();
+            }
+            this.contentsChanged = false;
+        }
+    }
+
+    private void setRecipe() {
+        if(this.level != null && !level.isClientSide()) {
+            var input = new SieveRecipeInput(
+                new ItemHandlerListView(this.upperInventories),
+                this.upperFluidTank.getCapability().getFluidInTank(0),
+                false,
+                FilterCondition.NONE
+            );
+            // reuse current recipe if possible
+            if(this.currentRecipe == null || !this.currentRecipe.matches(input, this.level)) {
+                this.currentRecipe = this.level.getRecipeManager()
+                    .getRecipeFor(EspressoRecipeTypes.SIEVING.value(), input, this.level)
+                    .map(RecipeHolder::value)
+                    .orElse(null);
+            }
+        }
+    }
+
+    private boolean tryAcceptOutputs(boolean simulate) {
+        if(this.currentRecipe == null) {
+            throw new IllegalStateException("Cannot accept outputs of an empty recipe");
+        }
+
+        var accepted = true;
+        // insert item output
+        var output = this.currentRecipe.resultItem();
+        if(!output.isEmpty()) {
+            this.lowerOutputInventory.allowInsertion();
+            var remainingOutput = this.lowerOutputInventory.insertItem(0, output, simulate);
+            this.lowerOutputInventory.forbidInsertion();
+            if(!remainingOutput.isEmpty()) {
+                if(!simulate) {
+                    LogUtils.getLogger().warn("Sieve voided item output: " + remainingOutput);
+                }
+                accepted = false;
+            }
+        }
+        // insert fluid output
+        var outputFluid = this.currentRecipe.resultFluid();
+        if(!outputFluid.isEmpty()) {
+            this.lowerFluidTank.allowInsertion();
+            var filledAmount = this.lowerFluidTank.getCapability().fill(outputFluid, simulate ? IFluidHandler.FluidAction.SIMULATE : IFluidHandler.FluidAction.EXECUTE);
+            this.lowerFluidTank.forbidInsertion();
+            if(filledAmount < outputFluid.getAmount()) {
+                if(!simulate) {
+                    LogUtils.getLogger().warn("Sieve voided fluid output: " + (outputFluid.getAmount() - filledAmount));
+                }
+                accepted = false;
+            }
+        }
+        // insert remaining items
+        var remainders = this.currentRecipe.remainingItems();
+        for(var stack : remainders) {
+            this.upperOutputInventory.allowInsertion();
+            var leftOver = ItemHandlerHelper.insertItemStacked(this.upperOutputInventory, stack, simulate);
+            this.upperOutputInventory.forbidInsertion();
+            if(!leftOver.isEmpty()) {
+                if(!simulate) {
+                    this.outputBuffer.add(leftOver);
+                }
+                accepted = false;
+            }
+        }
+
+        return accepted;
+    }
+
+    private void shrinkInputs() {
+        if(this.currentRecipe == null) {
+            throw new IllegalStateException("Cannot shrink inputs of an empty recipe");
+        }
+
+        var consumedInputs = this.currentRecipe.getMatchedInputItems(new ItemHandlerListView(this.upperInventories));
+        var slots = this.upperInventories.getSlots();
+        for(var consumedStack : consumedInputs) {
+            for(var slot = 0; slot < slots; slot++) {
+                var stack = this.upperInventories.getStackInSlot(slot);
+                if(ItemStack.isSameItemSameComponents(consumedStack, stack)) {
+                    this.upperInventories.extractItem(slot, 1, false);
+                    break;
+                }
+            }
+        }
+
+        var consumedFluidAmount = this.currentRecipe.consumedFluidAmount();
+        this.upperFluidTank.getCapability().drain(consumedFluidAmount, IFluidHandler.FluidAction.EXECUTE);
+    }
+
+    private void pullOutputBuffer() {
+        while(!this.outputBuffer.isEmpty()) {
+            var stack = this.outputBuffer.removeLast();
+            stack = ItemHandlerHelper.insertItemStacked(this.upperInventories, stack, false);
+            if(!stack.isEmpty()) {
+                this.outputBuffer.add(stack);
+                break;
+            }
+        }
+    }
+
+    @Override
     protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
         this.inputInventory.deserializeNBT(registries, tag.getCompound(INPUT_INV));
         this.filterInventory.deserializeNBT(registries, tag.getCompound(FILTER_INV));
         this.upperOutputInventory.deserializeNBT(registries, tag.getCompound(UPPER_OUTPUT_INV));
         this.lowerOutputInventory.deserializeNBT(registries, tag.getCompound(LOWER_OUTPUT_INV));
+        this.timeRemaining = tag.getInt(REMAINING_TIME);
+        this.outputBuffer.clear();
+        var bufferTag = tag.get(OUTPUT_BUFFER);
+        if(bufferTag != null) {
+            var ops = registries.createSerializationContext(NbtOps.INSTANCE);
+            this.outputBuffer.addAll(ItemStack.CODEC.listOf().parse(ops, bufferTag).resultOrPartial().orElse(List.of()));
+        }
     }
 
     @Override
@@ -130,6 +307,11 @@ public class SieveBlockEntity extends SmartBlockEntity {
         tag.put(FILTER_INV, this.filterInventory.serializeNBT(registries));
         tag.put(UPPER_OUTPUT_INV, this.upperOutputInventory.serializeNBT(registries));
         tag.put(LOWER_OUTPUT_INV, this.lowerOutputInventory.serializeNBT(registries));
+        tag.putInt(REMAINING_TIME, this.timeRemaining);
+        if(!this.outputBuffer.isEmpty()) {
+            var ops = registries.createSerializationContext(NbtOps.INSTANCE);
+            tag.put(OUTPUT_BUFFER, ItemStack.CODEC.listOf().encodeStart(ops, this.outputBuffer).getOrThrow());
+        }
     }
 
     private static class SieveFilterSlot extends ValueBoxTransform.Sided {

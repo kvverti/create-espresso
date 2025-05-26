@@ -4,6 +4,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import systems.thedawn.espresso.recipe.DrinkLevelingRecipe;
 import systems.thedawn.espresso.recipe.DrinkModificationRecipe;
+import systems.thedawn.espresso.recipe.SieveRecipe;
 import systems.thedawn.espresso.recipe.SteepingRecipe;
 
 import net.minecraft.core.registries.Registries;
@@ -20,6 +21,8 @@ public final class EspressoRecipeTypes {
         RECIPE_TYPES.register("modify_drink", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "modify_drink")));
     public static final DeferredHolder<RecipeType<?>, RecipeType<SteepingRecipe>> STEEPING =
         RECIPE_TYPES.register("steeping", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "steeping")));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<SieveRecipe>> SIEVING =
+        RECIPE_TYPES.register("sieving", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "sieving")));
 
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, Espresso.MODID);
 
@@ -29,4 +32,6 @@ public final class EspressoRecipeTypes {
         RECIPE_SERIALIZERS.register("modify_drink", DrinkModificationRecipe.Serializer::new);
     public static final DeferredHolder<RecipeSerializer<?>, SteepingRecipe.Serializer> STEEPING_SERIALIZER =
         RECIPE_SERIALIZERS.register("steeping", SteepingRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, SieveRecipe.Serializer> SIEVING_SERIALIZER =
+        RECIPE_SERIALIZERS.register("sieving", SieveRecipe.Serializer::new);
 }
