@@ -1,6 +1,7 @@
 package systems.thedawn.espresso.block.sieve;
 
 import com.mojang.serialization.MapCodec;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import org.jetbrains.annotations.Nullable;
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
@@ -12,7 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 
-public class SieveBlock extends HorizontalDirectionalBlock implements IBE<SieveBlockEntity> {
+public class SieveBlock extends HorizontalDirectionalBlock implements IBE<SieveBlockEntity>, IWrenchable {
     public SieveBlock(Properties properties) {
         super(properties);
     }
