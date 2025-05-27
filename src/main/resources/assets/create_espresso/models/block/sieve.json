@@ -9,7 +9,6 @@
     "inside": "create_espresso:block/sieve_inside",
     "inside_side": "create_espresso:block/sieve_inside_side",
     "bottom": "create_espresso:block/sieve_bottom",
-    "grate": "create_espresso:block/sieve_grating",
     "filter": "create_espresso:block/sieve_filter_slot"
   },
   "elements": [
@@ -75,6 +74,18 @@
         "down": { "texture": "#filter", "uv": [1,10,15,11] },
         "up": { "texture": "#filter", "uv": [1,10,15,11] },
         "south": { "texture": "#filter", "uv": [1,6,15,9] },
+        "west": { "texture": "#filter", "uv": [1,11,2,14] },
+        "east": { "texture": "#filter", "uv": [14,11,15,14] }
+      }
+    },
+    {
+      "_": "Second filter slot opening",
+      "from": [1,6.5,-1],
+      "to": [15,9.5,0],
+      "faces": {
+        "down": { "texture": "#filter", "uv": [1,10,15,11] },
+        "up": { "texture": "#filter", "uv": [1,10,15,11] },
+        "north": { "texture": "#filter", "uv": [1,6,15,9] },
         "west": { "texture": "#filter", "uv": [1,11,2,14] },
         "east": { "texture": "#filter", "uv": [14,11,15,14] }
       }

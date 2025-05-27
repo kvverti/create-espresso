@@ -1,19 +1,25 @@
 {
   "variants": {
-    "facing=east": {
-      "model": "create_espresso:block/sieve",
-      "y": 270
-    },
-    "facing=north": {
-      "model": "create_espresso:block/sieve",
-      "y": 180
-    },
-    "facing=south": {
-      "model": "create_espresso:block/sieve"
-    },
-    "facing=west": {
-      "model": "create_espresso:block/sieve",
+    "axis=x,filter=coarse": {
+      "model": "create_espresso:block/sieve_coarse",
       "y": 90
+    },
+    "axis=x,filter=fine": {
+      "model": "create_espresso:block/sieve_fine",
+      "y": 90
+    },
+    "axis=x,filter=none": {
+      "model": "create_espresso:block/sieve_none",
+      "y": 90
+    },
+    "axis=z,filter=coarse": {
+      "model": "create_espresso:block/sieve_coarse"
+    },
+    "axis=z,filter=fine": {
+      "model": "create_espresso:block/sieve_fine"
+    },
+    "axis=z,filter=none": {
+      "model": "create_espresso:block/sieve_none"
     }
   }
 }

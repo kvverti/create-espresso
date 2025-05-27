@@ -1,0 +1,6 @@
+{
+  "parent": "create_espresso:block/sieve",
+  "textures": {
+    "grate": "create_espresso:block/sieve_filter_none"
+  }
+}

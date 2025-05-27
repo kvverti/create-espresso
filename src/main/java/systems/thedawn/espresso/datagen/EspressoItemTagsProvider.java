@@ -10,6 +10,7 @@ import systems.thedawn.espresso.EspressoTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
 public class EspressoItemTagsProvider extends ItemTagsProvider {
@@ -30,5 +31,7 @@ public class EspressoItemTagsProvider extends ItemTagsProvider {
             );
         this.tag(EspressoTags.STEEPER_ENABLED_ITEMS)
             .add(EspressoItems.COFFEE_GROUNDS.value());
+        this.tag(EspressoTags.COARSE_FILTERS)
+            .add(Items.GOLDEN_PICKAXE);
     }
 }

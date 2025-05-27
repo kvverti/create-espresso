@@ -69,17 +69,24 @@ public class EspressoBlockStateProvider extends BlockStateProvider {
             .partialState()
             .setModels(ConfiguredModel.builder().modelFile(steeper).build());
 
-        var sieve = this.models().getExistingFile(this.modLoc("block/sieve"));
+        this.registerSieveModels();
+        this.registerFluidModels();
+    }
+
+    private void registerSieveModels() {
+        var template = this.models().getExistingFile(this.modLoc("block/sieve"));
         this.getVariantBuilder(EspressoBlocks.SIEVE.value())
             .forAllStates(blockState -> {
-                var facing = blockState.getValue(SieveBlock.FACING);
+                var filterId = blockState.getValue(SieveBlock.FILTER).getSerializedName();
+                var rotation = blockState.getValue(SieveBlock.AXIS).choose(90, 0, 0);
+                var model = this.models().getBuilder("block/sieve_" + filterId)
+                    .parent(template)
+                    .texture("grate", "block/sieve_filter_" + filterId);
                 return ConfiguredModel.builder()
-                    .modelFile(sieve)
-                    .rotationY(facing.get2DDataValue() * 90)
+                    .modelFile(model)
+                    .rotationY(rotation)
                     .build();
             });
-
-        this.registerFluidModels();
     }
 
     private void registerFluidModels() {

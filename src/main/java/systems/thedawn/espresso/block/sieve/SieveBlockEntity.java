@@ -101,6 +101,7 @@ public class SieveBlockEntity extends SmartBlockEntity {
             .forbidInsertion()
             .allowExtraction();
         this.upperInventories = new CombinedInvWrapper(this.inputInventory, this.upperOutputInventory);
+        System.out.println("Sieve constructed");
     }
 
     private static SmartInventory filterInventory(SieveBlockEntity be) {
@@ -174,8 +175,7 @@ public class SieveBlockEntity extends SmartBlockEntity {
         if(dir == Direction.DOWN) {
             return this.lowerOutputInventory;
         }
-        var facing = state.getValue(SieveBlock.FACING);
-        if(dir == facing) {
+        if(dir != null && SieveBlock.hasFilterEntry(state, dir)) {
             return this.filterInventory;
         }
         return this.upperInventories;
@@ -211,6 +211,12 @@ public class SieveBlockEntity extends SmartBlockEntity {
             this.setRecipe();
             if(this.timeRemaining < 0 && this.currentRecipe != null) {
                 this.timeRemaining = this.currentRecipe.duration();
+            }
+            var filterType = this.getFilterType();
+            if(filterType != this.getBlockState().getValue(SieveBlock.FILTER)) {
+                if(this.level != null && !this.level.isClientSide()) {
+                    this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(SieveBlock.FILTER, filterType), 2);
+                }
             }
             this.contentsChanged = false;
         }
@@ -391,12 +397,12 @@ public class SieveBlockEntity extends SmartBlockEntity {
     private static class SieveFilterSlot extends ValueBoxTransform.Sided {
         @Override
         protected Vec3 getSouthLocation() {
-            return VecHelper.voxelSpace(8, 8, 16.25);
+            return VecHelper.voxelSpace(8, 8, 16.125);
         }
 
         @Override
         protected boolean isSideActive(BlockState state, Direction direction) {
-            return direction.getAxis().isHorizontal() && state.getValue(SieveBlock.FACING) != direction;
+            return direction.getAxis().isHorizontal() && !SieveBlock.hasFilterEntry(state, direction);
         }
     }
 }
