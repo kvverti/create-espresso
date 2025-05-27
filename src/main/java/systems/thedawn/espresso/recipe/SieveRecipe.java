@@ -81,7 +81,7 @@ public class SieveRecipe implements Recipe<SieveRecipeInput> {
     public boolean matches(SieveRecipeInput input, Level level) {
         return (this.fluidIngredient == null || this.fluidIngredient.test(input.fluid())) &&
             (!this.requiresPress || input.hasPress()) &&
-            this.filterCondition.compareTo(input.filter()) <= 0 &&
+            this.filterCondition == input.filter() &&
             this.matchItems(input.items()) != null;
     }
 

@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
 import systems.thedawn.espresso.EspressoBlocks;
 import systems.thedawn.espresso.EspressoRecipeTypes;
+import systems.thedawn.espresso.EspressoTags;
 import systems.thedawn.espresso.recipe.FilterCondition;
 import systems.thedawn.espresso.recipe.SieveRecipe;
 import systems.thedawn.espresso.recipe.SieveRecipeInput;
@@ -33,7 +34,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -88,7 +88,7 @@ public class SieveBlockEntity extends SmartBlockEntity {
             .whenContentsChanged(slot -> this.contentsChanged = true)
             .allowInsertion()
             .allowExtraction();
-        this.filterInventory = new SmartInventory(1, this, 1, false)
+        this.filterInventory = filterInventory(this)
             .whenContentsChanged(slot -> this.contentsChanged = true)
             .allowInsertion()
             .allowExtraction();
@@ -101,6 +101,24 @@ public class SieveBlockEntity extends SmartBlockEntity {
             .forbidInsertion()
             .allowExtraction();
         this.upperInventories = new CombinedInvWrapper(this.inputInventory, this.upperOutputInventory);
+    }
+
+    private static SmartInventory filterInventory(SieveBlockEntity be) {
+        return new SmartInventory(1, be, 1, false) {
+            @Override
+            public boolean isItemValid(int slot, ItemStack stack) {
+                return super.isItemValid(slot, stack) &&
+                    (stack.is(EspressoTags.COARSE_FILTERS) || stack.is(EspressoTags.FINE_FILTERS));
+            }
+
+            @Override
+            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+                if(!this.isItemValid(slot, stack)) {
+                    return stack;
+                }
+                return super.insertItem(slot, stack, simulate);
+            }
+        };
     }
 
     public IItemHandler upperInventory() {
@@ -122,7 +140,8 @@ public class SieveBlockEntity extends SmartBlockEntity {
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         this.recipeFilter = new FilteringBehaviour(this, new SieveFilterSlot())
-            .forRecipes();
+            .forRecipes()
+            .withCallback(stack -> this.contentsChanged = true);
         this.upperFluidTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, 1000, false)
             .whenFluidUpdates(() -> this.contentsChanged = true);
         this.lowerFluidTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, 1000, false)
@@ -178,6 +197,10 @@ public class SieveBlockEntity extends SmartBlockEntity {
                 if(this.tryAcceptOutputs(true)) {
                     this.tryAcceptOutputs(false);
                     this.shrinkInputs();
+                    var filterItem = this.filterInventory.getStackInSlot(0);
+                    if(filterItem.isDamageableItem()) {
+                        filterItem.setDamageValue(filterItem.getDamageValue() + 1);
+                    }
                 }
             }
             this.timeRemaining = -1;
@@ -195,20 +218,63 @@ public class SieveBlockEntity extends SmartBlockEntity {
 
     private void setRecipe() {
         if(this.level != null && !level.isClientSide()) {
-            var input = new SieveRecipeInput(
-                new ItemHandlerListView(this.upperInventories),
-                this.upperFluidTank.getCapability().getFluidInTank(0),
-                false,
-                FilterCondition.NONE
-            );
-            // reuse current recipe if possible
-            if(this.currentRecipe == null || !this.currentRecipe.matches(input, this.level)) {
-                this.currentRecipe = this.level.getRecipeManager()
-                    .getRecipeFor(EspressoRecipeTypes.SIEVING.value(), input, this.level)
-                    .map(RecipeHolder::value)
-                    .orElse(null);
+            if(this.hasBrokenFilter()) {
+                // no recipes can be performed with a broken filter
+                this.currentRecipe = null;
+            } else {
+                var input = new SieveRecipeInput(
+                    new ItemHandlerListView(this.upperInventories),
+                    this.upperFluidTank.getCapability().getFluidInTank(0),
+                    false,
+                    this.getFilterType()
+                );
+                // recalculate recipe if current recipe no longer applies
+                if(this.currentRecipe == null || !this.currentRecipe.matches(input, this.level)) {
+                    this.currentRecipe = null;
+                    var recipeCandidates = this.level.getRecipeManager()
+                        .getRecipesFor(EspressoRecipeTypes.SIEVING.value(), input, this.level);
+                    for(var recipeHolder : recipeCandidates) {
+                        if(this.acceptableRecipe(recipeHolder.value())) {
+                            this.currentRecipe = recipeHolder.value();
+                            break;
+                        }
+                    }
+                }
             }
         }
+    }
+
+    private boolean acceptableRecipe(SieveRecipe recipe) {
+        var filter = this.recipeFilter;
+        if(filter.test(recipe.resultItem())) {
+            return true;
+        }
+        for(var stack : recipe.remainingItems()) {
+            if(filter.test(stack)) {
+                return true;
+            }
+        }
+        return filter.test(recipe.resultFluid());
+    }
+
+    private boolean hasBrokenFilter() {
+        var filterItem = this.filterInventory.getStackInSlot(0);
+        var damage = filterItem.getDamageValue();
+        return damage > 0 && damage >= filterItem.getMaxDamage();
+    }
+
+    private FilterCondition getFilterType() {
+        var filterItem = this.filterInventory.getStackInSlot(0);
+        if(filterItem.isEmpty()) {
+            return FilterCondition.NONE;
+        }
+        if(filterItem.is(EspressoTags.FINE_FILTERS)) {
+            return FilterCondition.FINE;
+        }
+        if(filterItem.is(EspressoTags.COARSE_FILTERS)) {
+            return FilterCondition.COARSE;
+        }
+        return FilterCondition.NONE;
     }
 
     private boolean tryAcceptOutputs(boolean simulate) {

@@ -9,6 +9,10 @@ import net.minecraft.world.level.material.Fluid;
 public final class EspressoTags {
     public static final TagKey<Item> STEEPER_ENABLED_ITEMS =
         TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "steeper_enabled"));
+    public static final TagKey<Item> COARSE_FILTERS =
+        TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "coarse_filters"));
+    public static final TagKey<Item> FINE_FILTERS =
+        TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "fine_filters"));
 
     public static final TagKey<Fluid> STEEPER_ENABLED_FLUIDS =
         TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "steeper_enabled"));
