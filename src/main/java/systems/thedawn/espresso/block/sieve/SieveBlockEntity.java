@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
+import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
+import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
@@ -193,25 +195,14 @@ public class SieveBlockEntity extends SmartBlockEntity {
     public void lazyTick() {
         if(this.timeRemaining == 0) {
             this.setRecipe();
-            if(this.currentRecipe != null && this.outputBuffer.size() < MAX_OUTPUT_BUFFER_SIZE) {
-                if(this.tryAcceptOutputs(true)) {
-                    this.tryAcceptOutputs(false);
-                    this.shrinkInputs();
-                    var filterItem = this.filterInventory.getStackInSlot(0);
-                    if(filterItem.isDamageableItem()) {
-                        filterItem.setDamageValue(filterItem.getDamageValue() + 1);
-                    }
-                }
-            }
+            this.finishRecipe();
             this.timeRemaining = -1;
         }
         if(this.contentsChanged) {
             this.pullOutputBuffer();
             // verify any recipe is still valid
             this.setRecipe();
-            if(this.timeRemaining < 0 && this.currentRecipe != null) {
-                this.timeRemaining = this.currentRecipe.duration();
-            }
+            this.startRecipe();
             var filterType = this.getFilterType();
             if(filterType != this.getBlockState().getValue(SieveBlock.FILTER)) {
                 if(this.level != null && !this.level.isClientSide()) {
@@ -219,6 +210,32 @@ public class SieveBlockEntity extends SmartBlockEntity {
                 }
             }
             this.contentsChanged = false;
+        }
+    }
+
+    private void startRecipe() {
+        if(this.currentRecipe != null) {
+            if(this.currentRecipe.requiresPress()) {
+                var press = this.getPress();
+                if(press != null) {
+                    ((PressingBehaviorExtension) press.getPressingBehaviour()).espresso$startSieveRecipe();
+                }
+            } else if(this.timeRemaining < 0) {
+                this.timeRemaining = this.currentRecipe.duration();
+            }
+        }
+    }
+
+    private void finishRecipe() {
+        if(this.currentRecipe != null && this.outputBuffer.size() < MAX_OUTPUT_BUFFER_SIZE) {
+            if(this.tryAcceptOutputs(true)) {
+                this.tryAcceptOutputs(false);
+                this.shrinkInputs();
+                var filterItem = this.filterInventory.getStackInSlot(0);
+                if(filterItem.isDamageableItem()) {
+                    filterItem.setDamageValue(filterItem.getDamageValue() + 1);
+                }
+            }
         }
     }
 
@@ -231,7 +248,7 @@ public class SieveBlockEntity extends SmartBlockEntity {
                 var input = new SieveRecipeInput(
                     new ItemHandlerListView(this.upperInventories),
                     this.upperFluidTank.getCapability().getFluidInTank(0),
-                    false,
+                    this.getPress() != null,
                     this.getFilterType()
                 );
                 // recalculate recipe if current recipe no longer applies
@@ -261,6 +278,26 @@ public class SieveBlockEntity extends SmartBlockEntity {
             }
         }
         return filter.test(recipe.resultFluid());
+    }
+
+    private @Nullable MechanicalPressBlockEntity getPress() {
+        if(this.level != null) {
+            var blockEntity = this.level.getBlockEntity(this.getBlockPos().above(2));
+            if(blockEntity instanceof MechanicalPressBlockEntity press) {
+                return press;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Called by a mechanical press when a sieve notifies it to activate.
+     */
+    public void handlePress() {
+        this.setRecipe();
+        if(this.currentRecipe != null && this.currentRecipe.requiresPress()) {
+            this.finishRecipe();
+        }
     }
 
     private boolean hasBrokenFilter() {

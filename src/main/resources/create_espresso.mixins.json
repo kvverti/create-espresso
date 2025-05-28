@@ -3,6 +3,7 @@
   "required": true,
   "mixins": [
     "ProcessingFixMixin",
+    "SievePressingMixin",
     "SpoutCustomRecipeAllowanceMixin",
     "SpoutCustomRecipeMixin"
   ]

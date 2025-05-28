@@ -43,6 +43,10 @@ public class SieveRecipe implements Recipe<SieveRecipeInput> {
         this.duration = duration;
     }
 
+    public boolean requiresPress() {
+        return this.requiresPress;
+    }
+
     public ItemStack resultItem() {
         return this.resultItem.copy();
     }
