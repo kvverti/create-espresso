@@ -6,5 +6,9 @@
     "SievePressingMixin",
     "SpoutCustomRecipeAllowanceMixin",
     "SpoutCustomRecipeMixin"
+  ],
+  "client": [
+    "PressHeadRenderFix",
+    "PressHeadVisualFix"
   ]
 }

@@ -5,4 +5,6 @@ package systems.thedawn.espresso.block.sieve;
  */
 public interface PressingBehaviorExtension {
     void espresso$startSieveRecipe();
+
+    boolean espresso$isOrWasPressingSieve();
 }
