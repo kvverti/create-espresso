@@ -34,8 +34,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 // sieve can hold fluids and/or items
@@ -102,7 +104,6 @@ public class SieveBlockEntity extends SmartBlockEntity {
             .forbidInsertion()
             .allowExtraction();
         this.upperInventories = new CombinedInvWrapper(this.inputInventory, this.upperOutputInventory);
-        System.out.println("Sieve constructed");
     }
 
     private static SmartInventory filterInventory(SieveBlockEntity be) {
@@ -183,6 +184,35 @@ public class SieveBlockEntity extends SmartBlockEntity {
     }
 
     @Override
+    public void destroy() {
+        if(this.level != null) {
+            for(var stack : new ItemHandlerListView(this.upperInventories)) {
+                if(!stack.isEmpty()) {
+                    this.spawnItemOnDestroy(stack);
+                }
+            }
+            if(!this.filterInventory.getStackInSlot(0).isEmpty()) {
+                this.spawnItemOnDestroy(this.filterInventory.getStackInSlot(0));
+            }
+            if(!this.lowerOutputInventory.getStackInSlot(0).isEmpty()) {
+                this.spawnItemOnDestroy(this.lowerOutputInventory.getStackInSlot(0));
+            }
+            for(var stack : this.outputBuffer) {
+                this.spawnItemOnDestroy(stack);
+            }
+        }
+        super.destroy();
+    }
+
+    private void spawnItemOnDestroy(ItemStack stack) {
+        if(this.level == null) {
+            throw new IllegalStateException("Cannot spawn item in empty world");
+        }
+        var pos = VecHelper.getCenterOf(this.getBlockPos());
+        this.level.addFreshEntity(new ItemEntity(this.level, pos.x, pos.y, pos.z, stack));
+    }
+
+    @Override
     public void tick() {
         super.tick();
         if(this.timeRemaining > 0) {
@@ -197,6 +227,8 @@ public class SieveBlockEntity extends SmartBlockEntity {
             this.finishRecipe();
             this.timeRemaining = -1;
         }
+        this.takeInputStacks();
+        this.dropOutputStack();
         if(this.contentsChanged) {
             this.pullOutputBuffer();
             // verify any recipe is still valid
@@ -398,6 +430,72 @@ public class SieveBlockEntity extends SmartBlockEntity {
                 break;
             }
         }
+    }
+
+    private void takeInputStacks() {
+        if(this.level != null) {
+            var pos = this.getBlockPos();
+            var searchSpace = new AABB(pos.getX(), pos.getY() + 0.5, pos.getZ(), pos.getX() + 1d, pos.getY() + 1d, pos.getZ() + 1d);
+            var itemEntities = this.level.getEntitiesOfClass(ItemEntity.class, searchSpace);
+            for(var itemEntity : itemEntities) {
+                var stack = itemEntity.getItem();
+                var remainder = ItemHandlerHelper.insertItemStacked(this.inputInventory, stack, true);
+                var countToTake = stack.getCount() - remainder.getCount();
+                if(countToTake > 0) {
+                    remainder = ItemHandlerHelper.insertItemStacked(this.inputInventory, stack, false);
+                    itemEntity.setItem(remainder);
+                }
+            }
+        }
+    }
+
+    private void dropOutputStack() {
+        if(this.level != null) {
+            var outputStack = this.lowerOutputInventory.extractItem(0, 64, true);
+            if(!outputStack.isEmpty()) {
+                var inventory = this.getDropInventory();
+                if(inventory != null) {
+                    var remainder = ItemHandlerHelper.insertItem(inventory, outputStack, false);
+                    var countToTake = outputStack.getCount() - remainder.getCount();
+                    if(countToTake > 0) {
+                        this.lowerOutputInventory.extractItem(0, countToTake, false);
+                    }
+                } else if(this.isDropPosClear()) {
+                    outputStack = this.lowerOutputInventory.extractItem(0, 64, false);
+                    var pos = this.getBlockPos();
+                    var itemEntity = new ItemEntity(
+                        this.level,
+                        pos.getX() + 0.5, pos.getY() - 0.5, pos.getZ() + 0.5,
+                        outputStack,
+                        0d, 0d, 0d
+                    );
+                    this.level.addFreshEntity(itemEntity);
+                }
+            }
+        }
+    }
+
+    private @Nullable IItemHandler getDropInventory() {
+        if(this.level == null) {
+            throw new IllegalStateException("Cannot test inventories in world-less context");
+        }
+        var searchPos = this.getBlockPos().below();
+        if(this.level.getBlockState(searchPos).is(EspressoTags.ACCEPTS_SIEVE_OUTPUT)) {
+            return this.level.getCapability(Capabilities.ItemHandler.BLOCK, searchPos, Direction.UP);
+        }
+        return null;
+    }
+
+    private boolean isDropPosClear() {
+        if(this.level == null) {
+            throw new IllegalStateException("Cannot test items in world-less context");
+        }
+        var searchPos = this.getBlockPos().below();
+        if(this.level.getBlockState(searchPos).isFaceSturdy(this.level, searchPos, Direction.UP)) {
+            return false;
+        }
+        var items = this.level.getEntitiesOfClass(ItemEntity.class, AABB.encapsulatingFullBlocks(searchPos, searchPos));
+        return items.isEmpty();
     }
 
     @Override

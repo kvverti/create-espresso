@@ -26,6 +26,7 @@ public class EspressoTranslationProvider extends LanguageProvider {
         this.addBlock(EspressoBlocks.COFFEE_BRICK_STAIRS, "Coffee Brick Stairs");
         this.addBlock(EspressoBlocks.COFFEE_MUG, "Coffee Mug");
         this.addBlock(EspressoBlocks.STEEPER, "Steeper");
+        this.addBlock(EspressoBlocks.SIEVE, "Sieve");
         // Items
         this.addItem(EspressoItems.COFFEE_CHERRY, "Coffee Cherry");
         this.addItem(EspressoItems.COFFEE_PASTE, "Coffee Paste");

@@ -2,10 +2,12 @@ package systems.thedawn.espresso.datagen;
 
 import java.util.concurrent.CompletableFuture;
 
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoBlocks;
+import systems.thedawn.espresso.EspressoTags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -28,5 +30,11 @@ public class EspressoBlockTagsProvider extends BlockTagsProvider {
         this.tag(AllTags.AllBlockTags.NON_HARVESTABLE.tag)
             .replace(false)
             .add(EspressoBlocks.COFFEE_PLANT.value());
+        this.tag(EspressoTags.ACCEPTS_SIEVE_OUTPUT)
+            .add(
+                AllBlocks.BASIN.value(),
+                AllBlocks.BELT.value(),
+                AllBlocks.DEPOT.value()
+            );
     }
 }

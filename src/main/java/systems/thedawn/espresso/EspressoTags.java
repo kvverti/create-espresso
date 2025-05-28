@@ -4,9 +4,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 
 public final class EspressoTags {
+    public static final TagKey<Block> ACCEPTS_SIEVE_OUTPUT =
+        TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "accepts_sieve_output"));
+
     public static final TagKey<Item> STEEPER_ENABLED_ITEMS =
         TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "steeper_enabled"));
     public static final TagKey<Item> COARSE_FILTERS =
