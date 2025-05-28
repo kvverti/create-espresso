@@ -6,8 +6,10 @@ import com.simibubi.create.foundation.block.IBE;
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
 import systems.thedawn.espresso.recipe.FilterCondition;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -16,6 +18,10 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class SieveBlock extends Block implements IBE<SieveBlockEntity>, IWrenchable {
     public static final Property<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
@@ -62,5 +68,19 @@ public class SieveBlock extends Block implements IBE<SieveBlockEntity>, IWrencha
             case NONE, CLOCKWISE_180 -> state;
             case CLOCKWISE_90, COUNTERCLOCKWISE_90 -> state.cycle(AXIS);
         };
+    }
+
+    private static final VoxelShape SHAPE = Shapes.or(
+        Shapes.box(0f, 0.4999f, 0f, 1f, 0.5001f, 1f),
+        Shapes.joinUnoptimized(
+            Shapes.box(0f, 0.25f, 0f, 1f, 0.75f, 1f),
+            Shapes.box(2f / 16f, 0f, 2f / 16f, 14 / 16f, 1f, 14f / 16f),
+            BooleanOp.ONLY_FIRST
+        )
+    );
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
     }
 }

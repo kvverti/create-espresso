@@ -42,8 +42,8 @@ public abstract class SievePressingMixin extends BeltProcessingBehaviour impleme
     private boolean espresso$wasPressingSieve;
 
     @Override
-    public void espresso$startSieveRecipe() {
-        this.espresso$pressingSieve = true;
+    public void espresso$setSieveRecipe(boolean start) {
+        this.espresso$pressingSieve = start;
     }
 
     @Override

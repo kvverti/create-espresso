@@ -6,7 +6,6 @@ import java.util.List;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
-import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
@@ -214,13 +213,13 @@ public class SieveBlockEntity extends SmartBlockEntity {
     }
 
     private void startRecipe() {
+        var press = this.getPress();
+        if(press != null) {
+            var doingPress = this.currentRecipe != null && this.currentRecipe.requiresPress();
+            ((PressingBehaviorExtension) press.getPressingBehaviour()).espresso$setSieveRecipe(doingPress);
+        }
         if(this.currentRecipe != null) {
-            if(this.currentRecipe.requiresPress()) {
-                var press = this.getPress();
-                if(press != null) {
-                    ((PressingBehaviorExtension) press.getPressingBehaviour()).espresso$startSieveRecipe();
-                }
-            } else if(this.timeRemaining < 0) {
+            if(this.timeRemaining < 0 && !this.currentRecipe.requiresPress()) {
                 this.timeRemaining = this.currentRecipe.duration();
             }
         }
@@ -252,7 +251,7 @@ public class SieveBlockEntity extends SmartBlockEntity {
                     this.getFilterType()
                 );
                 // recalculate recipe if current recipe no longer applies
-                if(this.currentRecipe == null || !this.currentRecipe.matches(input, this.level)) {
+                if(this.currentRecipe == null || !this.acceptableRecipe(this.currentRecipe) || !this.currentRecipe.matches(input, this.level)) {
                     this.currentRecipe = null;
                     var recipeCandidates = this.level.getRecipeManager()
                         .getRecipesFor(EspressoRecipeTypes.SIEVING.value(), input, this.level);
