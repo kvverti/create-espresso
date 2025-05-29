@@ -149,7 +149,8 @@ public class SieveBlockEntity extends SmartBlockEntity {
             .whenFluidUpdates(() -> this.contentsChanged = true);
         this.lowerFluidTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, 1000, false)
             .whenFluidUpdates(() -> this.contentsChanged = true);
-        this.beltInput = new DirectBeltInputBehaviour(this);
+        this.beltInput = new DirectBeltInputBehaviour(this)
+            .setInsertionHandler((stack, side, simulate) -> ItemHandlerHelper.insertItemStacked(this.inputInventory, stack.stack.copy(), simulate));
         behaviours.add(this.recipeFilter);
         behaviours.add(this.upperFluidTank);
         behaviours.add(this.lowerFluidTank);
@@ -185,7 +186,7 @@ public class SieveBlockEntity extends SmartBlockEntity {
 
     @Override
     public void destroy() {
-        if(this.level != null) {
+        if(this.level != null && !this.level.isClientSide()) {
             for(var stack : new ItemHandlerListView(this.upperInventories)) {
                 if(!stack.isEmpty()) {
                     this.spawnItemOnDestroy(stack);
@@ -258,7 +259,7 @@ public class SieveBlockEntity extends SmartBlockEntity {
     }
 
     private void finishRecipe() {
-        if(this.currentRecipe != null && this.outputBuffer.size() < MAX_OUTPUT_BUFFER_SIZE) {
+        if(this.level != null && !this.level.isClientSide() && this.currentRecipe != null && this.outputBuffer.size() < MAX_OUTPUT_BUFFER_SIZE) {
             if(this.tryAcceptOutputs(true)) {
                 this.tryAcceptOutputs(false);
                 this.shrinkInputs();
@@ -271,7 +272,7 @@ public class SieveBlockEntity extends SmartBlockEntity {
     }
 
     private void setRecipe() {
-        if(this.level != null && !level.isClientSide()) {
+        if(this.level != null && !this.level.isClientSide()) {
             if(this.hasBrokenFilter()) {
                 // no recipes can be performed with a broken filter
                 this.currentRecipe = null;
@@ -356,6 +357,10 @@ public class SieveBlockEntity extends SmartBlockEntity {
             throw new IllegalStateException("Cannot accept outputs of an empty recipe");
         }
 
+        if(this.level == null || this.level.isClientSide()) {
+            return false;
+        }
+
         var accepted = true;
         // insert item output
         var output = this.currentRecipe.resultItem();
@@ -405,6 +410,10 @@ public class SieveBlockEntity extends SmartBlockEntity {
             throw new IllegalStateException("Cannot shrink inputs of an empty recipe");
         }
 
+        if(this.level == null || this.level.isClientSide()) {
+            return;
+        }
+
         var consumedInputs = this.currentRecipe.getMatchedInputItems(new ItemHandlerListView(this.upperInventories));
         var slots = this.upperInventories.getSlots();
         for(var consumedStack : consumedInputs) {
@@ -422,18 +431,20 @@ public class SieveBlockEntity extends SmartBlockEntity {
     }
 
     private void pullOutputBuffer() {
-        while(!this.outputBuffer.isEmpty()) {
-            var stack = this.outputBuffer.removeLast();
-            stack = ItemHandlerHelper.insertItemStacked(this.upperInventories, stack, false);
-            if(!stack.isEmpty()) {
-                this.outputBuffer.add(stack);
-                break;
+        if(this.level != null && !this.level.isClientSide()) {
+            while(!this.outputBuffer.isEmpty()) {
+                var stack = this.outputBuffer.removeLast();
+                stack = ItemHandlerHelper.insertItemStacked(this.upperInventories, stack, false);
+                if(!stack.isEmpty()) {
+                    this.outputBuffer.add(stack);
+                    break;
+                }
             }
         }
     }
 
     private void takeInputStacks() {
-        if(this.level != null) {
+        if(this.level != null && !this.level.isClientSide()) {
             var pos = this.getBlockPos();
             var searchSpace = new AABB(pos.getX(), pos.getY() + 0.5, pos.getZ(), pos.getX() + 1d, pos.getY() + 1d, pos.getZ() + 1d);
             var itemEntities = this.level.getEntitiesOfClass(ItemEntity.class, searchSpace);
@@ -450,7 +461,7 @@ public class SieveBlockEntity extends SmartBlockEntity {
     }
 
     private void dropOutputStack() {
-        if(this.level != null) {
+        if(this.level != null && !this.level.isClientSide()) {
             var outputStack = this.lowerOutputInventory.extractItem(0, 64, true);
             if(!outputStack.isEmpty()) {
                 var inventory = this.getDropInventory();
