@@ -8,6 +8,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.TransparentBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,6 +37,17 @@ public class CoffeeMugBlock extends TransparentBlock {
     protected BlockState rotate(BlockState state, Rotation rotation) {
         var facing = state.getValue(FACING);
         return state.setValue(FACING, rotation.rotate(facing));
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        var facing = state.getValue(FACING);
+        if(mirror.mirror(facing) == facing) {
+            // keep handle facing the same direction
+            return state.cycle(CHIRALITY).setValue(FACING, facing.getOpposite());
+        }
+        // switch handle to the other side
+        return state.cycle(CHIRALITY);
     }
 
     @Nullable
