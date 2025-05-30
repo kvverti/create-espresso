@@ -5,7 +5,7 @@ import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoBlocks;
-import systems.thedawn.espresso.block.CoffeeMugBlock;
+import systems.thedawn.espresso.block.DrinkBaseBlock;
 import systems.thedawn.espresso.block.CoffeePlantBlock;
 import systems.thedawn.espresso.block.sieve.SieveBlock;
 
@@ -43,9 +43,9 @@ public class EspressoBlockStateProvider extends BlockStateProvider {
         var emptyMugLeft = this.models().getExistingFile(this.modLoc("block/coffee_mug_left"));
         this.getVariantBuilder(EspressoBlocks.COFFEE_MUG.value())
             .forAllStates(blockState -> {
-                var handedness = blockState.getValue(CoffeeMugBlock.CHIRALITY);
+                var handedness = blockState.getValue(DrinkBaseBlock.CHIRALITY);
                 var model = handedness == HumanoidArm.LEFT ? emptyMugLeft : emptyMugRight;
-                var direction = blockState.getValue(CoffeeMugBlock.FACING);
+                var direction = blockState.getValue(DrinkBaseBlock.FACING);
                 return ConfiguredModel.builder()
                     .modelFile(model)
                     .rotationY(direction.get2DDataValue() * 90)
@@ -55,9 +55,9 @@ public class EspressoBlockStateProvider extends BlockStateProvider {
         var filledMugLeft = this.models().getExistingFile(this.modLoc("block/filled_mug_left"));
         this.getVariantBuilder(EspressoBlocks.FILLED_COFFEE_MUG.value())
             .forAllStates(blockState -> {
-                var handedness = blockState.getValue(CoffeeMugBlock.CHIRALITY);
+                var handedness = blockState.getValue(DrinkBaseBlock.CHIRALITY);
                 var model = handedness == HumanoidArm.LEFT ? filledMugLeft : filledMugRight;
-                var direction = blockState.getValue(CoffeeMugBlock.FACING);
+                var direction = blockState.getValue(DrinkBaseBlock.FACING);
                 return ConfiguredModel.builder()
                     .modelFile(model)
                     .rotationY(direction.get2DDataValue() * 90)

@@ -12,8 +12,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 
-public class DrinkBlock extends CoffeeMugBlock implements EntityBlock {
-    public DrinkBlock(Properties properties) {
+public class FilledDrinkBlock extends DrinkBaseBlock implements EntityBlock {
+    public FilledDrinkBlock(Properties properties) {
         super(properties);
     }
 

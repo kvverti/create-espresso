@@ -20,11 +20,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class CoffeeMugBlock extends TransparentBlock {
+public class DrinkBaseBlock extends TransparentBlock {
     public static final Property<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final Property<HumanoidArm> CHIRALITY = EnumProperty.create("chirality", HumanoidArm.class);
 
-    public CoffeeMugBlock(Properties properties) {
+    public DrinkBaseBlock(Properties properties) {
         super(properties);
     }
 

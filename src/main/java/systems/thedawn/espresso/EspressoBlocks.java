@@ -2,9 +2,9 @@ package systems.thedawn.espresso;
 
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import systems.thedawn.espresso.block.CoffeeMugBlock;
+import systems.thedawn.espresso.block.DrinkBaseBlock;
 import systems.thedawn.espresso.block.CoffeePlantBlock;
-import systems.thedawn.espresso.block.DrinkBlock;
+import systems.thedawn.espresso.block.FilledDrinkBlock;
 import systems.thedawn.espresso.block.sieve.SieveBlock;
 import systems.thedawn.espresso.block.steeper.SteeperBlock;
 
@@ -60,9 +60,8 @@ public class EspressoBlocks {
         COFFEE_BRICK_SLAB = BLOCKS.registerBlock("coffee_brick_slab", SlabBlock::new, props);
     }
 
-    public static final DeferredBlock<CoffeeMugBlock> COFFEE_MUG;
-    public static final DeferredBlock<DrinkBlock> FILLED_COFFEE_MUG;
-    public static final DeferredBlock<SteeperBlock> STEEPER;
+    public static final DeferredBlock<DrinkBaseBlock> COFFEE_MUG;
+    public static final DeferredBlock<FilledDrinkBlock> FILLED_COFFEE_MUG;
 
     static {
         var props = BlockBehaviour.Properties.of()
@@ -70,9 +69,13 @@ public class EspressoBlocks {
             .noOcclusion()
             .isSuffocating((state, world, pos) -> false)
             .isViewBlocking((state, world, pos) -> false);
-        COFFEE_MUG = BLOCKS.registerBlock("coffee_mug", CoffeeMugBlock::new, props);
-        FILLED_COFFEE_MUG = BLOCKS.registerBlock("filled_coffee_mug", DrinkBlock::new, props);
+        COFFEE_MUG = BLOCKS.registerBlock("coffee_mug", DrinkBaseBlock::new, props);
+        FILLED_COFFEE_MUG = BLOCKS.registerBlock("filled_coffee_mug", FilledDrinkBlock::new, props);
+    }
 
+    public static final DeferredBlock<SteeperBlock> STEEPER;
+
+    static {
         var glassProps = BlockBehaviour.Properties.of()
             .instabreak()
             .noOcclusion()
