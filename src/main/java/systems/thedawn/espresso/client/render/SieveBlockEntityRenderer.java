@@ -1,20 +1,16 @@
 package systems.thedawn.espresso.client.render;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
-import net.neoforged.neoforge.items.IItemHandler;
 import org.joml.Quaternionf;
 import systems.thedawn.espresso.block.sieve.SieveBlockEntity;
+import systems.thedawn.espresso.util.ItemHandlerUtil;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
 
 public class SieveBlockEntityRenderer extends SmartBlockEntityRenderer<SieveBlockEntity> {
     private final ItemRenderer itemRenderer;
@@ -29,7 +25,7 @@ public class SieveBlockEntityRenderer extends SmartBlockEntityRenderer<SieveBloc
         super.renderSafe(blockEntity, partialTick, poseStack, bufferSource, packedLight, packedOverlay);
 
         var upperItems = blockEntity.upperInventory();
-        var contents = contents(upperItems);
+        var contents = ItemHandlerUtil.nonEmptyContents(upperItems);
         // render items
         if(!contents.isEmpty()) {
             var itemCount = (float) contents.size();
@@ -78,17 +74,5 @@ public class SieveBlockEntityRenderer extends SmartBlockEntityRenderer<SieveBloc
                 bufferSource, poseStack, packedLight, true, false
             );
         }
-    }
-
-    private static List<ItemStack> contents(IItemHandler inv) {
-        var count = inv.getSlots();
-        var contents = new ArrayList<ItemStack>();
-        for(var i = 0; i < count; i++) {
-            var stack = inv.getStackInSlot(i);
-            if(!stack.isEmpty()) {
-                contents.add(stack);
-            }
-        }
-        return contents;
     }
 }

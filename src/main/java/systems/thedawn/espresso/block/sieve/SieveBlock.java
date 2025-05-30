@@ -5,9 +5,14 @@ import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
 import systems.thedawn.espresso.recipe.FilterCondition;
+import systems.thedawn.espresso.util.ItemHandlerUtil;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.ParticleUtils;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -66,6 +71,18 @@ public class SieveBlock extends Block implements IBE<SieveBlockEntity>, IWrencha
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         IBE.onRemove(state, level, pos, newState);
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        this.withBlockEntityDo(level, pos, sieve -> {
+            if(sieve.isRunningPassiveRecipe()) {
+                var possibleItems = ItemHandlerUtil.nonEmptyContents(sieve.upperInventory());
+                var slot = level.getRandom().nextInt(possibleItems.size());
+                var particle = new ItemParticleOption(ParticleTypes.ITEM, possibleItems.get(slot));
+                ParticleUtils.spawnParticles(level, pos, 1, 0.5, 0.25, true, particle);
+            }
+        });
     }
 
     @Override

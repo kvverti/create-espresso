@@ -27,7 +27,7 @@ import systems.thedawn.espresso.EspressoTags;
 import systems.thedawn.espresso.recipe.FilterCondition;
 import systems.thedawn.espresso.recipe.SieveRecipe;
 import systems.thedawn.espresso.recipe.SieveRecipeInput;
-import systems.thedawn.espresso.util.ItemHandlerListView;
+import systems.thedawn.espresso.util.ItemHandlerUtil;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -140,6 +140,10 @@ public class SieveBlockEntity extends SmartBlockEntity {
         return this.lowerFluidTank.getCapability();
     }
 
+    boolean isRunningPassiveRecipe() {
+        return this.timeRemaining >= 0;
+    }
+
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         this.recipeFilter = new FilteringBehaviour(this, new SieveFilterSlot())
@@ -187,7 +191,7 @@ public class SieveBlockEntity extends SmartBlockEntity {
     @Override
     public void destroy() {
         if(this.level != null && !this.level.isClientSide()) {
-            for(var stack : new ItemHandlerListView(this.upperInventories)) {
+            for(var stack : ItemHandlerUtil.listView(this.upperInventories)) {
                 if(!stack.isEmpty()) {
                     this.spawnItemOnDestroy(stack);
                 }
@@ -278,7 +282,7 @@ public class SieveBlockEntity extends SmartBlockEntity {
                 this.currentRecipe = null;
             } else {
                 var input = new SieveRecipeInput(
-                    new ItemHandlerListView(this.upperInventories),
+                    ItemHandlerUtil.listView(this.upperInventories),
                     this.upperFluidTank.getCapability().getFluidInTank(0),
                     this.getPress() != null,
                     this.getFilterType()
@@ -414,7 +418,7 @@ public class SieveBlockEntity extends SmartBlockEntity {
             return;
         }
 
-        var consumedInputs = this.currentRecipe.getMatchedInputItems(new ItemHandlerListView(this.upperInventories));
+        var consumedInputs = this.currentRecipe.getMatchedInputItems(ItemHandlerUtil.listView(this.upperInventories));
         var slots = this.upperInventories.getSlots();
         for(var consumedStack : consumedInputs) {
             for(var slot = 0; slot < slots; slot++) {
