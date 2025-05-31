@@ -9,8 +9,10 @@ import systems.thedawn.espresso.block.DrinkBaseBlock;
 import systems.thedawn.espresso.block.CoffeePlantBlock;
 import systems.thedawn.espresso.block.sieve.SieveBlock;
 
+import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.level.block.Block;
 
 public class EspressoBlockStateProvider extends BlockStateProvider {
     public EspressoBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
@@ -39,38 +41,29 @@ public class EspressoBlockStateProvider extends BlockStateProvider {
         this.slabBlock(EspressoBlocks.COFFEE_BRICK_SLAB.value(), coffee_bricks, coffee_bricks);
         this.stairsBlock(EspressoBlocks.COFFEE_BRICK_STAIRS.value(), coffee_bricks);
 
-        var emptyMugRight = this.models().getExistingFile(this.modLoc("block/coffee_mug_right"));
-        var emptyMugLeft = this.models().getExistingFile(this.modLoc("block/coffee_mug_left"));
-        this.getVariantBuilder(EspressoBlocks.COFFEE_MUG.value())
-            .forAllStates(blockState -> {
-                var handedness = blockState.getValue(DrinkBaseBlock.CHIRALITY);
-                var model = handedness == HumanoidArm.LEFT ? emptyMugLeft : emptyMugRight;
-                var direction = blockState.getValue(DrinkBaseBlock.FACING);
-                return ConfiguredModel.builder()
-                    .modelFile(model)
-                    .rotationY(direction.get2DDataValue() * 90)
-                    .build();
-            });
-        var filledMugRight = this.models().getExistingFile(this.modLoc("block/filled_mug_right"));
-        var filledMugLeft = this.models().getExistingFile(this.modLoc("block/filled_mug_left"));
-        this.getVariantBuilder(EspressoBlocks.FILLED_COFFEE_MUG.value())
-            .forAllStates(blockState -> {
-                var handedness = blockState.getValue(DrinkBaseBlock.CHIRALITY);
-                var model = handedness == HumanoidArm.LEFT ? filledMugLeft : filledMugRight;
-                var direction = blockState.getValue(DrinkBaseBlock.FACING);
-                return ConfiguredModel.builder()
-                    .modelFile(model)
-                    .rotationY(direction.get2DDataValue() * 90)
-                    .build();
-            });
+        this.registerDrinkHolderModels(EspressoBlocks.COFFEE_MUG, "coffee_mug");
+        this.registerDrinkHolderModels(EspressoBlocks.FILLED_COFFEE_MUG, "filled_mug");
+        this.simpleBlock(EspressoBlocks.TALL_GLASS.value(), this.models().getExistingFile(this.modLoc("block/tall_glass")));
 
-        var steeper = this.models().getExistingFile(this.modLoc("block/steeper"));
-        this.getVariantBuilder(EspressoBlocks.STEEPER.value())
-            .partialState()
-            .setModels(ConfiguredModel.builder().modelFile(steeper).build());
+        this.simpleBlock(EspressoBlocks.STEEPER.value(), this.models().getExistingFile(this.modLoc("block/steeper")));
 
         this.registerSieveModels();
         this.registerFluidModels();
+    }
+
+    private void registerDrinkHolderModels(Holder<Block> block, String baseName) {
+        var rightModel = this.models().getExistingFile(this.modLoc("block/" + baseName + "_right"));
+        var leftModel = this.models().getExistingFile(this.modLoc("block/" + baseName + "_left"));
+        this.getVariantBuilder(block.value())
+            .forAllStates(blockState -> {
+                var handedness = blockState.getValue(DrinkBaseBlock.CHIRALITY);
+                var model = handedness == HumanoidArm.LEFT ? leftModel : rightModel;
+                var direction = blockState.getValue(DrinkBaseBlock.FACING);
+                return ConfiguredModel.builder()
+                    .modelFile(model)
+                    .rotationY(direction.get2DDataValue() * 90)
+                    .build();
+            });
     }
 
     private void registerSieveModels() {

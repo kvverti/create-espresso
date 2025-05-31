@@ -70,6 +70,7 @@ public class Espresso {
             output.accept(EspressoItems.COFFEE_BRICK_SLAB);
             output.accept(EspressoItems.COFFEE_BRICK_STAIRS);
             output.accept(EspressoItems.COFFEE_MUG);
+            output.accept(EspressoItems.TALL_GLASS);
             // items
             output.accept(EspressoItems.COFFEE_CHERRY);
             output.accept(EspressoItems.COFFEE_PASTE);

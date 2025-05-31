@@ -62,6 +62,8 @@ public class EspressoBlocks {
 
     public static final DeferredBlock<DrinkBaseBlock> COFFEE_MUG;
     public static final DeferredBlock<FilledDrinkBlock> FILLED_COFFEE_MUG;
+    public static final DeferredBlock<DrinkBaseBlock> TALL_GLASS;
+    public static final DeferredBlock<FilledDrinkBlock> FILLED_TALL_GLASS;
 
     static {
         var props = BlockBehaviour.Properties.of()
@@ -71,6 +73,8 @@ public class EspressoBlocks {
             .isViewBlocking((state, world, pos) -> false);
         COFFEE_MUG = BLOCKS.registerBlock("coffee_mug", DrinkBaseBlock::new, props);
         FILLED_COFFEE_MUG = BLOCKS.registerBlock("filled_coffee_mug", FilledDrinkBlock::new, props);
+        TALL_GLASS = BLOCKS.registerBlock("tall_glass", DrinkBaseBlock::new, props);
+        FILLED_TALL_GLASS = BLOCKS.registerBlock("filled_tall_glass", FilledDrinkBlock::new, props);
     }
 
     public static final DeferredBlock<SteeperBlock> STEEPER;

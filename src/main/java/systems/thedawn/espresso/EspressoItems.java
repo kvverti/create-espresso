@@ -40,5 +40,6 @@ public class EspressoItems {
     public static final DeferredItem<?> COFFEE_BRICK_SLAB = ITEMS.registerSimpleBlockItem(EspressoBlocks.COFFEE_BRICK_SLAB);
     public static final DeferredItem<?> COFFEE_BRICK_STAIRS = ITEMS.registerSimpleBlockItem(EspressoBlocks.COFFEE_BRICK_STAIRS);
     public static final DeferredItem<?> COFFEE_MUG = ITEMS.registerSimpleBlockItem(EspressoBlocks.COFFEE_MUG);
+    public static final DeferredItem<?> TALL_GLASS = ITEMS.registerSimpleBlockItem(EspressoBlocks.TALL_GLASS);
     public static final DeferredItem<?> SIEVE = ITEMS.registerSimpleBlockItem(EspressoBlocks.SIEVE);
 }

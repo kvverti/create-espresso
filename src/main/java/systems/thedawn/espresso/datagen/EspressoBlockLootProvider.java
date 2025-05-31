@@ -36,11 +36,13 @@ public class EspressoBlockLootProvider extends BlockLootSubProvider {
     protected void generate() {
         this.coffeePlantDrops();
         this.drinkHolderDrops(EspressoBlocks.FILLED_COFFEE_MUG.value());
+        this.drinkHolderDrops(EspressoBlocks.FILLED_TALL_GLASS.value());
 
         this.dropSelf(EspressoBlocks.COFFEE_BRICKS.value());
         this.add(EspressoBlocks.COFFEE_BRICK_SLAB.value(), this.createSlabItemTable(EspressoBlocks.COFFEE_BRICK_SLAB.value()));
         this.dropSelf(EspressoBlocks.COFFEE_BRICK_STAIRS.value());
         this.dropSelf(EspressoBlocks.COFFEE_MUG.value());
+        this.dropSelf(EspressoBlocks.TALL_GLASS.value());
         this.dropSelf(EspressoBlocks.STEEPER.value());
         this.dropSelf(EspressoBlocks.SIEVE.value());
     }
