@@ -2,14 +2,16 @@ package systems.thedawn.espresso;
 
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import systems.thedawn.espresso.block.DrinkBaseBlock;
 import systems.thedawn.espresso.block.CoffeePlantBlock;
-import systems.thedawn.espresso.block.FilledDrinkBlock;
+import systems.thedawn.espresso.block.MugBlock;
 import systems.thedawn.espresso.block.sieve.SieveBlock;
 import systems.thedawn.espresso.block.steeper.SteeperBlock;
 
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 
@@ -60,10 +62,8 @@ public class EspressoBlocks {
         COFFEE_BRICK_SLAB = BLOCKS.registerBlock("coffee_brick_slab", SlabBlock::new, props);
     }
 
-    public static final DeferredBlock<DrinkBaseBlock> COFFEE_MUG;
-    public static final DeferredBlock<FilledDrinkBlock> FILLED_COFFEE_MUG;
-    public static final DeferredBlock<DrinkBaseBlock> TALL_GLASS;
-    public static final DeferredBlock<FilledDrinkBlock> FILLED_TALL_GLASS;
+    public static final DeferredBlock<MugBlock> COFFEE_MUG;
+    public static final DeferredBlock<?> TALL_GLASS;
 
     static {
         var props = BlockBehaviour.Properties.of()
@@ -71,10 +71,8 @@ public class EspressoBlocks {
             .noOcclusion()
             .isSuffocating((state, world, pos) -> false)
             .isViewBlocking((state, world, pos) -> false);
-        COFFEE_MUG = BLOCKS.registerBlock("coffee_mug", DrinkBaseBlock::new, props);
-        FILLED_COFFEE_MUG = BLOCKS.registerBlock("filled_coffee_mug", FilledDrinkBlock::new, props);
-        TALL_GLASS = BLOCKS.registerBlock("tall_glass", DrinkBaseBlock::new, props);
-        FILLED_TALL_GLASS = BLOCKS.registerBlock("filled_tall_glass", FilledDrinkBlock::new, props);
+        COFFEE_MUG = BLOCKS.registerBlock("coffee_mug", MugBlock::new, props);
+        TALL_GLASS = BLOCKS.registerSimpleBlock("tall_glass", props);
     }
 
     public static final DeferredBlock<SteeperBlock> STEEPER;

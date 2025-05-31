@@ -6,7 +6,7 @@
     "fluid": "create_espresso:hot_milk"
   },
   "holder": {
-    "item": "create_espresso:drink_mug"
+    "item": "create_espresso:filled_coffee_mug"
   },
   "modifier": "create_espresso:milk"
 }

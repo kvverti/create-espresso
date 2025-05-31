@@ -76,7 +76,7 @@ public class EspressoTranslationProvider extends LanguageProvider {
     }
 
     private void addMug(Drink.Type type, String name) {
-        this.add(DrinkUtil.getDrinkDescriptionId(EspressoItems.DRINK_MUG.value(), type), name);
+        this.add(DrinkUtil.getDrinkDescriptionId(EspressoItems.FILLED_COFFEE_MUG.value(), type), name);
     }
 
     private void addDrink(ResourceKey<Drink> key, String name) {

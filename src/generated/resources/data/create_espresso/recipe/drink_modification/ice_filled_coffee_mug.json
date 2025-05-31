@@ -4,7 +4,7 @@
     "item": "create_espresso:ice_cubes"
   },
   "holder": {
-    "item": "create_espresso:drink_mug"
+    "item": "create_espresso:filled_coffee_mug"
   },
   "modifier": "create_espresso:ice"
 }

@@ -1,33 +1,63 @@
 {
   "variants": {
-    "chirality=left,facing=east": {
+    "chirality=left,facing=east,has_drink=false": {
       "model": "create_espresso:block/coffee_mug_left",
       "y": 270
     },
-    "chirality=left,facing=north": {
+    "chirality=left,facing=east,has_drink=true": {
+      "model": "create_espresso:block/filled_mug_left",
+      "y": 270
+    },
+    "chirality=left,facing=north,has_drink=false": {
       "model": "create_espresso:block/coffee_mug_left",
       "y": 180
     },
-    "chirality=left,facing=south": {
+    "chirality=left,facing=north,has_drink=true": {
+      "model": "create_espresso:block/filled_mug_left",
+      "y": 180
+    },
+    "chirality=left,facing=south,has_drink=false": {
       "model": "create_espresso:block/coffee_mug_left"
     },
-    "chirality=left,facing=west": {
+    "chirality=left,facing=south,has_drink=true": {
+      "model": "create_espresso:block/filled_mug_left"
+    },
+    "chirality=left,facing=west,has_drink=false": {
       "model": "create_espresso:block/coffee_mug_left",
       "y": 90
     },
-    "chirality=right,facing=east": {
+    "chirality=left,facing=west,has_drink=true": {
+      "model": "create_espresso:block/filled_mug_left",
+      "y": 90
+    },
+    "chirality=right,facing=east,has_drink=false": {
       "model": "create_espresso:block/coffee_mug_right",
       "y": 270
     },
-    "chirality=right,facing=north": {
+    "chirality=right,facing=east,has_drink=true": {
+      "model": "create_espresso:block/filled_mug_right",
+      "y": 270
+    },
+    "chirality=right,facing=north,has_drink=false": {
       "model": "create_espresso:block/coffee_mug_right",
       "y": 180
     },
-    "chirality=right,facing=south": {
+    "chirality=right,facing=north,has_drink=true": {
+      "model": "create_espresso:block/filled_mug_right",
+      "y": 180
+    },
+    "chirality=right,facing=south,has_drink=false": {
       "model": "create_espresso:block/coffee_mug_right"
     },
-    "chirality=right,facing=west": {
+    "chirality=right,facing=south,has_drink=true": {
+      "model": "create_espresso:block/filled_mug_right"
+    },
+    "chirality=right,facing=west,has_drink=false": {
       "model": "create_espresso:block/coffee_mug_right",
+      "y": 90
+    },
+    "chirality=right,facing=west,has_drink=true": {
+      "model": "create_espresso:block/filled_mug_right",
       "y": 90
     }
   }

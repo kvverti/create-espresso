@@ -86,7 +86,7 @@ public class DrinkLevelingRecipe implements FluidInputRecipe<DrinkLevelingRecipe
 
     @Override
     public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return EspressoItems.DRINK_MUG.toStack();
+        return EspressoItems.FILLED_COFFEE_MUG.toStack();
     }
 
     @Override

@@ -42,7 +42,7 @@ public class EspressoJeiPlugin implements IModPlugin {
                 return "";
             }
         };
-        registration.registerSubtypeInterpreter(EspressoItems.DRINK_MUG.value(), drinkComponentInterpreter);
+        registration.registerSubtypeInterpreter(EspressoItems.FILLED_COFFEE_MUG.value(), drinkComponentInterpreter);
 
         class DrinkBaseComponentInterpreter<T extends DataComponentHolder> implements ISubtypeInterpreter<T> {
             @Override

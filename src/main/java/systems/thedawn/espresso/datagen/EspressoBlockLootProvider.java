@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import systems.thedawn.espresso.EspressoBlocks;
 import systems.thedawn.espresso.EspressoDataComponentTypes;
 import systems.thedawn.espresso.EspressoItems;
+import systems.thedawn.espresso.block.AbstractDrinkBlock;
 import systems.thedawn.espresso.block.CoffeePlantBlock;
 
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
@@ -15,6 +16,9 @@ import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 
@@ -35,13 +39,11 @@ public class EspressoBlockLootProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
         this.coffeePlantDrops();
-        this.drinkHolderDrops(EspressoBlocks.FILLED_COFFEE_MUG.value());
-        this.drinkHolderDrops(EspressoBlocks.FILLED_TALL_GLASS.value());
+        this.drinkHolderDrops(EspressoBlocks.COFFEE_MUG.value());
 
         this.dropSelf(EspressoBlocks.COFFEE_BRICKS.value());
         this.add(EspressoBlocks.COFFEE_BRICK_SLAB.value(), this.createSlabItemTable(EspressoBlocks.COFFEE_BRICK_SLAB.value()));
         this.dropSelf(EspressoBlocks.COFFEE_BRICK_STAIRS.value());
-        this.dropSelf(EspressoBlocks.COFFEE_MUG.value());
         this.dropSelf(EspressoBlocks.TALL_GLASS.value());
         this.dropSelf(EspressoBlocks.STEEPER.value());
         this.dropSelf(EspressoBlocks.SIEVE.value());
@@ -60,10 +62,20 @@ public class EspressoBlockLootProvider extends BlockLootSubProvider {
         this.add(EspressoBlocks.GROWN_COFFEE_PLANT.value(), lootTable);
     }
 
-    private void drinkHolderDrops(Block block) {
-        var lootTable = this.createSingleItemTable(block.asItem())
-            .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
-                .include(EspressoDataComponentTypes.DRINK.value()));
+    private void drinkHolderDrops(AbstractDrinkBlock block) {
+        var lootTable = LootTable.lootTable()
+            .withPool(LootPool.lootPool()
+                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                    .setProperties(StatePropertiesPredicate.Builder.properties()
+                        .hasProperty(AbstractDrinkBlock.HAS_DRINK, false)))
+                .add(LootItem.lootTableItem(block.getEmptyItem())))
+            .withPool(LootPool.lootPool()
+                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                    .setProperties(StatePropertiesPredicate.Builder.properties()
+                        .hasProperty(AbstractDrinkBlock.HAS_DRINK, true)))
+                .add(LootItem.lootTableItem(block.getFilledItem()))
+                .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                    .include(EspressoDataComponentTypes.DRINK.value())));
         this.add(block, lootTable);
     }
 }

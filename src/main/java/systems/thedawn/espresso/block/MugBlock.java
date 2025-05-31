@@ -1,16 +1,17 @@
 package systems.thedawn.espresso.block;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import systems.thedawn.espresso.EspressoItems;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.TransparentBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -20,17 +21,28 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class DrinkBaseBlock extends TransparentBlock {
+public class MugBlock extends AbstractDrinkBlock {
     public static final Property<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final Property<HumanoidArm> CHIRALITY = EnumProperty.create("chirality", HumanoidArm.class);
 
-    public DrinkBaseBlock(Properties properties) {
+    public MugBlock(Properties properties) {
         super(properties);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(FACING, CHIRALITY);
+    }
+
+    @Override
+    public Item getEmptyItem() {
+        return EspressoItems.COFFEE_MUG.value();
+    }
+
+    @Override
+    public Item getFilledItem() {
+        return EspressoItems.FILLED_COFFEE_MUG.value();
     }
 
     @Override
@@ -50,9 +62,8 @@ public class DrinkBaseBlock extends TransparentBlock {
         return state.cycle(CHIRALITY);
     }
 
-    @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
+    public @NotNull BlockState getStateForPlacement(BlockPlaceContext context) {
         var playerFacing = context.getHorizontalDirection();
         HumanoidArm chirality;
         if(context.getPlayer() != null) {
@@ -61,7 +72,7 @@ public class DrinkBaseBlock extends TransparentBlock {
             chirality = HumanoidArm.RIGHT;
         }
         var direction = chirality == HumanoidArm.LEFT ? playerFacing.getCounterClockWise() : playerFacing.getClockWise();
-        return this.defaultBlockState()
+        return super.getStateForPlacement(context)
             .setValue(FACING, direction)
             .setValue(CHIRALITY, chirality);
     }

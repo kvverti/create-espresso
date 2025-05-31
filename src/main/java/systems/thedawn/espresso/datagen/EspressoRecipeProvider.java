@@ -319,7 +319,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
     }
 
     private void buildMugLevelingRecipes(RecipeOutput recipeOutput, HolderLookup.Provider registries, ResourceKey<Drink> drinkKey, int amount) {
-        this.buildDrinkLevelingRecipes(recipeOutput, registries, EspressoItems.COFFEE_MUG, EspressoItems.DRINK_MUG, drinkKey, amount);
+        this.buildDrinkLevelingRecipes(recipeOutput, registries, EspressoItems.COFFEE_MUG, EspressoItems.FILLED_COFFEE_MUG, drinkKey, amount);
     }
 
     private void buildDrinkLevelingRecipes(RecipeOutput recipeOutput,
@@ -348,11 +348,11 @@ public class EspressoRecipeProvider extends RecipeProvider {
     }
 
     private void buildMugModificationRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries, Holder<? extends Item> applied, ResourceKey<DrinkModifier> modifier) {
-        this.buildSpecificModificationRecipe(recipeOutput, registries, EspressoItems.DRINK_MUG, applied, modifier);
+        this.buildSpecificModificationRecipe(recipeOutput, registries, EspressoItems.FILLED_COFFEE_MUG, applied, modifier);
     }
 
     private void buildMugModificationRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries, Holder<? extends Fluid> applied, int amount, ResourceKey<DrinkModifier> modifier) {
-        this.buildSpecificModificationRecipe(recipeOutput, registries, EspressoItems.DRINK_MUG, applied, amount, modifier);
+        this.buildSpecificModificationRecipe(recipeOutput, registries, EspressoItems.FILLED_COFFEE_MUG, applied, amount, modifier);
     }
 
     private void buildSpecificModificationRecipe(RecipeOutput recipeOutput,

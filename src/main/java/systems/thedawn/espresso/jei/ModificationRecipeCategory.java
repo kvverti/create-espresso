@@ -43,7 +43,7 @@ public class ModificationRecipeCategory implements IRecipeCategory<RecipeHolder<
 
     @Override
     public @Nullable IDrawable getIcon() {
-        return helpers.getGuiHelper().createDrawableItemLike(EspressoItems.DRINK_MUG);
+        return helpers.getGuiHelper().createDrawableItemLike(EspressoItems.FILLED_COFFEE_MUG);
     }
 
     private static final int WIDTH = 100;

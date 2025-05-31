@@ -16,7 +16,7 @@ public final class EspressoBlockEntityTypes {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DrinkBlockEntity>> DRINK =
         BLOCK_ENTITY_TYPES.register("drink_holder", () ->
             BlockEntityType.Builder
-                .of(DrinkBlockEntity::new, EspressoBlocks.FILLED_COFFEE_MUG.value())
+                .of(DrinkBlockEntity::new, EspressoBlocks.COFFEE_MUG.value())
                 .build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SteeperBlockEntity>> STEEPER =
         BLOCK_ENTITY_TYPES.register("steeper", () ->

@@ -63,7 +63,7 @@ public class Espresso {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ESPRESSO_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
         .title(Component.translatable("itemGroup.create_espresso")) //The language key for the title of your CreativeModeTab
         .withTabsBefore(CreativeModeTabs.COMBAT)
-        .icon(() -> EspressoItems.DRINK_MUG.value().getDefaultInstance())
+        .icon(() -> EspressoItems.FILLED_COFFEE_MUG.value().getDefaultInstance())
         .displayItems((parameters, output) -> {
             // blocks
             output.accept(EspressoItems.COFFEE_BRICKS);
@@ -109,7 +109,7 @@ public class Espresso {
     private static ItemStack drinkMug(ResourceKey<Drink> key, HolderLookup.Provider registries) {
         var drinkBase = registries.holderOrThrow(key);
         var component = DrinkComponent.initial(drinkBase);
-        var stack = new ItemStack(EspressoItems.DRINK_MUG.value());
+        var stack = new ItemStack(EspressoItems.FILLED_COFFEE_MUG.value());
         stack.set(EspressoDataComponentTypes.DRINK, component);
         return stack;
     }
@@ -217,12 +217,12 @@ public class Espresso {
 
         @SubscribeEvent
         public static void onRegisterBlockColorHandlers(RegisterColorHandlersEvent.Block ev) {
-            ev.register(DrinkColorManager::getBlockColor, EspressoBlocks.FILLED_COFFEE_MUG.value());
+            ev.register(DrinkColorManager::getBlockColor, EspressoBlocks.COFFEE_MUG.value());
         }
 
         @SubscribeEvent
         public static void onRegisterItemColorHandlers(RegisterColorHandlersEvent.Item ev) {
-            ev.register(DrinkColorManager::getItemColor, EspressoItems.DRINK_MUG.value());
+            ev.register(DrinkColorManager::getItemColor, EspressoItems.FILLED_COFFEE_MUG.value());
         }
 
         @SubscribeEvent

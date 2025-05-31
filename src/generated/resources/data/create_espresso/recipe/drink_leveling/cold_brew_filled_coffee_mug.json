@@ -3,6 +3,6 @@
   "amount": 250,
   "drink": "create_espresso:cold_brew",
   "holder": {
-    "item": "create_espresso:drink_mug"
+    "item": "create_espresso:filled_coffee_mug"
   }
 }

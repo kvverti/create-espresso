@@ -5,13 +5,45 @@
       "bonus_rolls": 0.0,
       "conditions": [
         {
-          "condition": "minecraft:survives_explosion"
+          "block": "create_espresso:coffee_mug",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "has_drink": "false"
+          }
         }
       ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "create_espresso:coffee_mug"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "create_espresso:coffee_mug",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "has_drink": "true"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "create_espresso:filled_coffee_mug"
+        }
+      ],
+      "functions": [
+        {
+          "function": "minecraft:copy_components",
+          "include": [
+            "create_espresso:drink"
+          ],
+          "source": "block_entity"
         }
       ],
       "rolls": 1.0
