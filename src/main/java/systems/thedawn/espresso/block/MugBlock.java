@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -23,7 +22,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class MugBlock extends AbstractDrinkBlock {
     public static final Property<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final Property<HumanoidArm> CHIRALITY = EnumProperty.create("chirality", HumanoidArm.class);
 
     public MugBlock(Properties properties) {
         super(properties);
@@ -32,7 +30,7 @@ public class MugBlock extends AbstractDrinkBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(FACING, CHIRALITY);
+        builder.add(FACING);
     }
 
     @Override
@@ -64,17 +62,10 @@ public class MugBlock extends AbstractDrinkBlock {
 
     @Override
     public @NotNull BlockState getStateForPlacement(BlockPlaceContext context) {
+        var state = super.getStateForPlacement(context);
         var playerFacing = context.getHorizontalDirection();
-        HumanoidArm chirality;
-        if(context.getPlayer() != null) {
-            chirality = context.getPlayer().getMainArm();
-        } else {
-            chirality = HumanoidArm.RIGHT;
-        }
-        var direction = chirality == HumanoidArm.LEFT ? playerFacing.getCounterClockWise() : playerFacing.getClockWise();
-        return super.getStateForPlacement(context)
-            .setValue(FACING, direction)
-            .setValue(CHIRALITY, chirality);
+        var direction = state.getValue(CHIRALITY) == HumanoidArm.LEFT ? playerFacing.getCounterClockWise() : playerFacing.getClockWise();
+        return state.setValue(FACING, direction);
     }
 
     private static final VoxelShape SHAPE = Shapes.box(5f / 16f, 0f, 5f / 16f, 11f / 16f, 6f / 16f, 11f / 16f);

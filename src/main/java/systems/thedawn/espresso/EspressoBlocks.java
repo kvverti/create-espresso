@@ -4,6 +4,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import systems.thedawn.espresso.block.CoffeePlantBlock;
 import systems.thedawn.espresso.block.MugBlock;
+import systems.thedawn.espresso.block.TallGlassBlock;
 import systems.thedawn.espresso.block.sieve.SieveBlock;
 import systems.thedawn.espresso.block.steeper.SteeperBlock;
 
@@ -64,6 +65,7 @@ public class EspressoBlocks {
 
     public static final DeferredBlock<MugBlock> COFFEE_MUG;
     public static final DeferredBlock<?> TALL_GLASS;
+    public static final DeferredBlock<SteeperBlock> STEEPER;
 
     static {
         var props = BlockBehaviour.Properties.of()
@@ -71,19 +73,14 @@ public class EspressoBlocks {
             .noOcclusion()
             .isSuffocating((state, world, pos) -> false)
             .isViewBlocking((state, world, pos) -> false);
-        COFFEE_MUG = BLOCKS.registerBlock("coffee_mug", MugBlock::new, props);
-        TALL_GLASS = BLOCKS.registerSimpleBlock("tall_glass", props);
-    }
-
-    public static final DeferredBlock<SteeperBlock> STEEPER;
-
-    static {
         var glassProps = BlockBehaviour.Properties.of()
             .instabreak()
             .noOcclusion()
             .isSuffocating((state, level, pos) -> false)
             .isViewBlocking((state, level, pos) -> false)
             .sound(SoundType.GLASS);
+        COFFEE_MUG = BLOCKS.registerBlock("coffee_mug", MugBlock::new, props);
+        TALL_GLASS = BLOCKS.registerBlock("tall_glass", TallGlassBlock::new, glassProps);
         STEEPER = BLOCKS.registerBlock("steeper", SteeperBlock::new, glassProps);
     }
 

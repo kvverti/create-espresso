@@ -1,7 +1,52 @@
 {
   "variants": {
-    "": {
-      "model": "create_espresso:block/tall_glass"
+    "chirality=left,has_bubbles=false,has_drink=false,has_milk=false": {
+      "model": "create_espresso:block/tall_glass_left"
+    },
+    "chirality=left,has_bubbles=false,has_drink=false,has_milk=true": {
+      "model": "create_espresso:block/tall_glass_left"
+    },
+    "chirality=left,has_bubbles=false,has_drink=true,has_milk=false": {
+      "model": "create_espresso:block/tall_glass_left"
+    },
+    "chirality=left,has_bubbles=false,has_drink=true,has_milk=true": {
+      "model": "create_espresso:block/tall_glass_left"
+    },
+    "chirality=left,has_bubbles=true,has_drink=false,has_milk=false": {
+      "model": "create_espresso:block/tall_glass_left"
+    },
+    "chirality=left,has_bubbles=true,has_drink=false,has_milk=true": {
+      "model": "create_espresso:block/tall_glass_left"
+    },
+    "chirality=left,has_bubbles=true,has_drink=true,has_milk=false": {
+      "model": "create_espresso:block/tall_glass_left"
+    },
+    "chirality=left,has_bubbles=true,has_drink=true,has_milk=true": {
+      "model": "create_espresso:block/tall_glass_left"
+    },
+    "chirality=right,has_bubbles=false,has_drink=false,has_milk=false": {
+      "model": "create_espresso:block/tall_glass_right"
+    },
+    "chirality=right,has_bubbles=false,has_drink=false,has_milk=true": {
+      "model": "create_espresso:block/tall_glass_right"
+    },
+    "chirality=right,has_bubbles=false,has_drink=true,has_milk=false": {
+      "model": "create_espresso:block/tall_glass_right"
+    },
+    "chirality=right,has_bubbles=false,has_drink=true,has_milk=true": {
+      "model": "create_espresso:block/tall_glass_right"
+    },
+    "chirality=right,has_bubbles=true,has_drink=false,has_milk=false": {
+      "model": "create_espresso:block/tall_glass_right"
+    },
+    "chirality=right,has_bubbles=true,has_drink=false,has_milk=true": {
+      "model": "create_espresso:block/tall_glass_right"
+    },
+    "chirality=right,has_bubbles=true,has_drink=true,has_milk=false": {
+      "model": "create_espresso:block/tall_glass_right"
+    },
+    "chirality=right,has_bubbles=true,has_drink=true,has_milk=true": {
+      "model": "create_espresso:block/tall_glass_right"
     }
   }
 }
