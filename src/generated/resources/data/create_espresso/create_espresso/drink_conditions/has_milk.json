@@ -1,0 +1,6 @@
+{
+  "modifiers": [
+    "create_espresso:milk"
+  ],
+  "template": "create_espresso:has_modifier"
+}

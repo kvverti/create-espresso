@@ -1,0 +1,6 @@
+{
+  "modifiers": [
+    "create_espresso:bubbles"
+  ],
+  "template": "create_espresso:has_modifier"
+}
