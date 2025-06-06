@@ -1,0 +1,42 @@
+[
+  {
+    "alternatives": [
+      {
+        "condition": "create_espresso:has_drink",
+        "model": "create_espresso:block/tall_glass_drink"
+      }
+    ],
+    "when": "create_espresso:has_drink"
+  },
+  {
+    "alternatives": [
+      {
+        "condition": "create_espresso:has_drink",
+        "model": "create_espresso:block/tall_glass_bubbles"
+      }
+    ],
+    "when": "create_espresso:has_bubbles"
+  },
+  {
+    "alternatives": [
+      {
+        "condition": "create_espresso:has_drink",
+        "model": "create_espresso:block/tall_glass_ice"
+      }
+    ],
+    "when": "create_espresso:has_ice"
+  },
+  {
+    "alternatives": [
+      {
+        "condition": "create_espresso:is_coffee",
+        "model": "create_espresso:block/tall_glass_latte"
+      },
+      {
+        "condition": "create_espresso:has_drink",
+        "model": "create_espresso:block/tall_glass_milk"
+      }
+    ],
+    "when": "create_espresso:has_milk"
+  }
+]

@@ -14,6 +14,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
@@ -25,6 +26,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.slf4j.Logger;
 import systems.thedawn.espresso.block.sieve.SieveBlockEntity;
 import systems.thedawn.espresso.client.DrinkColorManager;
+import systems.thedawn.espresso.client.model.DrinkModelManager;
 import systems.thedawn.espresso.client.render.SieveBlockEntityRenderer;
 import systems.thedawn.espresso.client.render.SteeperBlockEntityRenderer;
 import systems.thedawn.espresso.datagen.*;
@@ -129,6 +131,8 @@ public class Espresso {
         EspressoRecipeTypes.RECIPE_SERIALIZERS.register(modEventBus);
         EspressoConditionTemplates.CONDITION_TEMPLATES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
+
+        modEventBus.register(DrinkModelManager.INSTANCE);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -256,6 +260,7 @@ public class Espresso {
 
             generator.addProvider(ev.includeClient(), new EspressoFluidTagsProvider(output, lookupProvider, existingFileHelper));
             generator.addProvider(ev.includeClient(), new EspressoDrinkColorProvider(output));
+            generator.addProvider(ev.includeClient(), new EspressoDrinkModelProvider(output));
             generator.addProvider(ev.includeClient(), new EspressoBlockStateProvider(output, existingFileHelper));
             generator.addProvider(ev.includeClient(), new EspressoItemModelProvider(output, existingFileHelper));
             generator.addProvider(ev.includeClient(), new EspressoTranslationProvider(output));

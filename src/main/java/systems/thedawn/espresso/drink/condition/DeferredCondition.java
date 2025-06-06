@@ -6,6 +6,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import org.jetbrains.annotations.Nullable;
 import systems.thedawn.espresso.EspressoRegistries;
+import systems.thedawn.espresso.drink.DrinkComponent;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -25,12 +26,30 @@ public sealed interface DeferredCondition {
         case Direct direct -> Either.right(direct);
     });
 
+    static <P> DeferredCondition direct(ConditionTemplate<P> template, P params) {
+        return new Direct(new Condition<>(template, params));
+    }
+
+    static DeferredCondition indirect(ResourceKey<Condition<?>> key) {
+        return new Indirect(key);
+    }
+
     /**
      * Resolve this condition against its registry.
      *
      * @return the resolved condition, or null if the condition cannot be resolved
      */
     @Nullable Condition<?> resolve(HolderLookup.RegistryLookup<Condition<?>> registry);
+
+    /**
+     * Resolve and test the condition.
+     *
+     * @return the result of the test, or false if the condition cannot be resolved
+     */
+    default boolean test(DrinkComponent drink, HolderLookup.Provider registries) {
+        var condition = this.resolve(registries.lookupOrThrow(EspressoRegistries.DRINK_CONDITIONS));
+        return condition != null && condition.test(drink, registries);
+    }
 
     record Direct(Condition<?> condition) implements DeferredCondition {
         @Override

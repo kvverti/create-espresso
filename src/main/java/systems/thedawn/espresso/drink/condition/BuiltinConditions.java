@@ -17,7 +17,8 @@ public class BuiltinConditions {
     public static final ResourceKey<Condition<?>> HAS_DRINK = register("has_drink");
     public static final ResourceKey<Condition<?>> HAS_MILK = register("has_milk");
     public static final ResourceKey<Condition<?>> HAS_BUBBLES = register("has_bubbles");
-    public static final ResourceKey<Condition<?>> IS_LATTE = register("is_latte");
+    public static final ResourceKey<Condition<?>> HAS_ICE = register("has_ice");
+    public static final ResourceKey<Condition<?>> IS_COFFEE = register("is_coffee");
 
     private static ResourceKey<Condition<?>> register(String name) {
         return ResourceKey.create(EspressoRegistries.DRINK_CONDITIONS, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, name));
@@ -27,9 +28,7 @@ public class BuiltinConditions {
         ctx.register(HAS_DRINK, new Condition<>(EspressoConditionTemplates.TRIVIAL.value(), Unit.INSTANCE));
         ctx.register(HAS_MILK, new Condition<>(EspressoConditionTemplates.MODIFIER.value(), List.of(BuiltinDrinkModifiers.MILK)));
         ctx.register(HAS_BUBBLES, new Condition<>(EspressoConditionTemplates.MODIFIER.value(), List.of(BuiltinDrinkModifiers.BUBBLES)));
-        ctx.register(IS_LATTE, new Condition<>(EspressoConditionTemplates.ALL.value(), List.of(
-            new DeferredCondition.Direct(new Condition<>(EspressoConditionTemplates.DRINK_TYPE.value(), List.of(Drink.Type.COFFEE))),
-            new DeferredCondition.Indirect(HAS_MILK)
-        )));
+        ctx.register(HAS_ICE, new Condition<>(EspressoConditionTemplates.MODIFIER.value(), List.of(BuiltinDrinkModifiers.ICE)));
+        ctx.register(IS_COFFEE, new Condition<>(EspressoConditionTemplates.DRINK_TYPE.value(), List.of(Drink.Type.COFFEE)));
     }
 }
