@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.mojang.logging.LogUtils;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -150,7 +151,7 @@ public class Espresso {
         }
     }
 
-    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientEvents {
         private static final ResourceLocation STILL_WATER = ResourceLocation.withDefaultNamespace("block/water_still");
         private static final ResourceLocation FLOWING_WATER = ResourceLocation.withDefaultNamespace("block/water_flow");
