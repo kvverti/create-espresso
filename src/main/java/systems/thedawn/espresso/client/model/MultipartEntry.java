@@ -4,10 +4,9 @@ import java.util.Optional;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import systems.thedawn.espresso.client.condition.ConditionHolder;
 import systems.thedawn.espresso.drink.DrinkComponent;
-import systems.thedawn.espresso.client.condition.DeferredCondition;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -16,24 +15,24 @@ import net.minecraft.resources.ResourceLocation;
  * @param condition the condition necessary to include the model
  * @param selector  the selector for the model
  */
-public record MultipartEntry(DeferredCondition condition, ModelSelector selector) {
+public record MultipartEntry(ConditionHolder condition, ModelSelector selector) {
     public static final Codec<MultipartEntry> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-        DeferredCondition.CODEC.fieldOf("when").forGetter(MultipartEntry::condition),
+        ConditionHolder.CODEC.fieldOf("when").forGetter(MultipartEntry::condition),
         ModelSelector.CODEC.fieldOf("apply").forGetter(MultipartEntry::selector)
     ).apply(inst, MultipartEntry::new));
 
     /**
      * Selects a single model according to the given drink.
      */
-    public Optional<ResourceLocation> selectModel(DrinkComponent drink, HolderLookup.Provider registries) {
-        if(this.condition.test(drink, registries)) {
+    public Optional<ResourceLocation> selectModel(DrinkComponent drink) {
+        if(this.condition.resolve().test(drink)) {
             switch(this.selector) {
                 case ModelSelector.Single(var loc) -> {
                     return Optional.of(loc);
                 }
                 case ModelSelector.Alternatives(var alternatives) -> {
                     for(var alternative : alternatives) {
-                        if(alternative.condition().test(drink, registries)) {
+                        if(alternative.condition().resolve().test(drink)) {
                             return Optional.of(alternative.modelLocation());
                         }
                     }

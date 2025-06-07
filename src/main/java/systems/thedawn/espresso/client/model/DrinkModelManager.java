@@ -11,13 +11,13 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
+import systems.thedawn.espresso.client.condition.ConditionManager;
 import systems.thedawn.espresso.drink.DrinkComponent;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.GsonHelper;
@@ -35,14 +35,14 @@ public final class DrinkModelManager {
 
     private final Object2ObjectOpenHashMap<Block, MultipartDrinkModel> drinkModels = new Object2ObjectOpenHashMap<>();
 
-    public static Collection<BakedModel> getBlockModels(Block block, DrinkComponent drink, ModelManager manager, HolderLookup.Provider registries) {
+    public static Collection<BakedModel> getBlockModels(Block block, DrinkComponent drink, ModelManager manager) {
         var multipart = INSTANCE.drinkModels.get(block);
         if(multipart == null) {
             return List.of();
         }
         return multipart.entries()
             .stream()
-            .flatMap(entry -> entry.selectModel(drink, registries).stream())
+            .flatMap(entry -> entry.selectModel(drink).stream())
             .map(modelLocation -> manager.getModel(ModelResourceLocation.standalone(modelLocation)))
             .toList();
     }
@@ -50,6 +50,8 @@ public final class DrinkModelManager {
     @SubscribeEvent
     public void loadAndRegisterModels(ModelEvent.RegisterAdditional ev) {
         var manager = Minecraft.getInstance().getResourceManager();
+        // conditions must be reloaded before drink models
+        ConditionManager.INSTANCE.reload(manager);
 
         this.drinkModels.clear();
         var blocks = EspressoBlockEntityTypes.DRINK.value().getValidBlocks();

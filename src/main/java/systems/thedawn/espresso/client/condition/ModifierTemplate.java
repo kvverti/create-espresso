@@ -7,7 +7,6 @@ import systems.thedawn.espresso.EspressoRegistries;
 import systems.thedawn.espresso.drink.DrinkComponent;
 import systems.thedawn.espresso.drink.DrinkModifier;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceKey;
 
 /**
@@ -18,7 +17,7 @@ public final class ModifierTemplate implements ConditionTemplate<List<ResourceKe
         ResourceKey.codec(EspressoRegistries.DRINK_MODIFIERS).listOf().fieldOf("modifiers");
 
     @Override
-    public boolean test(DrinkComponent drink, HolderLookup.Provider registries, List<ResourceKey<DrinkModifier>> params) {
+    public boolean test(DrinkComponent drink, List<ResourceKey<DrinkModifier>> params) {
         for(var modifier : drink.modifiers()) {
             if(params.contains(modifier.getKey())) {
                 return true;

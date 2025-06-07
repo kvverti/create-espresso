@@ -3,8 +3,6 @@ package systems.thedawn.espresso.client.condition;
 import com.mojang.serialization.MapCodec;
 import systems.thedawn.espresso.drink.DrinkComponent;
 
-import net.minecraft.core.HolderLookup;
-
 /**
  * A template for drink conditions that defines a set of parameters
  * and an interpretation of those parameters.
@@ -19,7 +17,7 @@ public interface ConditionTemplate<P> {
     /**
      * Test the given drink against this condition.
      */
-    boolean test(DrinkComponent drink, HolderLookup.Provider registries, P params);
+    boolean test(DrinkComponent drink, P params);
 
     /**
      * The Codec for this condition's parameters.

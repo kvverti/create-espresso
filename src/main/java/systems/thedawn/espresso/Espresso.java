@@ -33,7 +33,6 @@ import systems.thedawn.espresso.drink.BuiltinDrinkModifiers;
 import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
 import systems.thedawn.espresso.drink.Drink;
 import systems.thedawn.espresso.drink.DrinkComponent;
-import systems.thedawn.espresso.client.condition.BuiltinConditions;
 import systems.thedawn.espresso.worldgen.BuiltinEspressoBiomeModifiers;
 import systems.thedawn.espresso.worldgen.BuiltinEspressoFeatures;
 
@@ -245,7 +244,6 @@ public class Espresso {
             ev.createDatapackRegistryObjects(
                 new RegistrySetBuilder().add(EspressoRegistries.DRINKS, BuiltinEspressoDrinks::bootstrapDrinks)
                     .add(EspressoRegistries.DRINK_MODIFIERS, BuiltinDrinkModifiers::bootstrapModifiers)
-                    .add(EspressoRegistries.DRINK_CONDITIONS, BuiltinConditions::bootstrapConditions)
                     .add(Registries.CONFIGURED_FEATURE, BuiltinEspressoFeatures::bootstrapConfiguredFeatures)
                     .add(Registries.PLACED_FEATURE, BuiltinEspressoFeatures::bootstrapPlacedFeatures)
                     .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, BuiltinEspressoBiomeModifiers::bootstrapBiomeModifiers)
@@ -259,6 +257,7 @@ public class Espresso {
 
             generator.addProvider(ev.includeClient(), new EspressoFluidTagsProvider(output, lookupProvider, existingFileHelper));
             generator.addProvider(ev.includeClient(), new EspressoDrinkColorProvider(output));
+            generator.addProvider(ev.includeClient(), new EspressoConditionProvider(output));
             generator.addProvider(ev.includeClient(), new EspressoDrinkModelProvider(output));
             generator.addProvider(ev.includeClient(), new EspressoBlockStateProvider(output, existingFileHelper));
             generator.addProvider(ev.includeClient(), new EspressoItemModelProvider(output, existingFileHelper));

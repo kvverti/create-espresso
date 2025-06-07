@@ -7,7 +7,6 @@ import systems.thedawn.espresso.EspressoRegistries;
 import systems.thedawn.espresso.drink.Drink;
 import systems.thedawn.espresso.drink.DrinkComponent;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceKey;
 
 /**
@@ -18,7 +17,7 @@ public final class DrinkTemplate implements ConditionTemplate<List<ResourceKey<D
         ResourceKey.codec(EspressoRegistries.DRINKS).listOf().fieldOf("drinks");
 
     @Override
-    public boolean test(DrinkComponent drink, HolderLookup.Provider registries, List<ResourceKey<Drink>> params) {
+    public boolean test(DrinkComponent drink, List<ResourceKey<Drink>> params) {
         return params.contains(drink.base().getKey());
     }
 

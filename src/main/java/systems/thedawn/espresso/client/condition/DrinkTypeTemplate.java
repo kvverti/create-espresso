@@ -6,7 +6,6 @@ import com.mojang.serialization.MapCodec;
 import systems.thedawn.espresso.drink.Drink;
 import systems.thedawn.espresso.drink.DrinkComponent;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.util.StringRepresentable;
 
 /**
@@ -17,7 +16,7 @@ public final class DrinkTypeTemplate implements ConditionTemplate<List<Drink.Typ
         StringRepresentable.fromEnum(Drink.Type::values).listOf().fieldOf("drink_types");
 
     @Override
-    public boolean test(DrinkComponent drink, HolderLookup.Provider registries, List<Drink.Type> params) {
+    public boolean test(DrinkComponent drink, List<Drink.Type> params) {
         return params.contains(drink.base().value().type());
     }
 

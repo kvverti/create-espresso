@@ -7,9 +7,9 @@ import java.util.concurrent.CompletableFuture;
 import com.mojang.serialization.JsonOps;
 import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoBlocks;
-import systems.thedawn.espresso.client.model.*;
 import systems.thedawn.espresso.client.condition.BuiltinConditions;
-import systems.thedawn.espresso.client.condition.DeferredCondition;
+import systems.thedawn.espresso.client.model.*;
+import systems.thedawn.espresso.client.condition.ConditionHolder;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
 public class EspressoDrinkModelProvider implements DataProvider {
-    private static final DeferredCondition ALWAYS_TRUE = DeferredCondition.indirect(BuiltinConditions.HAS_DRINK);
+    private static final ConditionHolder ALWAYS_TRUE = ConditionHolder.indirect(BuiltinConditions.HAS_DRINK);
 
     private final PackOutput packOutput;
     private final List<ModelEntry> models = new ArrayList<>();
@@ -55,18 +55,18 @@ public class EspressoDrinkModelProvider implements DataProvider {
         this.registerBlock(EspressoBlocks.TALL_GLASS.value(), new MultipartDrinkModel(List.of(
             new MultipartEntry(ALWAYS_TRUE, ModelSelector.single(modLoc("block/tall_glass_drink"))),
             new MultipartEntry(
-                DeferredCondition.indirect(BuiltinConditions.HAS_BUBBLES),
+                ConditionHolder.indirect(BuiltinConditions.HAS_BUBBLES),
                 ModelSelector.single(modLoc("block/tall_glass_bubbles"))
             ),
             new MultipartEntry(
-                DeferredCondition.indirect(BuiltinConditions.HAS_ICE),
+                ConditionHolder.indirect(BuiltinConditions.HAS_ICE),
                 ModelSelector.single(modLoc("block/tall_glass_ice"))
             ),
             new MultipartEntry(
-                DeferredCondition.indirect(BuiltinConditions.HAS_MILK),
+                ConditionHolder.indirect(BuiltinConditions.HAS_MILK),
                 ModelSelector.alternatives(
                     new ConditionModelPair(
-                        DeferredCondition.indirect(BuiltinConditions.IS_COFFEE),
+                        ConditionHolder.indirect(BuiltinConditions.IS_COFFEE),
                         modLoc("block/tall_glass_latte")
                     ),
                     new ConditionModelPair(ALWAYS_TRUE, modLoc("block/tall_glass_milk"))
