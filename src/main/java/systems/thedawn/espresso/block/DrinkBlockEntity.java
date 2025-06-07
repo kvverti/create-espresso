@@ -22,12 +22,37 @@ public class DrinkBlockEntity extends BlockEntity {
      */
     private @Nullable DrinkComponent drinkData;
 
+    /**
+     * Client-only data. Untyped to prevent classloading issues.
+     */
+    private transient @Nullable Object clientData;
+
     public DrinkBlockEntity(BlockPos pos, BlockState blockState) {
         super(EspressoBlockEntityTypes.DRINK.value(), pos, blockState);
     }
 
     public @Nullable DrinkComponent drink() {
         return this.drinkData;
+    }
+
+    /**
+     * Get client-side data.
+     */
+    public @Nullable Object getClientData() {
+        if(this.level != null && !this.level.isClientSide()) {
+            throw new IllegalStateException("Cannot get client data on the logical server");
+        }
+        return this.clientData;
+    }
+
+    /**
+     * Set client-side data.
+     */
+    public void setClientData(Object clientData) {
+        if(this.level != null && !this.level.isClientSide()) {
+            throw new IllegalStateException("Cannot set client data on the logical server");
+        }
+        this.clientData = clientData;
     }
 
     @Override
