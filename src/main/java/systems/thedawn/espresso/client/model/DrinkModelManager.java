@@ -42,13 +42,8 @@ public final class DrinkModelManager {
         }
         return multipart.entries()
             .stream()
-            .filter(entry -> entry.condition().test(drink, registries))
-            .flatMap(entry -> entry.alternatives()
-                .stream()
-                .filter(pair -> pair.condition().test(drink, registries))
-                .findFirst()
-                .stream())
-            .map(pair -> manager.getModel(ModelResourceLocation.standalone(pair.modelLocation())))
+            .flatMap(entry -> entry.selectModel(drink, registries).stream())
+            .map(modelLocation -> manager.getModel(ModelResourceLocation.standalone(modelLocation)))
             .toList();
     }
 
@@ -82,9 +77,8 @@ public final class DrinkModelManager {
     }
 
     private static void submitBakeryOrder(MultipartDrinkModel multipart, ModelEvent.RegisterAdditional ev) {
-        multipart.entries()
-            .stream()
-            .flatMap(entry -> entry.alternatives().stream())
-            .forEach(alt -> ev.register(ModelResourceLocation.standalone(alt.modelLocation())));
+        for(var entry : multipart.entries()) {
+            entry.selector().forEachModel(model -> ev.register(ModelResourceLocation.standalone(model)));
+        }
     }
 }

@@ -1,7 +1,5 @@
 package systems.thedawn.espresso.drink.condition;
 
-import java.util.function.Function;
-
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import org.jetbrains.annotations.Nullable;
@@ -19,11 +17,11 @@ import net.minecraft.resources.ResourceKey;
  */
 public sealed interface DeferredCondition {
     Codec<DeferredCondition> CODEC = Codec.either(
-        ResourceKey.codec(EspressoRegistries.DRINK_CONDITIONS).xmap(Indirect::new, Indirect::key),
-        Condition.DIRECT_CODEC.xmap(Direct::new, Direct::condition)
-    ).xmap(either -> either.map(Function.identity(), Function.identity()), deferredCondition -> switch(deferredCondition) {
-        case Indirect indirect -> Either.left(indirect);
-        case Direct direct -> Either.right(direct);
+        ResourceKey.codec(EspressoRegistries.DRINK_CONDITIONS),
+        Condition.DIRECT_CODEC
+    ).xmap(either -> either.map(Indirect::new, Direct::new), deferredCondition -> switch(deferredCondition) {
+        case Indirect(var key) -> Either.left(key);
+        case Direct(var condition) -> Either.right(condition);
     });
 
     static <P> DeferredCondition direct(ConditionTemplate<P> template, P params) {

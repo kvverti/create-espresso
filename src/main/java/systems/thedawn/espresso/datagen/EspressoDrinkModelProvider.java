@@ -7,10 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import com.mojang.serialization.JsonOps;
 import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoBlocks;
-import systems.thedawn.espresso.client.model.ConditionModelPair;
-import systems.thedawn.espresso.client.model.DrinkModelManager;
-import systems.thedawn.espresso.client.model.MultipartDrinkModel;
-import systems.thedawn.espresso.client.model.MultipartEntry;
+import systems.thedawn.espresso.client.model.*;
 import systems.thedawn.espresso.drink.condition.BuiltinConditions;
 import systems.thedawn.espresso.drink.condition.DeferredCondition;
 
@@ -53,36 +50,33 @@ public class EspressoDrinkModelProvider implements DataProvider {
 
     private void registerModels() {
         this.registerBlock(EspressoBlocks.COFFEE_MUG.value(), new MultipartDrinkModel(List.of(
-            new MultipartEntry(ALWAYS_TRUE, singleModel("block/mug_drink"))
+            new MultipartEntry(ALWAYS_TRUE, ModelSelector.single(modLoc("block/mug_drink")))
         )));
         this.registerBlock(EspressoBlocks.TALL_GLASS.value(), new MultipartDrinkModel(List.of(
-            new MultipartEntry(ALWAYS_TRUE, singleModel("block/tall_glass_drink")),
+            new MultipartEntry(ALWAYS_TRUE, ModelSelector.single(modLoc("block/tall_glass_drink"))),
             new MultipartEntry(
                 DeferredCondition.indirect(BuiltinConditions.HAS_BUBBLES),
-                singleModel("block/tall_glass_bubbles")
+                ModelSelector.single(modLoc("block/tall_glass_bubbles"))
             ),
             new MultipartEntry(
                 DeferredCondition.indirect(BuiltinConditions.HAS_ICE),
-                singleModel("block/tall_glass_ice")
+                ModelSelector.single(modLoc("block/tall_glass_ice"))
             ),
             new MultipartEntry(
                 DeferredCondition.indirect(BuiltinConditions.HAS_MILK),
-                List.of(
+                ModelSelector.alternatives(
                     new ConditionModelPair(
                         DeferredCondition.indirect(BuiltinConditions.IS_COFFEE),
-                        ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "block/tall_glass_latte")
+                        modLoc("block/tall_glass_latte")
                     ),
-                    new ConditionModelPair(ALWAYS_TRUE, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "block/tall_glass_milk"))
+                    new ConditionModelPair(ALWAYS_TRUE, modLoc("block/tall_glass_milk"))
                 )
             )
         )));
     }
 
-    private List<ConditionModelPair> singleModel(String path) {
-        return List.of(new ConditionModelPair(
-            ALWAYS_TRUE,
-            ResourceLocation.fromNamespaceAndPath(Espresso.MODID, path)
-        ));
+    private static ResourceLocation modLoc(String path) {
+        return ResourceLocation.fromNamespaceAndPath(Espresso.MODID, path);
     }
 
     private void registerBlock(Block block, MultipartDrinkModel multipart) {

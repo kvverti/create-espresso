@@ -1,33 +1,18 @@
 [
   {
-    "alternatives": [
-      {
-        "condition": "create_espresso:has_drink",
-        "model": "create_espresso:block/tall_glass_drink"
-      }
-    ],
+    "apply": "create_espresso:block/tall_glass_drink",
     "when": "create_espresso:has_drink"
   },
   {
-    "alternatives": [
-      {
-        "condition": "create_espresso:has_drink",
-        "model": "create_espresso:block/tall_glass_bubbles"
-      }
-    ],
+    "apply": "create_espresso:block/tall_glass_bubbles",
     "when": "create_espresso:has_bubbles"
   },
   {
-    "alternatives": [
-      {
-        "condition": "create_espresso:has_drink",
-        "model": "create_espresso:block/tall_glass_ice"
-      }
-    ],
+    "apply": "create_espresso:block/tall_glass_ice",
     "when": "create_espresso:has_ice"
   },
   {
-    "alternatives": [
+    "apply": [
       {
         "condition": "create_espresso:is_coffee",
         "model": "create_espresso:block/tall_glass_latte"
