@@ -2,7 +2,7 @@ package systems.thedawn.espresso.client.model;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import systems.thedawn.espresso.drink.condition.DeferredCondition;
+import systems.thedawn.espresso.client.condition.DeferredCondition;
 
 import net.minecraft.resources.ResourceLocation;
 

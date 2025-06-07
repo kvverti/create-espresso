@@ -1,4 +1,4 @@
-package systems.thedawn.espresso.drink.condition;
+package systems.thedawn.espresso.client.condition;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;

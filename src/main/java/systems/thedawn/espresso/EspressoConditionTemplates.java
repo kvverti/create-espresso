@@ -2,7 +2,7 @@ package systems.thedawn.espresso;
 
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import systems.thedawn.espresso.drink.condition.*;
+import systems.thedawn.espresso.client.condition.*;
 
 public class EspressoConditionTemplates {
     public static final DeferredRegister<ConditionTemplate<?>> CONDITION_TEMPLATES = DeferredRegister.create(EspressoRegistries.DRINK_CONDITION_TEMPLATES, Espresso.MODID);

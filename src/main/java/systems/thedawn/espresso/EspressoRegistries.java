@@ -7,8 +7,8 @@ import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import systems.thedawn.espresso.drink.Drink;
 import systems.thedawn.espresso.drink.DrinkModifier;
-import systems.thedawn.espresso.drink.condition.Condition;
-import systems.thedawn.espresso.drink.condition.ConditionTemplate;
+import systems.thedawn.espresso.client.condition.Condition;
+import systems.thedawn.espresso.client.condition.ConditionTemplate;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

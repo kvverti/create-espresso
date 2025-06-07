@@ -1,4 +1,4 @@
-package systems.thedawn.espresso.drink.condition;
+package systems.thedawn.espresso.client.condition;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;

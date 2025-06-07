@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 @FieldsAreNonnullByDefault
-package systems.thedawn.espresso.drink.condition;
+package systems.thedawn.espresso.client.condition;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

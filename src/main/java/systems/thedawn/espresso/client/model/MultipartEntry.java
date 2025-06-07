@@ -5,7 +5,7 @@ import java.util.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import systems.thedawn.espresso.drink.DrinkComponent;
-import systems.thedawn.espresso.drink.condition.DeferredCondition;
+import systems.thedawn.espresso.client.condition.DeferredCondition;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;

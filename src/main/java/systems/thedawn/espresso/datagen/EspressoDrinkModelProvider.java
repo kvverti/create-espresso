@@ -8,8 +8,8 @@ import com.mojang.serialization.JsonOps;
 import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoBlocks;
 import systems.thedawn.espresso.client.model.*;
-import systems.thedawn.espresso.drink.condition.BuiltinConditions;
-import systems.thedawn.espresso.drink.condition.DeferredCondition;
+import systems.thedawn.espresso.client.condition.BuiltinConditions;
+import systems.thedawn.espresso.client.condition.DeferredCondition;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
