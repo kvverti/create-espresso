@@ -11,16 +11,15 @@ import systems.thedawn.espresso.drink.DrinkModifier;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 
 @EventBusSubscriber(modid = Espresso.MODID, bus = EventBusSubscriber.Bus.MOD)
 public final class EspressoRegistries {
     public static final ResourceKey<Registry<Drink>> DRINKS =
-        ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "drinks"));
+        ResourceKey.createRegistryKey(Espresso.modLoc("drinks"));
     public static final ResourceKey<Registry<DrinkModifier>> DRINK_MODIFIERS =
-        ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "drink_modifiers"));
+        ResourceKey.createRegistryKey(Espresso.modLoc("drink_modifiers"));
     public static final ResourceKey<Registry<ConditionTemplate<?>>> DRINK_CONDITION_TEMPLATES =
-        ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "drink_condition_templates"));
+        ResourceKey.createRegistryKey(Espresso.modLoc("drink_condition_templates"));
 
     @SubscribeEvent
     public static void dataPackRegistries(DataPackRegistryEvent.NewRegistry ev) {

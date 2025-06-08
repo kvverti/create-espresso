@@ -23,10 +23,10 @@ import net.minecraft.world.level.levelgen.placement.RarityFilter;
 
 public final class BuiltinEspressoFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> COFFEE_PLANT_CONFIG =
-        ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "coffee_plant_patch"));
+        ResourceKey.create(Registries.CONFIGURED_FEATURE, Espresso.modLoc("coffee_plant_patch"));
 
     public static final ResourceKey<PlacedFeature> COFFEE_PLANT =
-        ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "coffee_plant_patch"));
+        ResourceKey.create(Registries.PLACED_FEATURE, Espresso.modLoc("coffee_plant_patch"));
 
     public static void bootstrapConfiguredFeatures(BootstrapContext<ConfiguredFeature<?, ?>> ctx) {
         var coffeePlant = new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(

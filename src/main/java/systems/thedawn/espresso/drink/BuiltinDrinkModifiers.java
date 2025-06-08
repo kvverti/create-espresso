@@ -18,7 +18,7 @@ public class BuiltinDrinkModifiers {
     public static final ResourceKey<DrinkModifier> CHOCOLATE = register("chocolate");
 
     private static ResourceKey<DrinkModifier> register(String name) {
-        return ResourceKey.create(EspressoRegistries.DRINK_MODIFIERS, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, name));
+        return ResourceKey.create(EspressoRegistries.DRINK_MODIFIERS, Espresso.modLoc(name));
     }
 
     public static void bootstrapModifiers(BootstrapContext<DrinkModifier> ctx) {

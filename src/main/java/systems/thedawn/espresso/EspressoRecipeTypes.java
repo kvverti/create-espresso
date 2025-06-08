@@ -8,7 +8,6 @@ import systems.thedawn.espresso.recipe.SieveRecipe;
 import systems.thedawn.espresso.recipe.SteepingRecipe;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
@@ -16,13 +15,13 @@ public final class EspressoRecipeTypes {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, Espresso.MODID);
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<DrinkLevelingRecipe>> DRINK_LEVEL =
-        RECIPE_TYPES.register("level_drink", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "level_drink")));
+        RECIPE_TYPES.register("level_drink", () -> RecipeType.simple(Espresso.modLoc("level_drink")));
     public static final DeferredHolder<RecipeType<?>, RecipeType<DrinkModificationRecipe>> DRINK_MODIFY =
-        RECIPE_TYPES.register("modify_drink", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "modify_drink")));
+        RECIPE_TYPES.register("modify_drink", () -> RecipeType.simple(Espresso.modLoc("modify_drink")));
     public static final DeferredHolder<RecipeType<?>, RecipeType<SteepingRecipe>> STEEPING =
-        RECIPE_TYPES.register("steeping", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "steeping")));
+        RECIPE_TYPES.register("steeping", () -> RecipeType.simple(Espresso.modLoc("steeping")));
     public static final DeferredHolder<RecipeType<?>, RecipeType<SieveRecipe>> SIEVING =
-        RECIPE_TYPES.register("sieving", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "sieving")));
+        RECIPE_TYPES.register("sieving", () -> RecipeType.simple(Espresso.modLoc("sieving")));
 
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, Espresso.MODID);
 

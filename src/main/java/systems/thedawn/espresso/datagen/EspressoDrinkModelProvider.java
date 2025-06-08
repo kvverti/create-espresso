@@ -50,33 +50,29 @@ public class EspressoDrinkModelProvider implements DataProvider {
 
     private void registerModels() {
         this.registerBlock(EspressoBlocks.COFFEE_MUG.value(), new MultipartDrinkModel(List.of(
-            new MultipartEntry(ALWAYS_TRUE, ModelSelector.single(modLoc("block/mug_drink")))
+            new MultipartEntry(ALWAYS_TRUE, ModelSelector.single(Espresso.modLoc("block/mug_drink")))
         )));
         this.registerBlock(EspressoBlocks.TALL_GLASS.value(), new MultipartDrinkModel(List.of(
-            new MultipartEntry(ALWAYS_TRUE, ModelSelector.single(modLoc("block/tall_glass_drink"))),
+            new MultipartEntry(ALWAYS_TRUE, ModelSelector.single(Espresso.modLoc("block/tall_glass_drink"))),
             new MultipartEntry(
                 ConditionHolder.indirect(BuiltinConditions.HAS_BUBBLES),
-                ModelSelector.single(modLoc("block/tall_glass_bubbles"))
+                ModelSelector.single(Espresso.modLoc("block/tall_glass_bubbles"))
             ),
             new MultipartEntry(
                 ConditionHolder.indirect(BuiltinConditions.HAS_ICE),
-                ModelSelector.single(modLoc("block/tall_glass_ice"))
+                ModelSelector.single(Espresso.modLoc("block/tall_glass_ice"))
             ),
             new MultipartEntry(
                 ConditionHolder.indirect(BuiltinConditions.HAS_MILK),
                 ModelSelector.alternatives(
                     new ConditionModelPair(
                         ConditionHolder.indirect(BuiltinConditions.IS_COFFEE),
-                        modLoc("block/tall_glass_latte")
+                        Espresso.modLoc("block/tall_glass_latte")
                     ),
-                    new ConditionModelPair(ALWAYS_TRUE, modLoc("block/tall_glass_milk"))
+                    new ConditionModelPair(ALWAYS_TRUE, Espresso.modLoc("block/tall_glass_milk"))
                 )
             )
         )));
-    }
-
-    private static ResourceLocation modLoc(String path) {
-        return ResourceLocation.fromNamespaceAndPath(Espresso.MODID, path);
     }
 
     private void registerBlock(Block block, MultipartDrinkModel multipart) {

@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 
 public final class BuiltinEspressoBiomeModifiers {
     public static final ResourceKey<BiomeModifier> ADD_COFFEE_PLANT_PATCH =
-        ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "add_coffee_plant_patch"));
+        ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, Espresso.modLoc("add_coffee_plant_patch"));
 
     public static void bootstrapBiomeModifiers(BootstrapContext<BiomeModifier> ctx) {
         var biomes = ctx.lookup(Registries.BIOME);

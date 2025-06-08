@@ -30,7 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class DrinkColorManager implements ResourceManagerReloadListener {
     public static final DrinkColorManager INSTANCE = new DrinkColorManager();
 
-    public static final ResourceLocation DRINK_COLORS = ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "color/drinks.json");
+    public static final ResourceLocation DRINK_COLORS = Espresso.modLoc("color/drinks.json");
     private static final String MODIFIER_BASE_LOOKUP = "color/modifier";
     public static final String MODIFIER_BASE = MODIFIER_BASE_LOOKUP + "/";
     public static final String MODIFIER_SUFFIX = ".json";

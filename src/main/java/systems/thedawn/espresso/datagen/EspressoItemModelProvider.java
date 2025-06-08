@@ -47,7 +47,7 @@ public class EspressoItemModelProvider extends ItemModelProvider {
     private void drinkMug() {
         this.getBuilder(EspressoItems.FILLED_COFFEE_MUG.getRegisteredName())
             .parent(new ModelFile.ExistingModelFile(ResourceLocation.withDefaultNamespace("item/generated"), this.existingFileHelper))
-            .texture("layer0", ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "item/drink_mug_drink"))
-            .texture("layer1", ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "item/drink_mug_overlay"));
+            .texture("layer0", Espresso.modLoc("item/drink_mug_drink"))
+            .texture("layer1", Espresso.modLoc("item/drink_mug_overlay"));
     }
 }

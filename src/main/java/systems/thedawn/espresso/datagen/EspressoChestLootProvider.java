@@ -20,7 +20,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 public class EspressoChestLootProvider implements LootTableSubProvider {
     public static final ResourceKey<LootTable> CHEST_COFFEE_BEANS =
-        ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "chest/coffee_beans"));
+        ResourceKey.create(Registries.LOOT_TABLE, Espresso.modLoc("chest/coffee_beans"));
 
     private final HolderLookup.Provider registries;
 

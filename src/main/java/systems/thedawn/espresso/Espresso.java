@@ -145,6 +145,13 @@ public class Espresso {
             .registryOrThrow(key);
     }
 
+    /**
+     * Construct a resource location in the Espresso namespace.
+     */
+    public static ResourceLocation modLoc(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+    }
+
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD)
     public static class CommonEvents {
         @SubscribeEvent

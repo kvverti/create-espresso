@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 public class EspressoJeiPlugin implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(Espresso.MODID, "jei_plugin");
+        return Espresso.modLoc("jei_plugin");
     }
 
     @Override
