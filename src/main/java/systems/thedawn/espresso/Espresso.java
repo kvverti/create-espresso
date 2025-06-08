@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import systems.thedawn.espresso.block.sieve.SieveBlockEntity;
 import systems.thedawn.espresso.client.DrinkColorManager;
 import systems.thedawn.espresso.client.model.DrinkModelManager;
+import systems.thedawn.espresso.client.render.DrinkBlockEntityRenderer;
 import systems.thedawn.espresso.client.render.SieveBlockEntityRenderer;
 import systems.thedawn.espresso.client.render.SteeperBlockEntityRenderer;
 import systems.thedawn.espresso.datagen.*;
@@ -241,6 +242,7 @@ public class Espresso {
         public static void onRegisterEntityRenderers(EntityRenderersEvent.RegisterRenderers ev) {
             ev.registerBlockEntityRenderer(EspressoBlockEntityTypes.STEEPER.value(), SteeperBlockEntityRenderer::new);
             ev.registerBlockEntityRenderer(EspressoBlockEntityTypes.SIEVE.value(), SieveBlockEntityRenderer::new);
+            ev.registerBlockEntityRenderer(EspressoBlockEntityTypes.DRINK.value(), DrinkBlockEntityRenderer::new);
         }
     }
 

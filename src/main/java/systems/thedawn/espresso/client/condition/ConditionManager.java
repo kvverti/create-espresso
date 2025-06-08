@@ -29,7 +29,8 @@ public final class ConditionManager {
     }
 
     private void addBuiltinConditions() {
-        this.conditions.put(BuiltinConditions.HAS_DRINK, new Condition<>(EspressoConditionTemplates.TRIVIAL.value(), Unit.INSTANCE));
+        var defaultLocation = BuiltinConditions.HAS_DRINK.withPrefix(CONDITION_BASE).withSuffix(CONDITION_SUFFIX);
+        this.conditions.put(defaultLocation, new Condition<>(EspressoConditionTemplates.TRIVIAL.value(), Unit.INSTANCE));
     }
 
     public static @Nullable Condition<?> getCondition(ResourceLocation key) {

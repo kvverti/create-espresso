@@ -49,11 +49,8 @@ public class EspressoDrinkModelProvider implements DataProvider {
     }
 
     private void registerModels() {
-        this.registerBlock(EspressoBlocks.COFFEE_MUG.value(), new MultipartDrinkModel(List.of(
-            new MultipartEntry(ALWAYS_TRUE, ModelSelector.single(Espresso.modLoc("block/mug_drink")))
-        )));
+        this.registerBlock(EspressoBlocks.COFFEE_MUG.value(), new MultipartDrinkModel(List.of()));
         this.registerBlock(EspressoBlocks.TALL_GLASS.value(), new MultipartDrinkModel(List.of(
-            new MultipartEntry(ALWAYS_TRUE, ModelSelector.single(Espresso.modLoc("block/tall_glass_drink"))),
             new MultipartEntry(
                 ConditionHolder.indirect(BuiltinConditions.HAS_BUBBLES),
                 ModelSelector.single(Espresso.modLoc("block/tall_glass_bubbles"))
