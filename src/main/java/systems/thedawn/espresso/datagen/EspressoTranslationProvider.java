@@ -24,7 +24,8 @@ public class EspressoTranslationProvider extends LanguageProvider {
         this.addBlock(EspressoBlocks.COFFEE_BRICKS, "Coffee Bricks");
         this.addBlock(EspressoBlocks.COFFEE_BRICK_SLAB, "Coffee Brick Slab");
         this.addBlock(EspressoBlocks.COFFEE_BRICK_STAIRS, "Coffee Brick Stairs");
-        this.addBlock(EspressoBlocks.COFFEE_MUG, "Coffee Mug");
+        this.addBlock(EspressoBlocks.COFFEE_MUG, "Mug");
+        this.addBlock(EspressoBlocks.TALL_GLASS, "Tall Glass");
         this.addBlock(EspressoBlocks.STEEPER, "Steeper");
         this.addBlock(EspressoBlocks.SIEVE, "Sieve");
         // Items
@@ -45,9 +46,12 @@ public class EspressoTranslationProvider extends LanguageProvider {
         this.addItem(EspressoItems.CRUSHED_ICE, "Crushed Ice");
         this.addBottle(Drink.Type.COFFEE, "Coffee Bottle");
         this.addBottle(Drink.Type.TEA, "Tea Bottle");
-        this.addMug(Drink.Type.NONE, "Drink Mug");
+        this.addMug(Drink.Type.NONE, "Mug");
         this.addMug(Drink.Type.COFFEE, "Coffee Mug");
         this.addMug(Drink.Type.TEA, "Tea Mug");
+        this.addTallGlass(Drink.Type.NONE, "Tall Glass");
+        this.addTallGlass(Drink.Type.COFFEE, "Tall Coffee Glass");
+        this.addTallGlass(Drink.Type.TEA, "Tall Tea Glass");
         // fluids
         this.add("fluid_type.create_espresso.hot_water", "Hot Water");
         this.add("fluid_type.create_espresso.espresso", "Coffee");
@@ -77,6 +81,10 @@ public class EspressoTranslationProvider extends LanguageProvider {
 
     private void addMug(Drink.Type type, String name) {
         this.add(DrinkUtil.getDrinkDescriptionId(EspressoItems.FILLED_COFFEE_MUG.value(), type), name);
+    }
+
+    private void addTallGlass(Drink.Type type, String name) {
+        this.add(DrinkUtil.getDrinkDescriptionId(EspressoItems.FILLED_TALL_GLASS.value(), type), name);
     }
 
     private void addDrink(ResourceKey<Drink> key, String name) {

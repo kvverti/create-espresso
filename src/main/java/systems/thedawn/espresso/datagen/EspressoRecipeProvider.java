@@ -33,7 +33,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -74,6 +73,9 @@ public class EspressoRecipeProvider extends RecipeProvider {
         this.buildMugLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.POUR_OVER, 250);
         this.buildMugModificationRecipe(recipeOutput, registries, EspressoItems.ICE_CUBES, BuiltinDrinkModifiers.ICE);
         this.buildMugModificationRecipe(recipeOutput, registries, EspressoFluids.SOURCE_HOT_MILK, 125, BuiltinDrinkModifiers.MILK);
+        this.buildTallGlassLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.COLD_BREW, 250);
+        this.buildTallGlassLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.POUR_OVER, 250);
+        this.buildTallGlassModificationRecipe(recipeOutput, registries, EspressoFluids.SOURCE_HOT_MILK, 125, BuiltinDrinkModifiers.MILK);
 
         // coffee_beans -> coffee_grounds
         new ProcessingRecipeBuilder<>(MillingRecipe::new, Espresso.modLoc("coffee_grounds"))
@@ -322,6 +324,10 @@ public class EspressoRecipeProvider extends RecipeProvider {
         this.buildDrinkLevelingRecipes(recipeOutput, registries, EspressoItems.COFFEE_MUG, EspressoItems.FILLED_COFFEE_MUG, drinkKey, amount);
     }
 
+    private void buildTallGlassLevelingRecipes(RecipeOutput recipeOutput, HolderLookup.Provider registries, ResourceKey<Drink> drinkKey, int amount) {
+        this.buildDrinkLevelingRecipes(recipeOutput, registries, EspressoItems.TALL_GLASS, EspressoItems.FILLED_TALL_GLASS, drinkKey, amount);
+    }
+
     private void buildDrinkLevelingRecipes(RecipeOutput recipeOutput,
                                            HolderLookup.Provider registries,
                                            Holder<? extends Item> emptyContainer,
@@ -353,6 +359,10 @@ public class EspressoRecipeProvider extends RecipeProvider {
 
     private void buildMugModificationRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries, Holder<? extends Fluid> applied, int amount, ResourceKey<DrinkModifier> modifier) {
         this.buildSpecificModificationRecipe(recipeOutput, registries, EspressoItems.FILLED_COFFEE_MUG, applied, amount, modifier);
+    }
+
+    private void buildTallGlassModificationRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries, Holder<? extends Fluid> applied, int amount, ResourceKey<DrinkModifier> modifier) {
+        this.buildSpecificModificationRecipe(recipeOutput, registries, EspressoItems.FILLED_TALL_GLASS, applied, amount, modifier);
     }
 
     private void buildSpecificModificationRecipe(RecipeOutput recipeOutput,

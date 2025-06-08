@@ -230,7 +230,9 @@ public class Espresso {
 
         @SubscribeEvent
         public static void onRegisterBlockColorHandlers(RegisterColorHandlersEvent.Block ev) {
-            ev.register(DrinkColorManager::getBlockColor, EspressoBlocks.COFFEE_MUG.value());
+            ev.register(DrinkColorManager::getBlockColor,
+                EspressoBlocks.COFFEE_MUG.value(),
+                EspressoBlocks.TALL_GLASS.value());
         }
 
         @SubscribeEvent

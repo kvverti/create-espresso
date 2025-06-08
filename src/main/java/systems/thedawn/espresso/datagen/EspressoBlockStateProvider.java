@@ -73,18 +73,29 @@ public class EspressoBlockStateProvider extends BlockStateProvider {
     }
 
     private void registerTallGlassModels() {
-        var models = new ModelFile.ExistingModelFile[] {
-            this.models().getExistingFile(this.modLoc("block/tall_glass_right")),
-            this.models().getExistingFile(this.modLoc("block/tall_glass_left"))
-        };
-        this.getVariantBuilder(EspressoBlocks.TALL_GLASS.value())
-            .forAllStates(blockState -> {
-                var handedness = blockState.getValue(AbstractDrinkBlock.CHIRALITY);
-                var model = models[handedness == HumanoidArm.LEFT ? 1 : 0];
-                return ConfiguredModel.builder()
-                    .modelFile(model)
-                    .build();
-            });
+        this.getMultipartBuilder(EspressoBlocks.TALL_GLASS.value())
+            .part()
+            .modelFile(this.models().getExistingFile(this.modLoc("block/tall_glass_right")))
+            .addModel()
+            .condition(AbstractDrinkBlock.CHIRALITY, HumanoidArm.RIGHT)
+            .end()
+            .part()
+            .modelFile(this.models().getExistingFile(this.modLoc("block/tall_glass_left")))
+            .addModel()
+            .condition(AbstractDrinkBlock.CHIRALITY, HumanoidArm.LEFT)
+            .end()
+            .part()
+            .modelFile(this.models().getExistingFile(this.modLoc("block/tall_glass_drink_right")))
+            .addModel()
+            .condition(AbstractDrinkBlock.CHIRALITY, HumanoidArm.RIGHT)
+            .condition(AbstractDrinkBlock.HAS_DRINK, true)
+            .end()
+            .part()
+            .modelFile(this.models().getExistingFile(this.modLoc("block/tall_glass_drink_left")))
+            .addModel()
+            .condition(AbstractDrinkBlock.CHIRALITY, HumanoidArm.LEFT)
+            .condition(AbstractDrinkBlock.HAS_DRINK, true)
+            .end();
     }
 
     private void registerSieveModels() {

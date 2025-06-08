@@ -1,0 +1,25 @@
+{
+  "render_type": "solid",
+  "textures": {
+    "drink": "create_espresso:block/tall_glass_drink"
+  },
+  "elements": [
+    {
+      "from": [6,1,6],
+      "to": [10,9,10],
+      "rotation": {
+        "origin": [8,8,8],
+        "axis": "y",
+        "angle": 22.5
+      },
+      "faces": {
+        "down": { "texture": "#drink", "uv": [6,1,10,5], "tintindex": 0 },
+        "up": { "texture": "#drink", "uv": [6,1,10,5], "tintindex": 0 },
+        "north": { "texture": "#drink", "tintindex": 0 },
+        "south": { "texture": "#drink", "tintindex": 0 },
+        "west": { "texture": "#drink", "tintindex": 0 },
+        "east": { "texture": "#drink", "tintindex": 0 }
+      }
+    }
+  ]
+}

@@ -1,16 +1,38 @@
 {
-  "variants": {
-    "chirality=left,has_drink=false": {
-      "model": "create_espresso:block/tall_glass_left"
+  "multipart": [
+    {
+      "apply": {
+        "model": "create_espresso:block/tall_glass_right"
+      },
+      "when": {
+        "chirality": "right"
+      }
     },
-    "chirality=left,has_drink=true": {
-      "model": "create_espresso:block/tall_glass_left"
+    {
+      "apply": {
+        "model": "create_espresso:block/tall_glass_left"
+      },
+      "when": {
+        "chirality": "left"
+      }
     },
-    "chirality=right,has_drink=false": {
-      "model": "create_espresso:block/tall_glass_right"
+    {
+      "apply": {
+        "model": "create_espresso:block/tall_glass_drink_right"
+      },
+      "when": {
+        "chirality": "right",
+        "has_drink": "true"
+      }
     },
-    "chirality=right,has_drink=true": {
-      "model": "create_espresso:block/tall_glass_right"
+    {
+      "apply": {
+        "model": "create_espresso:block/tall_glass_drink_left"
+      },
+      "when": {
+        "chirality": "left",
+        "has_drink": "true"
+      }
     }
-  }
+  ]
 }

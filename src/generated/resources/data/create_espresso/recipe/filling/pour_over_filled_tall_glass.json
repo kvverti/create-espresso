@@ -1,0 +1,29 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "create_espresso:tall_glass"
+    },
+    {
+      "type": "fluid_stack",
+      "amount": 250,
+      "components": {
+        "create_espresso:drink_base": "create_espresso:pour_over"
+      },
+      "fluid": "create_espresso:drink"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "components": {
+        "create_espresso:drink": {
+          "drink": "create_espresso:pour_over",
+          "level": "single",
+          "modifiers": []
+        }
+      },
+      "id": "create_espresso:filled_tall_glass"
+    }
+  ]
+}
