@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
+import systems.thedawn.espresso.block.AbstractDrinkBlock;
 import systems.thedawn.espresso.block.DrinkBlockEntity;
 import systems.thedawn.espresso.client.model.DrinkModelManager;
 
@@ -14,6 +16,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.phys.Vec3;
 
 public class DrinkBlockEntityRenderer implements BlockEntityRenderer<DrinkBlockEntity> {
@@ -39,6 +42,10 @@ public class DrinkBlockEntityRenderer implements BlockEntityRenderer<DrinkBlockE
         var clientData = this.getClientData(blockEntity);
         var level = blockEntity.getLevel();
         if(clientData != null && level != null) {
+            poseStack.pushPose();
+            var handedness = blockEntity.getBlockState().getValue(AbstractDrinkBlock.CHIRALITY);
+            var rotation = handedness == HumanoidArm.LEFT ? 22.5f : -22.5f;
+            poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0f, 1f, 0f, rotation), 0.5f, 0.5f, 0.5f);
             for(var bakedModel : clientData.bakedModels) {
                 this.blockRenderDispatcher
                     .getModelRenderer()
@@ -57,6 +64,7 @@ public class DrinkBlockEntityRenderer implements BlockEntityRenderer<DrinkBlockE
                         RenderType.translucent()
                     );
             }
+            poseStack.popPose();
         }
     }
 

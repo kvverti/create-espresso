@@ -7,11 +7,6 @@
     {
       "from": [5.999,7,5.999],
       "to": [10.001,9.001,10.001],
-      "rotation": {
-        "origin": [8,8,8],
-        "axis": "y",
-        "angle": -22.5
-      },
       "faces": {
         "up": { "texture": "#milk", "uv": [6,1,10,5] },
         "north": { "texture": "#milk" },
