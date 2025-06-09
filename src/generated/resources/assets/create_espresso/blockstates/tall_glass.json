@@ -1,38 +1,10 @@
 {
-  "multipart": [
-    {
-      "apply": {
-        "model": "create_espresso:block/tall_glass_right"
-      },
-      "when": {
-        "chirality": "right"
-      }
+  "variants": {
+    "chirality=left": {
+      "model": "create_espresso:block/tall_glass_left"
     },
-    {
-      "apply": {
-        "model": "create_espresso:block/tall_glass_left"
-      },
-      "when": {
-        "chirality": "left"
-      }
-    },
-    {
-      "apply": {
-        "model": "create_espresso:block/tall_glass_drink_right"
-      },
-      "when": {
-        "chirality": "right",
-        "has_drink": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "create_espresso:block/tall_glass_drink_left"
-      },
-      "when": {
-        "chirality": "left",
-        "has_drink": "true"
-      }
+    "chirality=right": {
+      "model": "create_espresso:block/tall_glass_right"
     }
-  ]
+  }
 }

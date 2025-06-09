@@ -1,0 +1,6 @@
+{
+  "drink_types": [
+    "tea"
+  ],
+  "template": "create_espresso:has_drink_type"
+}

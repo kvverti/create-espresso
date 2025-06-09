@@ -1,5 +1,9 @@
 [
   {
+    "apply": "create_espresso:block/tall_glass_coffee",
+    "when": "create_espresso:is_coffee"
+  },
+  {
     "apply": "create_espresso:block/tall_glass_bubbles",
     "when": "create_espresso:has_bubbles"
   },

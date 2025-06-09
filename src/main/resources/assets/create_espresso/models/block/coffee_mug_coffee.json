@@ -1,0 +1,15 @@
+{
+    "render_type": "solid",
+    "textures": {
+        "drink": "create_espresso:block/mug_drink"
+    },
+    "elements": [
+        {
+            "from": [6,5,6],
+            "to": [10,5,10],
+            "faces": {
+                "up": { "texture": "#drink", "tintindex": 0 }
+            }
+        }
+    ]
+}

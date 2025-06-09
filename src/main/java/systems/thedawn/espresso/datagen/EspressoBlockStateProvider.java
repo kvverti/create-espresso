@@ -51,17 +51,12 @@ public class EspressoBlockStateProvider extends BlockStateProvider {
     }
 
     private void registerMugModels() {
-        var emptyModels = new ModelFile.ExistingModelFile[] {
+        var models = new ModelFile.ExistingModelFile[] {
             this.models().getExistingFile(this.modLoc("block/coffee_mug_right")),
             this.models().getExistingFile(this.modLoc("block/coffee_mug_left"))
         };
-        var filledModels = new ModelFile.ExistingModelFile[] {
-            this.models().getExistingFile(this.modLoc("block/filled_mug_right")),
-            this.models().getExistingFile(this.modLoc("block/filled_mug_left"))
-        };
         this.getVariantBuilder(EspressoBlocks.COFFEE_MUG.value())
-            .forAllStates(blockState -> {
-                var models = blockState.getValue(AbstractDrinkBlock.HAS_DRINK) ? filledModels : emptyModels;
+            .forAllStatesExcept(blockState -> {
                 var handedness = blockState.getValue(AbstractDrinkBlock.CHIRALITY);
                 var model = models[handedness == HumanoidArm.LEFT ? 1 : 0];
                 var direction = blockState.getValue(MugBlock.FACING);
@@ -69,33 +64,21 @@ public class EspressoBlockStateProvider extends BlockStateProvider {
                     .modelFile(model)
                     .rotationY(direction.get2DDataValue() * 90)
                     .build();
-            });
+            }, AbstractDrinkBlock.HAS_DRINK);
     }
 
     private void registerTallGlassModels() {
-        this.getMultipartBuilder(EspressoBlocks.TALL_GLASS.value())
-            .part()
-            .modelFile(this.models().getExistingFile(this.modLoc("block/tall_glass_right")))
+        this.getVariantBuilder(EspressoBlocks.TALL_GLASS.value())
+            .partialState()
+            .with(AbstractDrinkBlock.CHIRALITY, HumanoidArm.LEFT)
+            .modelForState()
+            .modelFile(this.models().getExistingFile(Espresso.modLoc("block/tall_glass_left")))
             .addModel()
-            .condition(AbstractDrinkBlock.CHIRALITY, HumanoidArm.RIGHT)
-            .end()
-            .part()
-            .modelFile(this.models().getExistingFile(this.modLoc("block/tall_glass_left")))
-            .addModel()
-            .condition(AbstractDrinkBlock.CHIRALITY, HumanoidArm.LEFT)
-            .end()
-            .part()
-            .modelFile(this.models().getExistingFile(this.modLoc("block/tall_glass_drink_right")))
-            .addModel()
-            .condition(AbstractDrinkBlock.CHIRALITY, HumanoidArm.RIGHT)
-            .condition(AbstractDrinkBlock.HAS_DRINK, true)
-            .end()
-            .part()
-            .modelFile(this.models().getExistingFile(this.modLoc("block/tall_glass_drink_left")))
-            .addModel()
-            .condition(AbstractDrinkBlock.CHIRALITY, HumanoidArm.LEFT)
-            .condition(AbstractDrinkBlock.HAS_DRINK, true)
-            .end();
+            .partialState()
+            .with(AbstractDrinkBlock.CHIRALITY, HumanoidArm.RIGHT)
+            .modelForState()
+            .modelFile(this.models().getExistingFile(Espresso.modLoc("block/tall_glass_right")))
+            .addModel();
     }
 
     private void registerSieveModels() {

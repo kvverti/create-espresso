@@ -66,7 +66,7 @@ public class Espresso {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ESPRESSO_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
         .title(Component.translatable("itemGroup.create_espresso")) //The language key for the title of your CreativeModeTab
         .withTabsBefore(CreativeModeTabs.COMBAT)
-        .icon(() -> EspressoItems.FILLED_COFFEE_MUG.value().getDefaultInstance())
+        .icon(EspressoItems.COFFEE_BEANS::toStack)
         .displayItems((parameters, output) -> {
             // blocks
             output.accept(EspressoItems.COFFEE_BRICKS);
@@ -100,6 +100,10 @@ public class Espresso {
             output.accept(drinkMug(BuiltinEspressoDrinks.COLD_BREW, registries));
             output.accept(drinkMug(BuiltinEspressoDrinks.POUR_OVER, registries));
             output.accept(drinkMug(BuiltinEspressoDrinks.ESPRESSO, registries));
+            // tall glasses
+            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.COLD_BREW, registries));
+            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.POUR_OVER, registries));
+            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.ESPRESSO, registries));
         }).build());
 
     private static ItemStack drinkBottle(ResourceKey<Drink> key, HolderLookup.Provider registries) {
@@ -110,9 +114,16 @@ public class Espresso {
     }
 
     private static ItemStack drinkMug(ResourceKey<Drink> key, HolderLookup.Provider registries) {
+        return drinkHolder(EspressoItems.FILLED_COFFEE_MUG.toStack(), key, registries);
+    }
+
+    private static ItemStack tallDrinkGlass(ResourceKey<Drink> key, HolderLookup.Provider registries) {
+        return drinkHolder(EspressoItems.FILLED_TALL_GLASS.toStack(), key, registries);
+    }
+
+    private static ItemStack drinkHolder(ItemStack stack, ResourceKey<Drink> key, HolderLookup.Provider registries) {
         var drinkBase = registries.holderOrThrow(key);
         var component = DrinkComponent.initial(drinkBase);
-        var stack = new ItemStack(EspressoItems.FILLED_COFFEE_MUG.value());
         stack.set(EspressoDataComponentTypes.DRINK, component);
         return stack;
     }
