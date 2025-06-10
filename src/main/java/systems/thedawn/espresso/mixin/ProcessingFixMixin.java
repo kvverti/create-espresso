@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 
 /**
  * Patch Create processing recipes to add component patch to the output stack.
- * Fixed in Create 6.0.5
+ * Fixed in Create 6.0.6
  */
 @Mixin(ProcessingOutput.class)
 public class ProcessingFixMixin {
