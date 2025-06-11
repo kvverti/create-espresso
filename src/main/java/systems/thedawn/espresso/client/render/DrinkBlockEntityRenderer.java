@@ -1,7 +1,5 @@
 package systems.thedawn.espresso.client.render;
 
-import java.util.Collection;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
@@ -14,7 +12,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.phys.Vec3;
@@ -31,7 +28,7 @@ public class DrinkBlockEntityRenderer implements BlockEntityRenderer<DrinkBlockE
     @Override
     public boolean shouldRender(DrinkBlockEntity blockEntity, Vec3 cameraPos) {
         var clientData = this.getClientData(blockEntity);
-        if(clientData == null || clientData.bakedModels.isEmpty()) {
+        if(clientData == null || clientData.bakedModels().isEmpty()) {
             return false;
         }
         return BlockEntityRenderer.super.shouldRender(blockEntity, cameraPos);
@@ -46,7 +43,7 @@ public class DrinkBlockEntityRenderer implements BlockEntityRenderer<DrinkBlockE
             var handedness = blockEntity.getBlockState().getValue(AbstractDrinkBlock.CHIRALITY);
             var rotation = handedness == HumanoidArm.LEFT ? 22.5f : -22.5f;
             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0f, 1f, 0f, rotation), 0.5f, 0.5f, 0.5f);
-            for(var bakedModel : clientData.bakedModels) {
+            for(var bakedModel : clientData.bakedModels()) {
                 this.blockRenderDispatcher
                     .getModelRenderer()
                     .tesselateBlock(
@@ -69,19 +66,17 @@ public class DrinkBlockEntityRenderer implements BlockEntityRenderer<DrinkBlockE
     }
 
     private @Nullable ClientData getClientData(DrinkBlockEntity blockEntity) {
+        var lastLoad = DrinkModelManager.lastLoadTimestamp();
         var clientData = (ClientData) blockEntity.getClientData();
-        if(clientData != null) {
+        if(clientData != null && clientData.timestamp() == lastLoad) {
             return clientData;
         }
         var block = blockEntity.getBlockState().getBlock();
         var drink = blockEntity.drink();
         if(drink != null) {
-            clientData = new ClientData(DrinkModelManager.getBlockModels(block, drink, this.modelManager));
+            clientData = new ClientData(DrinkModelManager.getBlockModels(block, drink, this.modelManager), lastLoad);
             blockEntity.setClientData(clientData);
         }
         return clientData;
-    }
-
-    private record ClientData(Collection<BakedModel> bakedModels) {
     }
 }

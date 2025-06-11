@@ -17,6 +17,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -27,6 +28,7 @@ import systems.thedawn.espresso.block.sieve.SieveBlockEntity;
 import systems.thedawn.espresso.client.DrinkColorManager;
 import systems.thedawn.espresso.client.model.DrinkModelManager;
 import systems.thedawn.espresso.client.render.DrinkBlockEntityRenderer;
+import systems.thedawn.espresso.client.render.DrinkItemRenderer;
 import systems.thedawn.espresso.client.render.SieveBlockEntityRenderer;
 import systems.thedawn.espresso.client.render.SteeperBlockEntityRenderer;
 import systems.thedawn.espresso.datagen.*;
@@ -38,6 +40,7 @@ import systems.thedawn.espresso.worldgen.BuiltinEspressoBiomeModifiers;
 import systems.thedawn.espresso.worldgen.BuiltinEspressoFeatures;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.HolderLookup;
@@ -237,6 +240,14 @@ public class Espresso {
                     return FLOWING_MILK;
                 }
             }, EspressoFluids.HOT_MILK);
+            ev.registerItem(new IClientItemExtensions() {
+                private final DrinkItemRenderer renderer = new DrinkItemRenderer();
+
+                @Override
+                public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                    return renderer;
+                }
+            }, EspressoItems.FILLED_COFFEE_MUG, EspressoItems.FILLED_TALL_GLASS);
         }
 
         @SubscribeEvent

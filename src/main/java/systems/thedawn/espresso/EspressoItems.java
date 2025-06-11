@@ -28,9 +28,9 @@ public class EspressoItems {
     public static final DeferredItem<?> HOT_MILK_BOTTLE = ITEMS.registerSimpleItem("hot_milk_bottle");
     public static final DeferredItem<?> DRINK_BOTTLE =
         ITEMS.registerItem("drink_bottle", DrinkBottleItem::new, new Item.Properties().stacksTo(1));
-    public static final DeferredItem<?> FILLED_COFFEE_MUG =
+    public static final DeferredItem<DrinkItem> FILLED_COFFEE_MUG =
         ITEMS.registerItem("filled_coffee_mug", props -> new DrinkItem(EspressoBlocks.COFFEE_MUG.value(), props), new Item.Properties().stacksTo(1));
-    public static final DeferredItem<?> FILLED_TALL_GLASS =
+    public static final DeferredItem<DrinkItem> FILLED_TALL_GLASS =
         ITEMS.registerItem("filled_tall_glass", props -> new DrinkItem(EspressoBlocks.TALL_GLASS.value(), props), new Item.Properties().stacksTo(1));
     public static final DeferredItem<?> STEEPER = ITEMS.registerSimpleBlockItem(EspressoBlocks.STEEPER);
     public static final DeferredItem<?> POUR_OVER_COFFEE_SETUP =
