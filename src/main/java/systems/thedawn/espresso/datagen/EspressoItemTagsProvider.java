@@ -26,6 +26,8 @@ public class EspressoItemTagsProvider extends ItemTagsProvider {
                 EspressoItems.COFFEE_MUG.value(),
                 EspressoItems.DRINK_BOTTLE.value(),
                 EspressoItems.FILLED_COFFEE_MUG.value(),
+                EspressoItems.TALL_GLASS.value(),
+                EspressoItems.FILLED_TALL_GLASS.value(),
                 EspressoItems.INCOMPLETE_POUR_OVER_COFFEE_SETUP.value(),
                 EspressoItems.POUR_OVER_COFFEE_SETUP.value()
             );

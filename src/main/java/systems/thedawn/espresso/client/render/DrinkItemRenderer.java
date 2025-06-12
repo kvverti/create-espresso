@@ -2,10 +2,11 @@ package systems.thedawn.espresso.client.render;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import systems.thedawn.espresso.EspressoDataComponentTypes;
-import systems.thedawn.espresso.client.model.DrinkItemModelComponent;
 import systems.thedawn.espresso.client.model.DrinkModelManager;
 import systems.thedawn.espresso.item.DrinkItem;
 
@@ -19,6 +20,11 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class DrinkItemRenderer extends BlockEntityWithoutLevelRenderer {
+    /**
+     * Cache of model data associated with an item stack. This assumes the drink component
+     * does not change.
+     */
+    private final Map<ItemStack, ClientData> clientDataMap = new WeakHashMap<>();
     private final ItemRenderer itemRenderer;
     private final ModelManager modelManager;
 
@@ -30,15 +36,18 @@ public class DrinkItemRenderer extends BlockEntityWithoutLevelRenderer {
 
     @Override
     public void renderByItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+        poseStack.pushPose();
+        poseStack.translate(0.5f, 0.5f, 0.5f);
         for(var bakedModel : this.getModels(stack)) {
             this.itemRenderer.render(stack, displayContext, false, poseStack, buffer, packedLight, packedOverlay, bakedModel);
         }
+        poseStack.popPose();
     }
 
     private Collection<BakedModel> getModels(ItemStack stack) {
         var lastLoad = DrinkModelManager.lastLoadTimestamp();
-        var component = stack.get(EspressoDataComponentTypes.DRINK_ITEM_MODEL);
-        if(component != null && component.clientData() instanceof ClientData clientData && clientData.timestamp() == lastLoad) {
+        var clientData = clientDataMap.get(stack);
+        if(clientData != null && clientData.timestamp() == lastLoad) {
             return clientData.bakedModels();
         }
 
@@ -47,8 +56,7 @@ public class DrinkItemRenderer extends BlockEntityWithoutLevelRenderer {
             var drink = stack.get(EspressoDataComponentTypes.DRINK);
             if(drink != null) {
                 var bakedModels = DrinkModelManager.getItemModels(block, drink, this.modelManager);
-                var clientData = new ClientData(bakedModels, lastLoad);
-                stack.set(EspressoDataComponentTypes.DRINK_ITEM_MODEL, new DrinkItemModelComponent(clientData));
+                clientDataMap.put(stack, new ClientData(bakedModels, lastLoad));
                 return bakedModels;
             }
         }

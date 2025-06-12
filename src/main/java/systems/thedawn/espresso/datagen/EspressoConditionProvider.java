@@ -8,6 +8,7 @@ import com.mojang.serialization.JsonOps;
 import systems.thedawn.espresso.EspressoConditionTemplates;
 import systems.thedawn.espresso.client.condition.BuiltinConditions;
 import systems.thedawn.espresso.client.condition.Condition;
+import systems.thedawn.espresso.client.condition.ConditionHolder;
 import systems.thedawn.espresso.client.condition.ConditionManager;
 import systems.thedawn.espresso.drink.BuiltinDrinkModifiers;
 import systems.thedawn.espresso.drink.Drink;
@@ -49,6 +50,10 @@ public class EspressoConditionProvider implements DataProvider {
         this.register(BuiltinConditions.HAS_ICE, new Condition<>(EspressoConditionTemplates.MODIFIER.value(), List.of(BuiltinDrinkModifiers.ICE)));
         this.register(BuiltinConditions.IS_COFFEE, new Condition<>(EspressoConditionTemplates.DRINK_TYPE.value(), List.of(Drink.Type.COFFEE)));
         this.register(BuiltinConditions.IS_TEA, new Condition<>(EspressoConditionTemplates.DRINK_TYPE.value(), List.of(Drink.Type.TEA)));
+        this.register(BuiltinConditions.IS_LATTE, new Condition<>(
+            EspressoConditionTemplates.ALL.value(),
+            List.of(ConditionHolder.indirect(BuiltinConditions.IS_COFFEE), ConditionHolder.indirect(BuiltinConditions.HAS_MILK))
+        ));
     }
 
     private void register(ResourceLocation location, Condition<?> condition) {

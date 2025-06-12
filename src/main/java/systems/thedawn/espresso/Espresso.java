@@ -259,7 +259,9 @@ public class Espresso {
 
         @SubscribeEvent
         public static void onRegisterItemColorHandlers(RegisterColorHandlersEvent.Item ev) {
-            ev.register(DrinkColorManager::getItemColor, EspressoItems.FILLED_COFFEE_MUG.value());
+            ev.register(DrinkColorManager::getItemColor,
+                EspressoItems.FILLED_COFFEE_MUG.value(),
+                EspressoItems.FILLED_TALL_GLASS.value());
         }
 
         @SubscribeEvent

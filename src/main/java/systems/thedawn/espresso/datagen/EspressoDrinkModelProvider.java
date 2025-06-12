@@ -8,9 +8,13 @@ import com.google.common.collect.Streams;
 import com.mojang.serialization.JsonOps;
 import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoBlocks;
+import systems.thedawn.espresso.EspressoItems;
 import systems.thedawn.espresso.client.condition.BuiltinConditions;
 import systems.thedawn.espresso.client.condition.ConditionHolder;
-import systems.thedawn.espresso.client.model.*;
+import systems.thedawn.espresso.client.model.DrinkModelManager;
+import systems.thedawn.espresso.client.model.ModelSelector;
+import systems.thedawn.espresso.client.model.MultipartDrinkModel;
+import systems.thedawn.espresso.client.model.MultipartEntry;
 import systems.thedawn.espresso.item.DrinkItem;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -76,14 +80,18 @@ public class EspressoDrinkModelProvider implements DataProvider {
                 ModelSelector.single(Espresso.modLoc("block/tall_glass_ice"))
             ),
             new MultipartEntry(
-                ConditionHolder.indirect(BuiltinConditions.HAS_MILK),
-                ModelSelector.alternatives(
-                    new ConditionModelPair(
-                        ConditionHolder.indirect(BuiltinConditions.IS_COFFEE),
-                        Espresso.modLoc("block/tall_glass_latte")
-                    ),
-                    new ConditionModelPair(ALWAYS_TRUE, Espresso.modLoc("block/tall_glass_milk"))
-                )
+                ConditionHolder.indirect(BuiltinConditions.IS_LATTE),
+                ModelSelector.single(Espresso.modLoc("block/tall_glass_latte"))
+            )
+        )));
+        this.registerItem(EspressoItems.FILLED_TALL_GLASS.value(), new MultipartDrinkModel(List.of(
+            new MultipartEntry(
+                ALWAYS_TRUE,
+                ModelSelector.single(Espresso.modLoc("item/tall_glass_drink"))
+            ),
+            new MultipartEntry(
+                ConditionHolder.indirect(BuiltinConditions.IS_LATTE),
+                ModelSelector.single(Espresso.modLoc("item/tall_glass_latte"))
             )
         )));
     }

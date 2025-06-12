@@ -64,7 +64,7 @@ public class DrinkColorManager implements ResourceManagerReloadListener {
     }
 
     public static int getItemColor(ItemStack stack, int tintIndex) {
-        if(tintIndex == 0) {
+        if(tintIndex == 1) {
             var component = stack.get(EspressoDataComponentTypes.DRINK);
             if(component != null) {
                 return getColorFromDrinkComponent(component);

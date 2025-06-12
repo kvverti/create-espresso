@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "create_espresso:item/drink_mug_drink",
-    "layer1": "create_espresso:item/drink_mug_overlay"
+    "layer0": "create_espresso:item/drink_mug_overlay",
+    "layer1": "create_espresso:item/drink_mug_drink"
   }
 }

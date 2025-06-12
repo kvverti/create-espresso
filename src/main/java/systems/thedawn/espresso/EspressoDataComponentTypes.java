@@ -3,14 +3,12 @@ package systems.thedawn.espresso;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import systems.thedawn.espresso.block.steeper.SteeperComponent;
-import systems.thedawn.espresso.client.model.DrinkItemModelComponent;
 import systems.thedawn.espresso.drink.Drink;
 import systems.thedawn.espresso.drink.DrinkComponent;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.codec.StreamCodec;
 
 public final class EspressoDataComponentTypes {
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENT_TYPES =
@@ -29,11 +27,6 @@ public final class EspressoDataComponentTypes {
                 .persistent(DrinkComponent.CODEC)
                 .networkSynchronized(DrinkComponent.STREAM_CODEC)
                 .cacheEncoding()
-                .build());
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<DrinkItemModelComponent>> DRINK_ITEM_MODEL =
-        DATA_COMPONENT_TYPES.register("drink_item_model", () ->
-            DataComponentType.<DrinkItemModelComponent>builder()
-                .networkSynchronized(StreamCodec.unit(DrinkItemModelComponent.INVALID))
                 .build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<SteeperComponent>> STEEPING =
         DATA_COMPONENT_TYPES.register("steeping", () ->

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:builtin/generated",
+  "textures": {
+    "layer0": "create_espresso:item/tall_glass_latte"
+  }
+}
