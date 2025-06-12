@@ -1,0 +1,7 @@
+{
+  "conditions": [
+    "create_espresso:is_coffee",
+    "create_espresso:has_milk"
+  ],
+  "template": "create_espresso:any"
+}

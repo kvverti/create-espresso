@@ -61,15 +61,15 @@ public class EspressoDrinkModelProvider implements DataProvider {
         // mug
         this.registerBlock(EspressoBlocks.COFFEE_MUG.value(), new MultipartDrinkModel(List.of(
             new MultipartEntry(
-                ConditionHolder.indirect(BuiltinConditions.IS_COFFEE),
-                ModelSelector.single(Espresso.modLoc("block/coffee_mug_coffee"))
+                ConditionHolder.indirect(BuiltinConditions.IS_DRINK_OPAQUE),
+                ModelSelector.single(Espresso.modLoc("block/coffee_mug_opaque"))
             )
         )));
         // tall glass
         this.registerBlock(EspressoBlocks.TALL_GLASS.value(), new MultipartDrinkModel(List.of(
             new MultipartEntry(
-                ConditionHolder.indirect(BuiltinConditions.IS_COFFEE),
-                ModelSelector.single(Espresso.modLoc("block/tall_glass_coffee"))
+                ConditionHolder.indirect(BuiltinConditions.IS_DRINK_OPAQUE),
+                ModelSelector.single(Espresso.modLoc("block/tall_glass_opaque"))
             ),
             new MultipartEntry(
                 ConditionHolder.indirect(BuiltinConditions.HAS_BUBBLES),

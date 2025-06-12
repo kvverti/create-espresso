@@ -1,6 +1,6 @@
 [
   {
-    "apply": "create_espresso:block/coffee_mug_coffee",
-    "when": "create_espresso:is_coffee"
+    "apply": "create_espresso:block/coffee_mug_opaque",
+    "when": "create_espresso:is_drink_opaque"
   }
 ]

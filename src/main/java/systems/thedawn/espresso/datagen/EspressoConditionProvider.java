@@ -54,6 +54,10 @@ public class EspressoConditionProvider implements DataProvider {
             EspressoConditionTemplates.ALL.value(),
             List.of(ConditionHolder.indirect(BuiltinConditions.IS_COFFEE), ConditionHolder.indirect(BuiltinConditions.HAS_MILK))
         ));
+        this.register(BuiltinConditions.IS_DRINK_OPAQUE, new Condition<>(
+            EspressoConditionTemplates.ANY.value(),
+            List.of(ConditionHolder.indirect(BuiltinConditions.IS_COFFEE), ConditionHolder.indirect(BuiltinConditions.HAS_MILK))
+        ));
     }
 
     private void register(ResourceLocation location, Condition<?> condition) {
