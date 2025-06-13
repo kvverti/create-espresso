@@ -9,17 +9,16 @@
       "items": "create_espresso:drink_bottle"
     }
   ],
-  "processing_time": 100,
   "results": [
+    {
+      "id": "minecraft:glass_bottle"
+    },
     {
       "amount": 250,
       "components": {
         "create_espresso:drink_base": "create_espresso:cold_brew"
       },
       "id": "create_espresso:drink"
-    },
-    {
-      "id": "minecraft:glass_bottle"
     }
   ]
 }

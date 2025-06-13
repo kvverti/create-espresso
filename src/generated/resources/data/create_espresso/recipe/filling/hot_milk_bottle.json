@@ -10,7 +10,6 @@
       "fluid": "create_espresso:hot_milk"
     }
   ],
-  "processing_time": 100,
   "results": [
     {
       "id": "create_espresso:hot_milk_bottle"

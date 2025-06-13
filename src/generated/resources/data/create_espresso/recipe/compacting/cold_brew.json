@@ -13,15 +13,15 @@
   "processing_time": 100,
   "results": [
     {
+      "count": 6,
+      "id": "create_espresso:spent_coffee_grounds"
+    },
+    {
       "amount": 250,
       "components": {
         "create_espresso:drink_base": "create_espresso:cold_brew"
       },
       "id": "create_espresso:drink"
-    },
-    {
-      "count": 6,
-      "id": "create_espresso:spent_coffee_grounds"
     }
   ]
 }

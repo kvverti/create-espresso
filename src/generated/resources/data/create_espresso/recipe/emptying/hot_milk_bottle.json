@@ -5,14 +5,13 @@
       "item": "create_espresso:hot_milk_bottle"
     }
   ],
-  "processing_time": 100,
   "results": [
+    {
+      "id": "minecraft:glass_bottle"
+    },
     {
       "amount": 250,
       "id": "create_espresso:hot_milk"
-    },
-    {
-      "id": "minecraft:glass_bottle"
     }
   ]
 }

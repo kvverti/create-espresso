@@ -13,15 +13,15 @@
   "processing_time": 100,
   "results": [
     {
+      "chance": 0.75,
+      "id": "create_espresso:coffee_grounds"
+    },
+    {
       "amount": 10,
       "components": {
         "create_espresso:drink_base": "create_espresso:dirty_cold_brew"
       },
       "id": "create_espresso:drink"
-    },
-    {
-      "chance": 0.75,
-      "id": "create_espresso:coffee_grounds"
     }
   ]
 }
