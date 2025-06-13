@@ -14,7 +14,7 @@ import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.kinetics.saw.CuttingRecipe;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipeBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.neoforged.neoforge.common.NeoForgeMod;
@@ -48,7 +48,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes(RecipeOutput recipeOutput, HolderLookup.Provider registries) {
         // water -> hot water
-        new ProcessingRecipeBuilder<>(MixingRecipe::new, Espresso.modLoc("hot_water"))
+        new StandardProcessingRecipe.Builder<>(MixingRecipe::new, Espresso.modLoc("hot_water"))
             .withFluidIngredients(FluidIngredient.fromTag(FluidTags.WATER, 10))
             .requiresHeat(HeatCondition.HEATED)
             .averageProcessingDuration()
@@ -56,7 +56,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .build(recipeOutput);
 
         // milk -> hot milk
-        new ProcessingRecipeBuilder<>(MixingRecipe::new, Espresso.modLoc("hot_milk"))
+        new StandardProcessingRecipe.Builder<>(MixingRecipe::new, Espresso.modLoc("hot_milk"))
             .withFluidIngredients(FluidIngredient.fromFluid(NeoForgeMod.MILK.value(), 10))
             .requiresHeat(HeatCondition.HEATED)
             .averageProcessingDuration()
@@ -78,12 +78,12 @@ public class EspressoRecipeProvider extends RecipeProvider {
         this.buildTallGlassModificationRecipe(recipeOutput, registries, EspressoFluids.SOURCE_HOT_MILK, 125, BuiltinDrinkModifiers.MILK);
 
         // coffee_beans -> coffee_grounds
-        new ProcessingRecipeBuilder<>(MillingRecipe::new, Espresso.modLoc("coffee_grounds"))
+        new StandardProcessingRecipe.Builder<>(MillingRecipe::new, Espresso.modLoc("coffee_grounds"))
             .withItemIngredients(Ingredient.of(EspressoItems.COFFEE_BEANS))
             .withSingleItemOutput(new ItemStack(EspressoItems.COFFEE_GROUNDS.get()))
             .averageProcessingDuration()
             .build(recipeOutput);
-        new ProcessingRecipeBuilder<>(CrushingRecipe::new, Espresso.modLoc("coffee_grounds"))
+        new StandardProcessingRecipe.Builder<>(CrushingRecipe::new, Espresso.modLoc("coffee_grounds"))
             .withItemIngredients(Ingredient.of(EspressoItems.COFFEE_BEANS))
             .withSingleItemOutput(new ItemStack(EspressoItems.COFFEE_GROUNDS.get()))
             .averageProcessingDuration()
@@ -143,7 +143,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
      */
     private void buildCoffeePlantRecipes(RecipeOutput recipeOutput) {
         // coffee_cherry -> coffee_pit + coffee_paste
-        new ProcessingRecipeBuilder<>(MixingRecipe::new, Espresso.modLoc("mix_coffee_cherry"))
+        new StandardProcessingRecipe.Builder<>(MixingRecipe::new, Espresso.modLoc("mix_coffee_cherry"))
             .withItemIngredients(Ingredient.of(EspressoItems.COFFEE_CHERRY))
             .withItemOutputs(
                 new ProcessingOutput(EspressoItems.COFFEE_PASTE.value(), 1, 1f),
@@ -202,14 +202,14 @@ public class EspressoRecipeProvider extends RecipeProvider {
 
     private void buildIceRecipes(RecipeOutput recipeOutput) {
         // #ice -> ice cubes
-        new ProcessingRecipeBuilder<>(CuttingRecipe::new, Espresso.modLoc("ice_cubes"))
+        new StandardProcessingRecipe.Builder<>(CuttingRecipe::new, Espresso.modLoc("ice_cubes"))
             .withItemIngredients(Ingredient.of(Items.ICE))
             .averageProcessingDuration()
             .withItemOutputs(new ProcessingOutput(EspressoItems.ICE_CUBES.value(), 6, 1f))
             .build(recipeOutput);
 
         // ice cubes -> crushed ice
-        new ProcessingRecipeBuilder<>(CrushingRecipe::new, Espresso.modLoc("crushed_ice"))
+        new StandardProcessingRecipe.Builder<>(CrushingRecipe::new, Espresso.modLoc("crushed_ice"))
             .withItemIngredients(Ingredient.of(EspressoItems.ICE_CUBES))
             .averageProcessingDuration()
             .withItemOutputs(
@@ -225,7 +225,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
         // mix dirty cold brew
         var dirtyColdBrewFluid = new FluidStack(EspressoFluids.SOURCE_DRINK, 10);
         dirtyColdBrewFluid.set(EspressoDataComponentTypes.DRINK_BASE, dirtyColdBrew);
-        new ProcessingRecipeBuilder<>(MixingRecipe::new, Espresso.modLoc("dirty_cold_brew"))
+        new StandardProcessingRecipe.Builder<>(MixingRecipe::new, Espresso.modLoc("dirty_cold_brew"))
             .withItemIngredients(Ingredient.of(EspressoItems.COFFEE_GROUNDS))
             .withFluidIngredients(FluidIngredient.fromTag(FluidTags.WATER, 10))
             .averageProcessingDuration()
@@ -240,7 +240,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
         dirtyColdBrewInput.set(EspressoDataComponentTypes.DRINK_BASE, dirtyColdBrew);
         var coldBrewFluid = new FluidStack(EspressoFluids.SOURCE_DRINK, 250);
         coldBrewFluid.set(EspressoDataComponentTypes.DRINK_BASE, coldBrew);
-        new ProcessingRecipeBuilder<>(CompactingRecipe::new, Espresso.modLoc("cold_brew"))
+        new StandardProcessingRecipe.Builder<>(CompactingRecipe::new, Espresso.modLoc("cold_brew"))
             .withFluidIngredients(FluidIngredient.fromFluidStack(dirtyColdBrewInput))
             .averageProcessingDuration()
             .withItemOutputs(new ProcessingOutput(EspressoItems.SPENT_COFFEE_GROUNDS.value(), 6, 1f))
@@ -271,7 +271,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
         // pour over bottle from setup
         var pourOverBottle = new ItemStack(EspressoItems.DRINK_BOTTLE.value());
         pourOverBottle.set(EspressoDataComponentTypes.DRINK_BASE, pourOver);
-        new ProcessingRecipeBuilder<>(CuttingRecipe::new, Espresso.modLoc("pour_over_bottle"))
+        new StandardProcessingRecipe.Builder<>(CuttingRecipe::new, Espresso.modLoc("pour_over_bottle"))
             .withItemIngredients(Ingredient.of(EspressoItems.POUR_OVER_COFFEE_SETUP))
             .averageProcessingDuration()
             .withItemOutputs(
@@ -288,34 +288,30 @@ public class EspressoRecipeProvider extends RecipeProvider {
         var bottle = new ItemStack(EspressoItems.DRINK_BOTTLE.value());
         bottle.set(EspressoDataComponentTypes.DRINK_BASE, component);
 
-        new ProcessingRecipeBuilder<>(EmptyingRecipe::new, Espresso.modLoc(name))
+        new StandardProcessingRecipe.Builder<>(EmptyingRecipe::new, Espresso.modLoc(name))
             .withItemIngredients(DataComponentIngredient.of(false, EspressoDataComponentTypes.DRINK_BASE, component, EspressoItems.DRINK_BOTTLE))
             .withFluidOutputs(fluidStack)
-            .averageProcessingDuration()
             .withItemOutputs(new ProcessingOutput(Items.GLASS_BOTTLE, 1, 1f))
             .build(recipeOutput);
 
         // fill bottle
-        new ProcessingRecipeBuilder<>(FillingRecipe::new, Espresso.modLoc(name))
+        new StandardProcessingRecipe.Builder<>(FillingRecipe::new, Espresso.modLoc(name))
             .withFluidIngredients(FluidIngredient.fromFluidStack(fluidStack))
             .withItemIngredients(Ingredient.of(Items.GLASS_BOTTLE))
-            .averageProcessingDuration()
             .withItemOutputs(new ProcessingOutput(bottle, 1f))
             .build(recipeOutput);
     }
 
     private void buildStandardBottleRecipes(RecipeOutput recipeOutput, Holder<? extends Fluid> fluid, Holder<? extends Item> filledBottle) {
         var name = Objects.requireNonNull(filledBottle.getKey()).location().getPath();
-        new ProcessingRecipeBuilder<>(EmptyingRecipe::new, Espresso.modLoc(name))
+        new StandardProcessingRecipe.Builder<>(EmptyingRecipe::new, Espresso.modLoc(name))
             .withItemIngredients(Ingredient.of(filledBottle.value()))
-            .averageProcessingDuration()
             .withItemOutputs(new ProcessingOutput(Items.GLASS_BOTTLE, 1, 1f))
             .withFluidOutputs(new FluidStack(fluid.value(), 250))
             .build(recipeOutput);
-        new ProcessingRecipeBuilder<>(FillingRecipe::new, Espresso.modLoc(name))
+        new StandardProcessingRecipe.Builder<>(FillingRecipe::new, Espresso.modLoc(name))
             .withItemIngredients(Ingredient.of(Items.GLASS_BOTTLE))
             .withFluidIngredients(FluidIngredient.fromFluid(fluid.value(), 250))
-            .averageProcessingDuration()
             .withItemOutputs(new ProcessingOutput(filledBottle.value(), 1, 1f))
             .build(recipeOutput);
     }
@@ -341,10 +337,9 @@ public class EspressoRecipeProvider extends RecipeProvider {
         var filledContainerStack = new ItemStack(filledContainer.value());
         drinkFluid.set(EspressoDataComponentTypes.DRINK_BASE, drinkBase);
         filledContainerStack.set(EspressoDataComponentTypes.DRINK, DrinkComponent.initial(drinkBase));
-        new ProcessingRecipeBuilder<>(FillingRecipe::new, Espresso.modLoc(name))
+        new StandardProcessingRecipe.Builder<>(FillingRecipe::new, Espresso.modLoc(name))
             .withItemIngredients(Ingredient.of(emptyContainer.value()))
             .withFluidIngredients(FluidIngredient.fromFluidStack(drinkFluid))
-            .averageProcessingDuration()
             .withItemOutputs(new ProcessingOutput(filledContainerStack, 1f))
             .build(recipeOutput);
 

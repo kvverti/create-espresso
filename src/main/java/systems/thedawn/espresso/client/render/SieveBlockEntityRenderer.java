@@ -2,14 +2,17 @@ package systems.thedawn.espresso.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
-import com.simibubi.create.foundation.fluid.FluidRenderer;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.textures.FluidSpriteCache;
 import org.joml.Quaternionf;
 import systems.thedawn.espresso.block.sieve.SieveBlockEntity;
 import systems.thedawn.espresso.util.ItemHandlerUtil;
 
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 
 public class SieveBlockEntityRenderer extends SmartBlockEntityRenderer<SieveBlockEntity> {
@@ -50,29 +53,26 @@ public class SieveBlockEntityRenderer extends SmartBlockEntityRenderer<SieveBloc
         }
 
         // render fluids
-        var upperFluid = blockEntity.upperTank().getFluidInTank(0);
-        if(!upperFluid.isEmpty()) {
-            var amount = upperFluid.getAmount();
-            var yMax = 0.75f - 0.00025f * (1000 - amount);
-            FluidRenderer.renderFluidBox(
-                upperFluid.getFluid(),
-                amount,
-                2f / 16f, 0.5f, 2f / 16f,
-                14f / 16f, yMax, 14f / 16f,
-                bufferSource, poseStack, packedLight, true, false
-            );
-        }
-        var lowerFluid = blockEntity.lowerTank().getFluidInTank(0);
-        if(!lowerFluid.isEmpty()) {
-            var amount = lowerFluid.getAmount();
-            var yMin = 0.25f + 0.00025f * (1000 - amount);
-            FluidRenderer.renderFluidBox(
-                lowerFluid.getFluid(),
-                amount,
-                2f / 16f, yMin, 2f / 16f,
-                14f / 16f, 0.5f, 14f / 16f,
-                bufferSource, poseStack, packedLight, true, false
-            );
+        var vertexConsumer = bufferSource.getBuffer(RenderType.TRANSLUCENT);
+        var level = blockEntity.getLevel();
+        var pos = blockEntity.getBlockPos();
+        if(level != null) {
+            var upperFluid = blockEntity.upperTank().getFluidInTank(0);
+            if(!upperFluid.isEmpty()) {
+                var texture = FluidSpriteCache.getFluidSprites(level, pos, upperFluid.getFluid().defaultFluidState())[0];
+                var color = IClientFluidTypeExtensions.of(upperFluid.getFluid()).getTintColor(upperFluid);
+                var yMax = 0.75f - 0.00025f * (1000 - upperFluid.getAmount());
+                RenderUtil.renderFace(vertexConsumer, poseStack.last().pose(), texture, 2f / 16f, 2f / 16f, 14f / 16f, 14f / 16f, yMax, Direction.UP, color, packedLight, packedOverlay);
+                RenderUtil.renderFace(vertexConsumer, poseStack.last().pose(), texture, 2f / 16f, 2f / 16f, 14f / 16f, 14f / 16f, 0.501f, Direction.DOWN, color, packedLight, packedOverlay);
+            }
+            var lowerFluid = blockEntity.lowerTank().getFluidInTank(0);
+            if(!lowerFluid.isEmpty()) {
+                var texture = FluidSpriteCache.getFluidSprites(level, pos, lowerFluid.getFluid().defaultFluidState())[0];
+                var color = IClientFluidTypeExtensions.of(lowerFluid.getFluid()).getTintColor(lowerFluid);
+                var yMin = 0.25f + 0.00025f * (1000 - lowerFluid.getAmount());
+                RenderUtil.renderFace(vertexConsumer, poseStack.last().pose(), texture, 2f / 16f, 2f / 16f, 14f / 16f, 14f / 16f, 0.499f, Direction.UP, color, packedLight, packedOverlay);
+                RenderUtil.renderFace(vertexConsumer, poseStack.last().pose(), texture, 2f / 16f, 2f / 16f, 14f / 16f, 14f / 16f, yMin, Direction.DOWN, color, packedLight, packedOverlay);
+            }
         }
     }
 }
