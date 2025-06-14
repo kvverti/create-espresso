@@ -28,10 +28,12 @@ public class EspressoItems {
     public static final DeferredItem<?> HOT_MILK_BOTTLE = ITEMS.registerSimpleItem("hot_milk_bottle");
     public static final DeferredItem<?> DRINK_BOTTLE =
         ITEMS.registerItem("drink_bottle", DrinkBottleItem::new, new Item.Properties().stacksTo(1));
+    public static final DeferredItem<?> COFFEE_MUG = ITEMS.registerSimpleBlockItem(EspressoBlocks.COFFEE_MUG);
+    public static final DeferredItem<?> TALL_GLASS = ITEMS.registerSimpleBlockItem(EspressoBlocks.TALL_GLASS);
     public static final DeferredItem<DrinkItem> FILLED_COFFEE_MUG =
-        ITEMS.registerItem("filled_coffee_mug", props -> new DrinkItem(EspressoBlocks.COFFEE_MUG.value(), props), new Item.Properties().stacksTo(1));
+        ITEMS.registerItem("filled_coffee_mug", props -> new DrinkItem(EspressoBlocks.COFFEE_MUG.value(), COFFEE_MUG.value(), props), new Item.Properties().stacksTo(1));
     public static final DeferredItem<DrinkItem> FILLED_TALL_GLASS =
-        ITEMS.registerItem("filled_tall_glass", props -> new DrinkItem(EspressoBlocks.TALL_GLASS.value(), props), new Item.Properties().stacksTo(1));
+        ITEMS.registerItem("filled_tall_glass", props -> new DrinkItem(EspressoBlocks.TALL_GLASS.value(), TALL_GLASS.value(), props), new Item.Properties().stacksTo(1));
     public static final DeferredItem<?> STEEPER = ITEMS.registerSimpleBlockItem(EspressoBlocks.STEEPER);
     public static final DeferredItem<?> POUR_OVER_COFFEE_SETUP =
         ITEMS.registerSimpleItem("pour_over_coffee_setup", new Item.Properties().stacksTo(1));
@@ -41,7 +43,5 @@ public class EspressoItems {
     public static final DeferredItem<?> COFFEE_BRICKS = ITEMS.registerSimpleBlockItem(EspressoBlocks.COFFEE_BRICKS);
     public static final DeferredItem<?> COFFEE_BRICK_SLAB = ITEMS.registerSimpleBlockItem(EspressoBlocks.COFFEE_BRICK_SLAB);
     public static final DeferredItem<?> COFFEE_BRICK_STAIRS = ITEMS.registerSimpleBlockItem(EspressoBlocks.COFFEE_BRICK_STAIRS);
-    public static final DeferredItem<?> COFFEE_MUG = ITEMS.registerSimpleBlockItem(EspressoBlocks.COFFEE_MUG);
-    public static final DeferredItem<?> TALL_GLASS = ITEMS.registerSimpleBlockItem(EspressoBlocks.TALL_GLASS);
     public static final DeferredItem<?> SIEVE = ITEMS.registerSimpleBlockItem(EspressoBlocks.SIEVE);
 }

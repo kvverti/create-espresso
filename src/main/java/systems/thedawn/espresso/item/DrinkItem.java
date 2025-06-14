@@ -22,8 +22,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 public class DrinkItem extends BlockItem {
-    public DrinkItem(Block block, Properties properties) {
+    private final Item emptyItem;
+
+    public DrinkItem(Block block, Item emptyItem, Properties properties) {
         super(block, properties);
+        this.emptyItem = emptyItem;
     }
 
     @Override
@@ -55,7 +58,7 @@ public class DrinkItem extends BlockItem {
         livingEntity.gameEvent(GameEvent.DRINK);
 
         if(!livingEntity.hasInfiniteMaterials()) {
-            return new ItemStack(Items.GLASS_BOTTLE);
+            return new ItemStack(this.emptyItem);
         }
         return stack;
     }
