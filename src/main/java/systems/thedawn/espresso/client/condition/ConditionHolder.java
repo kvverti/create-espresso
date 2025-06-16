@@ -40,7 +40,7 @@ public sealed interface ConditionHolder {
 
     final class Indirect implements ConditionHolder {
         private final ResourceLocation key;
-        private @Nullable Condition<?> value;
+        private transient @Nullable Condition<?> value;
 
         public Indirect(ResourceLocation key) {
             this.key = key;
@@ -56,6 +56,27 @@ public sealed interface ConditionHolder {
             }
 
             return this.value;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(this == obj) {
+                return true;
+            }
+            if(!(obj instanceof Indirect other)) {
+                return false;
+            }
+            return this.key.equals(other.key);
+        }
+
+        @Override
+        public int hashCode() {
+            return this.key.hashCode();
+        }
+
+        @Override
+        public String toString() {
+            return "Indirect[" + this.key + "]";
         }
     }
 }
