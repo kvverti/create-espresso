@@ -5,6 +5,7 @@ import systems.thedawn.espresso.Espresso;
 import net.minecraft.resources.ResourceLocation;
 
 public class BuiltinConditions {
+    public static final ResourceLocation IMPOSSIBLE = Espresso.modLoc("impossible");
     public static final ResourceLocation HAS_DRINK = Espresso.modLoc("has_drink");
     public static final ResourceLocation HAS_MILK = Espresso.modLoc("has_milk");
     public static final ResourceLocation HAS_BUBBLES = Espresso.modLoc("has_bubbles");

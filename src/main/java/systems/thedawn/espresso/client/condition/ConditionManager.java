@@ -7,13 +7,11 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
-import systems.thedawn.espresso.EspressoConditionTemplates;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.util.Unit;
 
 public final class ConditionManager {
     public static final ConditionManager INSTANCE = new ConditionManager();
@@ -25,12 +23,6 @@ public final class ConditionManager {
     private final Object2ObjectOpenHashMap<ResourceLocation, Condition<?>> conditions = new Object2ObjectOpenHashMap<>();
 
     private ConditionManager() {
-        this.addBuiltinConditions();
-    }
-
-    private void addBuiltinConditions() {
-        var defaultLocation = BuiltinConditions.HAS_DRINK.withPrefix(CONDITION_BASE).withSuffix(CONDITION_SUFFIX);
-        this.conditions.put(defaultLocation, new Condition<>(EspressoConditionTemplates.TRIVIAL.value(), Unit.INSTANCE));
     }
 
     public static @Nullable Condition<?> getCondition(ResourceLocation key) {
@@ -45,7 +37,6 @@ public final class ConditionManager {
      */
     public void reload(ResourceManager manager) {
         this.conditions.clear();
-        this.addBuiltinConditions();
 
         var resources = manager.listResources(CONDITION_BASE_LOOKUP, loc -> loc.getPath().endsWith(CONDITION_SUFFIX));
         for(var entry : resources.entrySet()) {

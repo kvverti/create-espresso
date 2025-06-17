@@ -45,6 +45,8 @@ public class EspressoConditionProvider implements DataProvider {
     }
 
     private void registerConditions() {
+        this.register(BuiltinConditions.IMPOSSIBLE, new Condition<>(EspressoConditionTemplates.TRIVIAL.value(), false));
+        this.register(BuiltinConditions.HAS_DRINK, new Condition<>(EspressoConditionTemplates.TRIVIAL.value(), true));
         this.register(BuiltinConditions.HAS_MILK, new Condition<>(EspressoConditionTemplates.MODIFIER.value(), List.of(BuiltinDrinkModifiers.MILK)));
         this.register(BuiltinConditions.HAS_BUBBLES, new Condition<>(EspressoConditionTemplates.MODIFIER.value(), List.of(BuiltinDrinkModifiers.BUBBLES)));
         this.register(BuiltinConditions.HAS_ICE, new Condition<>(EspressoConditionTemplates.MODIFIER.value(), List.of(BuiltinDrinkModifiers.ICE)));
