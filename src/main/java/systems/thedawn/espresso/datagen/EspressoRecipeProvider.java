@@ -1,13 +1,14 @@
 package systems.thedawn.espresso.datagen;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe;
 import com.simibubi.create.content.fluids.transfer.FillingRecipe;
 import com.simibubi.create.content.kinetics.crusher.CrushingRecipe;
-import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.simibubi.create.content.kinetics.millstone.MillingRecipe;
 import com.simibubi.create.content.kinetics.mixer.CompactingRecipe;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
@@ -15,18 +16,17 @@ import com.simibubi.create.content.kinetics.saw.CuttingRecipe;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
-import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipeBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoDataComponentTypes;
 import systems.thedawn.espresso.EspressoFluids;
 import systems.thedawn.espresso.EspressoItems;
 import systems.thedawn.espresso.drink.*;
-import systems.thedawn.espresso.recipe.DrinkLevelingRecipe;
-import systems.thedawn.espresso.recipe.DrinkModificationRecipe;
+import systems.thedawn.espresso.recipe.*;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -39,6 +39,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 
 public class EspressoRecipeProvider extends RecipeProvider {
     public EspressoRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
@@ -246,39 +247,41 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .withItemOutputs(new ProcessingOutput(EspressoItems.SPENT_COFFEE_GROUNDS.value(), 6, 1f))
             .withFluidOutputs(coldBrewFluid)
             .build(recipeOutput);
+
+        // cold brew through steeper
+        var steeperRecipe = new SteepingRecipe(
+            net.neoforged.neoforge.fluids.crafting.FluidIngredient.of(Fluids.WATER),
+            Ingredient.of(EspressoItems.COFFEE_GROUNDS),
+            coldBrewFluid,
+            new ItemStack(EspressoItems.SPENT_COFFEE_GROUNDS.value(), 6),
+            1200
+        );
+        recipeOutput.accept(Espresso.modLoc("steeping/cold_brew"), steeperRecipe, null);
     }
 
     private void buildPourOverRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries) {
         var pourOver = registries.holderOrThrow(BuiltinEspressoDrinks.POUR_OVER);
         this.buildStandardDrinkBottleRecipes(recipeOutput, "pour_over_bottle", pourOver);
 
-        // pour over setup
-        new SequencedAssemblyRecipeBuilder(Espresso.modLoc("pour_over_setup"))
-            .require(Items.GLASS_BOTTLE)
-            .transitionTo(EspressoItems.INCOMPLETE_POUR_OVER_COFFEE_SETUP)
-            .addStep(DeployerApplicationRecipe::new, builder ->
-                builder.require(EspressoItems.COFFEE_FILTER))
-            .addStep(DeployerApplicationRecipe::new, builder ->
-                builder.require(EspressoItems.COFFEE_GROUNDS))
-            .addStep(DeployerApplicationRecipe::new, builder ->
-                builder.require(EspressoItems.COFFEE_GROUNDS))
-            .addStep(FillingRecipe::new, builder ->
-                builder.require(EspressoFluids.SOURCE_HOT_WATER.value(), 250))
-            .loops(1)
-            .addOutput(EspressoItems.POUR_OVER_COFFEE_SETUP, 1f)
-            .build(recipeOutput);
-
-        // pour over bottle from setup
-        var pourOverBottle = new ItemStack(EspressoItems.DRINK_BOTTLE.value());
-        pourOverBottle.set(EspressoDataComponentTypes.DRINK_BASE, pourOver);
-        new StandardProcessingRecipe.Builder<>(CuttingRecipe::new, Espresso.modLoc("pour_over_bottle"))
-            .withItemIngredients(Ingredient.of(EspressoItems.POUR_OVER_COFFEE_SETUP))
-            .averageProcessingDuration()
-            .withItemOutputs(
-                new ProcessingOutput(pourOverBottle, 1f),
-                new ProcessingOutput(EspressoItems.SPENT_COFFEE_GROUNDS.value(), 2, 1f),
-                new ProcessingOutput(EspressoItems.USED_COFFEE_FILTER.value(), 1, 1f))
-            .build(recipeOutput);
+        // sieving pour over
+        var outputFluid = new FluidStack(EspressoFluids.SOURCE_DRINK, 250);
+        outputFluid.set(EspressoDataComponentTypes.DRINK_BASE, pourOver);
+        var sievingRecipe = new SieveRecipe(
+            List.of(
+                Ingredient.of(EspressoItems.COFFEE_GROUNDS),
+                Ingredient.of(EspressoItems.COFFEE_GROUNDS),
+                Ingredient.of(EspressoItems.COFFEE_GROUNDS),
+                Ingredient.of(EspressoItems.COFFEE_GROUNDS)
+            ),
+            Optional.of(SizedFluidIngredient.of(EspressoFluids.SOURCE_HOT_WATER.value(), 250)),
+            ItemStack.EMPTY,
+            List.of(EspressoItems.SPENT_COFFEE_GROUNDS.toStack(4)),
+            outputFluid,
+            false,
+            FilterCondition.COARSE,
+            200
+        );
+        recipeOutput.accept(Espresso.modLoc("sieving/pour_over"), sievingRecipe, null);
     }
 
     private void buildStandardDrinkBottleRecipes(RecipeOutput recipeOutput, String name, Holder<Drink> component) {

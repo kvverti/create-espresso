@@ -42,9 +42,6 @@
   "item.create_espresso.hot_milk_bottle": "Hot Milk Bottle",
   "item.create_espresso.hot_water_bucket": "Hot Water Bucket",
   "item.create_espresso.ice_cubes": "Ice Cubes",
-  "item.create_espresso.incomplete_pour_over_coffee_setup": "Incomplete Pour Over Coffee Setup",
-  "item.create_espresso.pour_over_coffee_setup": "Pour Over Coffee Setup",
   "item.create_espresso.spent_coffee_grounds": "Spent Coffee Grounds",
-  "item.create_espresso.used_coffee_filter": "Used Coffee Filter",
   "itemGroup.create_espresso": "Create: Espresso"
 }

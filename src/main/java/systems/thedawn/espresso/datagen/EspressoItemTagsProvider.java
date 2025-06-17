@@ -10,7 +10,6 @@ import systems.thedawn.espresso.EspressoTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
 public class EspressoItemTagsProvider extends ItemTagsProvider {
@@ -27,13 +26,11 @@ public class EspressoItemTagsProvider extends ItemTagsProvider {
                 EspressoItems.DRINK_BOTTLE.value(),
                 EspressoItems.FILLED_COFFEE_MUG.value(),
                 EspressoItems.TALL_GLASS.value(),
-                EspressoItems.FILLED_TALL_GLASS.value(),
-                EspressoItems.INCOMPLETE_POUR_OVER_COFFEE_SETUP.value(),
-                EspressoItems.POUR_OVER_COFFEE_SETUP.value()
+                EspressoItems.FILLED_TALL_GLASS.value()
             );
         this.tag(EspressoTags.STEEPER_ENABLED_ITEMS)
             .add(EspressoItems.COFFEE_GROUNDS.value());
         this.tag(EspressoTags.COARSE_FILTERS)
-            .add(Items.GOLDEN_PICKAXE);
+            .add(EspressoItems.COFFEE_FILTER.value());
     }
 }

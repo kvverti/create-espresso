@@ -85,7 +85,6 @@ public class Espresso {
             output.accept(EspressoItems.COFFEE_GROUNDS);
             output.accept(EspressoItems.SPENT_COFFEE_GROUNDS);
             output.accept(EspressoItems.COFFEE_FILTER);
-            output.accept(EspressoItems.USED_COFFEE_FILTER);
             output.accept(EspressoItems.ICE_CUBES);
             output.accept(EspressoItems.CRUSHED_ICE);
             output.accept(EspressoItems.COFFEE_BRICK);

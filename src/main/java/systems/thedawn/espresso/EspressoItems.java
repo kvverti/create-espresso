@@ -18,7 +18,6 @@ public class EspressoItems {
     public static final DeferredItem<?> COFFEE_GROUNDS = ITEMS.registerSimpleItem("coffee_grounds");
     public static final DeferredItem<?> SPENT_COFFEE_GROUNDS = ITEMS.registerSimpleItem("spent_coffee_grounds");
     public static final DeferredItem<?> COFFEE_FILTER = ITEMS.registerSimpleItem("coffee_filter");
-    public static final DeferredItem<?> USED_COFFEE_FILTER = ITEMS.registerSimpleItem("used_coffee_filter");
     public static final DeferredItem<?> ICE_CUBES = ITEMS.registerSimpleItem("ice_cubes");
     public static final DeferredItem<?> CRUSHED_ICE = ITEMS.registerSimpleItem("crushed_ice");
     public static final DeferredItem<?> HOT_WATER_BUCKET = ITEMS.register("hot_water_bucket", () -> new BucketItem(
@@ -35,10 +34,6 @@ public class EspressoItems {
     public static final DeferredItem<DrinkItem> FILLED_TALL_GLASS =
         ITEMS.registerItem("filled_tall_glass", props -> new DrinkItem(EspressoBlocks.TALL_GLASS.value(), TALL_GLASS.value(), props), new Item.Properties().stacksTo(1));
     public static final DeferredItem<?> STEEPER = ITEMS.registerSimpleBlockItem(EspressoBlocks.STEEPER);
-    public static final DeferredItem<?> POUR_OVER_COFFEE_SETUP =
-        ITEMS.registerSimpleItem("pour_over_coffee_setup", new Item.Properties().stacksTo(1));
-    public static final DeferredItem<?> INCOMPLETE_POUR_OVER_COFFEE_SETUP =
-        ITEMS.registerSimpleItem("incomplete_pour_over_coffee_setup", new Item.Properties().stacksTo(1));
     public static final DeferredItem<?> COFFEE_BRICK = ITEMS.registerSimpleItem("coffee_brick");
     public static final DeferredItem<?> COFFEE_BRICKS = ITEMS.registerSimpleBlockItem(EspressoBlocks.COFFEE_BRICKS);
     public static final DeferredItem<?> COFFEE_BRICK_SLAB = ITEMS.registerSimpleBlockItem(EspressoBlocks.COFFEE_BRICK_SLAB);

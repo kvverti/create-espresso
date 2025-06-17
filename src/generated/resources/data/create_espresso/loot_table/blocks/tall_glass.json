@@ -5,13 +5,45 @@
       "bonus_rolls": 0.0,
       "conditions": [
         {
-          "condition": "minecraft:survives_explosion"
+          "block": "create_espresso:tall_glass",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "has_drink": "false"
+          }
         }
       ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "create_espresso:tall_glass"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "create_espresso:tall_glass",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "has_drink": "true"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "create_espresso:filled_tall_glass"
+        }
+      ],
+      "functions": [
+        {
+          "function": "minecraft:copy_components",
+          "include": [
+            "create_espresso:drink"
+          ],
+          "source": "block_entity"
         }
       ],
       "rolls": 1.0

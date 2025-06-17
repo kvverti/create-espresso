@@ -1,0 +1,36 @@
+{
+  "type": "create_espresso:sieving",
+  "duration": 200,
+  "filter": "coarse",
+  "fluid": {
+    "amount": 250,
+    "fluid": "create_espresso:hot_water"
+  },
+  "items": [
+    {
+      "item": "create_espresso:coffee_grounds"
+    },
+    {
+      "item": "create_espresso:coffee_grounds"
+    },
+    {
+      "item": "create_espresso:coffee_grounds"
+    },
+    {
+      "item": "create_espresso:coffee_grounds"
+    }
+  ],
+  "remainder": [
+    {
+      "count": 4,
+      "id": "create_espresso:spent_coffee_grounds"
+    }
+  ],
+  "result_fluid": {
+    "amount": 250,
+    "components": {
+      "create_espresso:drink_base": "create_espresso:pour_over"
+    },
+    "id": "create_espresso:drink"
+  }
+}

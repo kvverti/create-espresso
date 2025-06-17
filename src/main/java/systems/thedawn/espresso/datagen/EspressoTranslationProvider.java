@@ -36,12 +36,9 @@ public class EspressoTranslationProvider extends LanguageProvider {
         this.addItem(EspressoItems.COFFEE_GROUNDS, "Coffee Grounds");
         this.addItem(EspressoItems.SPENT_COFFEE_GROUNDS, "Spent Coffee Grounds");
         this.addItem(EspressoItems.COFFEE_FILTER, "Coffee Filter");
-        this.addItem(EspressoItems.USED_COFFEE_FILTER, "Used Coffee Filter");
         this.addItem(EspressoItems.COFFEE_BRICK, "Coffee Brick");
         this.addItem(EspressoItems.HOT_WATER_BUCKET, "Hot Water Bucket");
         this.addItem(EspressoItems.HOT_MILK_BOTTLE, "Hot Milk Bottle");
-        this.addItem(EspressoItems.INCOMPLETE_POUR_OVER_COFFEE_SETUP, "Incomplete Pour Over Coffee Setup");
-        this.addItem(EspressoItems.POUR_OVER_COFFEE_SETUP, "Pour Over Coffee Setup");
         this.addItem(EspressoItems.ICE_CUBES, "Ice Cubes");
         this.addItem(EspressoItems.CRUSHED_ICE, "Crushed Ice");
         this.addBottle(Drink.Type.COFFEE, "Coffee Bottle");

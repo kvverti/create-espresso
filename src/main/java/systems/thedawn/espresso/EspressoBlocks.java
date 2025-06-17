@@ -64,7 +64,7 @@ public class EspressoBlocks {
     }
 
     public static final DeferredBlock<MugBlock> COFFEE_MUG;
-    public static final DeferredBlock<?> TALL_GLASS;
+    public static final DeferredBlock<TallGlassBlock> TALL_GLASS;
     public static final DeferredBlock<SteeperBlock> STEEPER;
 
     static {

@@ -4,8 +4,6 @@
     "create_espresso:drink_bottle",
     "create_espresso:filled_coffee_mug",
     "create_espresso:tall_glass",
-    "create_espresso:filled_tall_glass",
-    "create_espresso:incomplete_pour_over_coffee_setup",
-    "create_espresso:pour_over_coffee_setup"
+    "create_espresso:filled_tall_glass"
   ]
 }

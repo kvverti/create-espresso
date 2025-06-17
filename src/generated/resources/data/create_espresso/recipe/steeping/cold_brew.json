@@ -1,0 +1,21 @@
+{
+  "type": "create_espresso:steeping",
+  "duration": 1200,
+  "result_fluid": {
+    "amount": 250,
+    "components": {
+      "create_espresso:drink_base": "create_espresso:cold_brew"
+    },
+    "id": "create_espresso:drink"
+  },
+  "result_item": {
+    "count": 6,
+    "id": "create_espresso:spent_coffee_grounds"
+  },
+  "steeping_fluid": {
+    "fluid": "minecraft:water"
+  },
+  "steeping_item": {
+    "item": "create_espresso:coffee_grounds"
+  }
+}
