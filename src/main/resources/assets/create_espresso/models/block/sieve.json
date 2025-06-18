@@ -6,9 +6,7 @@
     "particle": "create_espresso:block/sieve_top",
     "top": "create_espresso:block/sieve_top",
     "side": "create_espresso:block/sieve_side",
-    "inside": "create_espresso:block/sieve_inside",
-    "inside_side": "create_espresso:block/sieve_inside_side",
-    "bottom": "create_espresso:block/sieve_bottom",
+    "front": "create_espresso:block/sieve_front",
     "filter": "create_espresso:block/sieve_filter_slot"
   },
   "elements": [
@@ -19,8 +17,8 @@
       "faces": {
         "down": { "texture": "#top" },
         "up": { "texture": "#top" },
-        "north": { "texture": "#side" },
-        "south": { "texture": "#side" },
+        "north": { "texture": "#front" },
+        "south": { "texture": "#front" },
         "west": { "texture": "#side" },
         "east": { "texture": "#side" }
       }
@@ -30,7 +28,7 @@
       "from": [2,4,2],
       "to": [14,12,2],
       "faces": {
-        "south": { "texture": "#inside" }
+        "south": { "texture": "#front" }
       }
     },
     {
@@ -38,7 +36,7 @@
       "from": [2,4,14],
       "to": [14,12,14],
       "faces": {
-        "north": { "texture": "#inside" }
+        "north": { "texture": "#front" }
       }
     },
     {
@@ -46,7 +44,7 @@
       "from": [2,4,2],
       "to": [2,12,14],
       "faces": {
-        "east": { "texture": "#inside" }
+        "east": { "texture": "#front" }
       }
     },
     {
@@ -54,7 +52,7 @@
       "from": [14,4,2],
       "to": [14,12,14],
       "faces": {
-        "west": { "texture": "#inside" }
+        "west": { "texture": "#front" }
       }
     },
     {
