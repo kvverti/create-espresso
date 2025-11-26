@@ -13,6 +13,9 @@ out
 *.iml
 .idea
 
+# codium
+.vscode
+
 # gradle
 build
 .gradle
