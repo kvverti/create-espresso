@@ -8,8 +8,9 @@ import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import systems.thedawn.espresso.block.steeper.SteeperBlock;
-
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
@@ -26,12 +27,11 @@ public class RecipeUtil {
      */
     @Nullable
     public static FillingResult findFillingResult(ItemStack stack, Level level, FluidStack filledFluid, int amount) {
-        // todo: fix result item not being calculated correctly
         var recipe = getFillingRecipe(stack, filledFluid, level);
         if(recipe != null) {
             return new FillingResult(recipe.getResultItem(level.registryAccess()), recipe.getRequiredFluid().getRequiredAmount());
         } else if(GenericItemFilling.canItemBeFilled(level, stack)) {
-            var resultStack = GenericItemFilling.fillItem(level, amount, stack.copy(), filledFluid);
+            var resultStack = GenericItemFilling.fillItem(level, amount, stack.copy(), filledFluid.copy());
             var requiredAmount = GenericItemFilling.getRequiredAmountForItem(level, stack, filledFluid);
             return new FillingResult(resultStack, requiredAmount);
         }
@@ -66,7 +66,12 @@ public class RecipeUtil {
             return new EmptyingResult(recipe.getResultingFluid(), recipe.getResultItem(level.registryAccess()));
         } else if(GenericItemEmptying.canItemBeEmptied(level, stack)) {
             var result = GenericItemEmptying.emptyItem(level, stack, true);
-            return new EmptyingResult(result.getFirst(), result.getSecond());
+            var remaining = result.getSecond();
+            // work around Create returning the incorrect empty bucket. Ideally we would do more robust checking here
+            if(remaining.getItem() instanceof BucketItem) {
+                remaining = new ItemStack(Items.BUCKET, remaining.getCount());
+            }
+            return new EmptyingResult(result.getFirst(), remaining);
         }
         return null;
     }

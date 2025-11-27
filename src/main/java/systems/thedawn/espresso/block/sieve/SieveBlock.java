@@ -3,6 +3,7 @@ package systems.thedawn.espresso.block.sieve;
 import com.mojang.serialization.MapCodec;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
+
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
 import systems.thedawn.espresso.recipe.FilterCondition;
@@ -175,6 +176,10 @@ public class SieveBlock extends Block implements IBE<SieveBlockEntity>, IWrencha
                     if(tryFillFluid(sieve.upperTank(), stack, level, player, hand)) {
                         return ItemInteractionResult.sidedSuccess(level.isClientSide());
                     }
+                    var emptying = RecipeUtil.findEmptyingResult(stack, level);
+                    if(emptying != null && tryDrainFluid(emptying, sieve.upperTank(), stack, level, player, hand)) {
+                        return ItemInteractionResult.sidedSuccess(level.isClientSide());
+                    }
                 }
             }
             return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
@@ -182,7 +187,6 @@ public class SieveBlock extends Block implements IBE<SieveBlockEntity>, IWrencha
     }
 
     private static boolean tryFillFluid(IFluidHandler handler, ItemStack container, Level level, Player player, InteractionHand hand) {
-        // todo: fix not draining fluid
         var supply = handler.drain(1000, IFluidHandler.FluidAction.SIMULATE);
         if(!supply.isEmpty()) {
             var filling = RecipeUtil.findFillingResult(container, level, supply, supply.getAmount());
@@ -200,6 +204,27 @@ public class SieveBlock extends Block implements IBE<SieveBlockEntity>, IWrencha
                 }
                 return true;
             }
+        }
+        return false;
+    }
+
+    private static boolean tryDrainFluid(RecipeUtil.EmptyingResult emptying, IFluidHandler handler, ItemStack container, Level level, Player player, InteractionHand hand) {
+        var supply = emptying.resultFluid();
+        var filled = handler.fill(supply, IFluidHandler.FluidAction.SIMULATE);
+        if(filled == supply.getAmount()) {
+            if(!level.isClientSide()) {
+                handler.fill(supply, IFluidHandler.FluidAction.EXECUTE);
+                var remaining = emptying.remainingItem();
+                if(container.getCount() == 1) {
+                    player.setItemInHand(hand, remaining);
+                } else {
+                    container.shrink(1);
+                    if(!player.addItem(remaining)) {
+                        player.drop(remaining, false);
+                    }
+                }
+            }
+            return true;
         }
         return false;
     }
