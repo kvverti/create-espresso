@@ -2,23 +2,16 @@ package systems.thedawn.espresso.block.steeper;
 
 import java.util.List;
 
-import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.content.fluids.transfer.EmptyingRecipe;
-import com.simibubi.create.content.fluids.transfer.FillingRecipe;
-import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
-import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
-import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
 import systems.thedawn.espresso.EspressoTags;
+import systems.thedawn.espresso.util.RecipeUtil;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
@@ -73,46 +66,22 @@ public class SteeperBlock extends TransparentBlock implements EntityBlock {
             if(!stack.isEmpty()) {
                 // check Create emptying recipes for depositing fluid
                 if(be.canFillWithFluid()) {
-                    FluidStack resultFluid = null;
-                    ItemStack remainingItem = null;
-
-                    var recipe = this.getEmptyingRecipe(stack, level);
-                    if(recipe != null) {
-                        resultFluid = recipe.getResultingFluid();
-                        remainingItem = recipe.getResultItem(level.registryAccess());
-                    } else if(GenericItemEmptying.canItemBeEmptied(level, stack)) {
-                        var result = GenericItemEmptying.emptyItem(level, stack, true);
-                        if(result.getFirst().getAmount() == FLUID_CAPACITY) {
-                            resultFluid = result.getFirst();
-                            remainingItem = result.getSecond();
-                        }
-                    }
-
-                    if(resultFluid != null && resultFluid.is(EspressoTags.STEEPER_ENABLED_FLUIDS)) {
+                    var result = RecipeUtil.findEmptyingResult(stack, level);
+                    if(result != null && result.resultFluid().is(EspressoTags.STEEPER_ENABLED_FLUIDS) && result.resultFluid().getAmount() == FLUID_CAPACITY) {
                         if(!level.isClientSide()) {
-                            be.fillWithFluid(resultFluid);
-                            player.setItemInHand(hand, remainingItem);
+                            be.fillWithFluid(result.resultFluid());
+                            player.setItemInHand(hand, result.remainingItem());
                         }
                         player.gameEvent(GameEvent.BLOCK_CHANGE);
                         return ItemInteractionResult.sidedSuccess(level.isClientSide());
                     }
                 } else {
                     // check Create filling recipes for extracting fluid
-                    var filledFluid = be.getFilledFluid();
-                    ItemStack filledStack = null;
-
-                    var recipe = this.getFillingRecipe(stack, filledFluid, level);
-                    if(recipe != null) {
-                        filledStack = recipe.getResultItem(level.registryAccess());
-                    } else if(GenericItemFilling.canItemBeFilled(level, stack) &&
-                        GenericItemFilling.getRequiredAmountForItem(level, stack, filledFluid) == SteeperBlock.FLUID_CAPACITY) {
-                        filledStack = GenericItemFilling.fillItem(level, SteeperBlock.FLUID_CAPACITY, stack.copy(), filledFluid);
-                    }
-
-                    if(filledStack != null) {
+                    var result = RecipeUtil.findFillingResult(stack, level, be.getFilledFluid(), FLUID_CAPACITY);
+                    if(result != null && result.requiredFluidAmount() == FLUID_CAPACITY) {
                         if(!level.isClientSide()) {
                             be.drainFluid();
-                            player.setItemInHand(hand, filledStack);
+                            player.setItemInHand(hand, result.resultStack());
                         }
                         player.gameEvent(GameEvent.BLOCK_CHANGE);
                         return ItemInteractionResult.sidedSuccess(level.isClientSide());
@@ -140,26 +109,6 @@ public class SteeperBlock extends TransparentBlock implements EntityBlock {
             }
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
-    }
-
-    private @Nullable EmptyingRecipe getEmptyingRecipe(ItemStack stack, Level level) {
-        var input = new SingleRecipeInput(stack);
-        return level.getRecipeManager()
-            .getRecipeFor(AllRecipeTypes.EMPTYING.<SingleRecipeInput, EmptyingRecipe>getType(), input, level)
-            .map(RecipeHolder::value)
-            .filter(recipe -> recipe.getResultingFluid().getAmount() == FLUID_CAPACITY)
-            .orElse(null);
-    }
-
-    private @Nullable FillingRecipe getFillingRecipe(ItemStack stack, FluidStack fluid, Level level) {
-        var recipes = level.getRecipeManager().getAllRecipesFor(AllRecipeTypes.FILLING.<SingleRecipeInput, FillingRecipe>getType());
-        for(var holder : recipes) {
-            var recipe = holder.value();
-            if(recipe.getRequiredFluid().test(fluid) && recipe.getIngredients().get(0).test(stack)) {
-                return recipe;
-            }
-        }
-        return null;
     }
 
     @Override

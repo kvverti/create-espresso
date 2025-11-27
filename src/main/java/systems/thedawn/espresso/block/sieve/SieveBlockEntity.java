@@ -140,6 +140,10 @@ public class SieveBlockEntity extends SmartBlockEntity {
         return this.lowerFluidTank.getCapability();
     }
 
+    public IItemHandler filterInventory() {
+        return this.filterInventory;
+    }
+
     boolean isRunningPassiveRecipe() {
         return this.timeRemaining >= 0;
     }
