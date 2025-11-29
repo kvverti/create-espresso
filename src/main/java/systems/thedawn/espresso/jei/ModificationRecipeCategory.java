@@ -13,6 +13,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import org.jetbrains.annotations.Nullable;
+
 import systems.thedawn.espresso.EspressoItems;
 import systems.thedawn.espresso.EspressoRecipeTypes;
 import systems.thedawn.espresso.recipe.DrinkModificationRecipe;
@@ -90,7 +91,8 @@ public class ModificationRecipeCategory implements IRecipeCategory<RecipeHolder<
         if(appliedItem != null) {
             applySlot.addIngredients(appliedItem);
         } else if(appliedFluid != null) {
-            applySlot.addIngredients(NeoForgeTypes.FLUID_STACK, appliedFluid.getMatchingFluidStacks());
+            applySlot.addIngredients(NeoForgeTypes.FLUID_STACK, appliedFluid.getMatchingFluidStacks())
+                .setFluidRenderer(1000, false, 16, 16);
         }
         // output
         builder.addOutputSlot()
