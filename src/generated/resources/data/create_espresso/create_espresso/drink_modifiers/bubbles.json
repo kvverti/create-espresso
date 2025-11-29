@@ -1,6 +1,3 @@
 {
-  "transform": {
-    "type": "strengthen",
-    "level": 1
-  }
+  "offset_levels": 1
 }

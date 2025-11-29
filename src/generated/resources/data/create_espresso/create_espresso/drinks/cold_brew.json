@@ -4,7 +4,7 @@
     {
       "duration": 1200,
       "id": "minecraft:speed",
-      "show_icon": true
+      "template": "create_espresso:potion_effect"
     }
   ]
 }

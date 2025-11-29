@@ -1,14 +1,14 @@
 package systems.thedawn.espresso.drink;
 
 import java.util.List;
-import java.util.Optional;
 
 import systems.thedawn.espresso.Espresso;
+import systems.thedawn.espresso.EspressoDrinkEffectTemplates;
 import systems.thedawn.espresso.EspressoRegistries;
-
+import systems.thedawn.espresso.drink.effect.DrinkEffect;
+import systems.thedawn.espresso.drink.effect.MobEffectTemplate;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 
 public class BuiltinDrinkModifiers {
@@ -22,15 +22,11 @@ public class BuiltinDrinkModifiers {
     }
 
     public static void bootstrapModifiers(BootstrapContext<DrinkModifier> ctx) {
-        ctx.register(ICE, new DrinkModifier(
-            Optional.of(new DrinkModifier.BaseTransform.Lengthen(0.6f)),
-            List.of(DrinkUtil.effectInstance(MobEffects.FIRE_RESISTANCE, DrinkUtil.seconds(15)))));
-        ctx.register(BUBBLES, new DrinkModifier(
-            Optional.of(new DrinkModifier.BaseTransform.Strengthen(1)),
-            List.of()));
-        ctx.register(MILK, new DrinkModifier(
-            Optional.of(new DrinkModifier.BaseTransform.Lengthen(1.1f)),
-            List.of()));
-        ctx.register(CHOCOLATE, new DrinkModifier(Optional.empty(), List.of()));
+        ctx.register(ICE, new DrinkModifier(0, 0.6d, List.of(
+            new DrinkEffect<>(EspressoDrinkEffectTemplates.MOB_EFFECT.value(), new MobEffectTemplate.Parameters(MobEffects.FIRE_RESISTANCE, DrinkUtil.seconds(15), 0))
+        )));
+        ctx.register(BUBBLES, new DrinkModifier(1, 1d, List.of()));
+        ctx.register(MILK, new DrinkModifier(0, 1.1d, List.of()));
+        ctx.register(CHOCOLATE, new DrinkModifier(0, 1d, List.of()));
     }
 }

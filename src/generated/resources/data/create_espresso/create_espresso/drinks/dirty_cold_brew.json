@@ -4,12 +4,12 @@
     {
       "duration": 100,
       "id": "minecraft:poison",
-      "show_icon": true
+      "template": "create_espresso:potion_effect"
     },
     {
       "duration": 100,
       "id": "minecraft:nausea",
-      "show_icon": true
+      "template": "create_espresso:potion_effect"
     }
   ]
 }

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import com.mojang.logging.LogUtils;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -23,7 +22,6 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import org.slf4j.Logger;
 import systems.thedawn.espresso.block.sieve.SieveBlockEntity;
 import systems.thedawn.espresso.client.DrinkColorManager;
 import systems.thedawn.espresso.client.model.DrinkModelManager;
@@ -61,8 +59,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 public class Espresso {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "create_espresso";
-    // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
     // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "create_espresso" namespace
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
     // Creates a creative tab with the id "create_espresso:example_tab" for the example item, that is placed after the combat tab
@@ -142,6 +138,7 @@ public class Espresso {
         EspressoRecipeTypes.RECIPE_TYPES.register(modEventBus);
         EspressoRecipeTypes.RECIPE_SERIALIZERS.register(modEventBus);
         EspressoConditionTemplates.CONDITION_TEMPLATES.register(modEventBus);
+        EspressoDrinkEffectTemplates.DRINK_EFFECT_TEMPLATES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
 
         modEventBus.register(DrinkModelManager.INSTANCE);

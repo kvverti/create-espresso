@@ -13,7 +13,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -46,12 +45,19 @@ public class DrinkItem extends BlockItem {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
-        if(!level.isClientSide()) {
+        if(!level.isClientSide() && livingEntity instanceof Player player) {
             var component = stack.get(EspressoDataComponentTypes.DRINK);
-            if(component != null) {
-                for(var effectInstance : effects(component)) {
-                    livingEntity.addEffect(new MobEffectInstance(effectInstance));
-                }
+            var effects = new ArrayList<>(component.base().value().effects());
+            var drinkLevel = Math.max(1, component.level().levelIndex());
+            var strength = 1d;
+            for(var modifierHolder : component.modifiers()) {
+                var modifier = modifierHolder.value();
+                drinkLevel += modifier.levelOffset();
+                strength *= modifier.strengthScale();
+                effects.addAll(modifier.additionalEffects());
+            }
+            for(var effect : effects) {
+                effect.apply(player, drinkLevel, strength);
             }
         }
 
@@ -61,40 +67,6 @@ public class DrinkItem extends BlockItem {
             return new ItemStack(this.emptyItem);
         }
         return stack;
-    }
-
-    private static List<MobEffectInstance> effects(DrinkComponent drink) {
-        var effectsFromModifiers = new ArrayList<MobEffectInstance>();
-        var baseLengthScale = 1f;
-        var baseStrengthOffset = 0;
-        switch(drink.level()) {
-            case DOUBLE -> baseLengthScale = 2f;
-            case TRIPLE -> {
-                baseLengthScale = 2f;
-                baseStrengthOffset = 1;
-            }
-        }
-
-        for(var modifier : drink.modifiers()) {
-            effectsFromModifiers.addAll(modifier.value().additionalEffects());
-            var transform = modifier.value().transform().orElse(null);
-            switch(transform) {
-                case DrinkModifier.BaseTransform.Lengthen(var scale) -> baseLengthScale *= scale;
-                case DrinkModifier.BaseTransform.Strengthen(var level) -> baseStrengthOffset += level;
-                case null -> {
-                    // nothing
-                }
-            }
-        }
-        var effectList = new ArrayList<MobEffectInstance>();
-        // update base effects
-        for(var effectInstance : drink.base().value().effects()) {
-            var duration = effectInstance.getDuration();
-            var intensity = effectInstance.getAmplifier();
-            effectList.add(new MobEffectInstance(effectInstance.getEffect(), (int) (duration * baseLengthScale), intensity + baseStrengthOffset));
-        }
-        effectList.addAll(effectsFromModifiers);
-        return effectList;
     }
 
     // reset the base translation key to the one in Item.

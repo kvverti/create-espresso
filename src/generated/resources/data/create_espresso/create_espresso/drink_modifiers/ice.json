@@ -3,11 +3,8 @@
     {
       "duration": 300,
       "id": "minecraft:fire_resistance",
-      "show_icon": true
+      "template": "create_espresso:potion_effect"
     }
   ],
-  "transform": {
-    "type": "lengthen",
-    "scale": 0.6
-  }
+  "strength_multiplier": 0.6
 }

@@ -4,12 +4,12 @@
     {
       "duration": 1500,
       "id": "minecraft:speed",
-      "show_icon": true
+      "template": "create_espresso:potion_effect"
     },
     {
       "duration": 1500,
       "id": "minecraft:night_vision",
-      "show_icon": true
+      "template": "create_espresso:potion_effect"
     }
   ]
 }
