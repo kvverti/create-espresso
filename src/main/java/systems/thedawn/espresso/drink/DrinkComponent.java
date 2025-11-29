@@ -69,6 +69,14 @@ public record DrinkComponent(Holder<Drink> base, BaseLevel level, List<Holder<Dr
             };
         }
 
+        public int levelIndex() {
+            return switch(this) {
+                case SINGLE -> 1;
+                case DOUBLE -> 2;
+                case TRIPLE -> 3;
+            };
+        }
+
         public String getDescriptionId() {
             return "create_espresso.drinkLevel." + this.getSerializedName();
         }

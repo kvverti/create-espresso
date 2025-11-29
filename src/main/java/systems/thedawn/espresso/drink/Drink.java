@@ -5,7 +5,7 @@ import java.util.List;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import systems.thedawn.espresso.EspressoRegistries;
-
+import systems.thedawn.espresso.drink.effect.DrinkEffect;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -15,20 +15,19 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.effect.MobEffectInstance;
 
 /**
  * A drink.
  *
  * @param effects the potion effects applied after drinking
  */
-public record Drink(Type type, List<MobEffectInstance> effects) {
+public record Drink(Type type, List<DrinkEffect<?>> effects) {
     public static final Drink EMPTY = new Drink(Type.NONE, List.of());
 
     public static final Codec<Drink> DIRECT_CODEC =
         RecordCodecBuilder.create(inst -> inst.group(
             StringRepresentable.fromEnum(Type::values).fieldOf("type").forGetter(Drink::type),
-            MobEffectInstance.CODEC.listOf().fieldOf("effects").forGetter(Drink::effects)
+            DrinkEffect.CODEC.listOf().fieldOf("effects").forGetter(Drink::effects)
         ).apply(inst, Drink::new));
     public static final Codec<Holder<Drink>> CODEC =
         RegistryFileCodec.create(EspressoRegistries.DRINKS, DIRECT_CODEC);
