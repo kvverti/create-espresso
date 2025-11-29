@@ -1,0 +1,24 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "type": "fluid_stack",
+      "amount": 250,
+      "components": {
+        "create_espresso:drink_base": "create_espresso:black_tea"
+      },
+      "fluid": "create_espresso:drink"
+    }
+  ],
+  "results": [
+    {
+      "components": {
+        "create_espresso:drink_base": "create_espresso:black_tea"
+      },
+      "id": "create_espresso:drink_bottle"
+    }
+  ]
+}

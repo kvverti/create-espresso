@@ -16,9 +16,11 @@ import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
 import systems.thedawn.espresso.EspressoDataComponentTypes;
 import systems.thedawn.espresso.block.DrinkBlockEntity;
+import systems.thedawn.espresso.drink.Drink;
 import systems.thedawn.espresso.drink.DrinkComponent;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -71,6 +73,11 @@ public class DrinkColorManager implements ResourceManagerReloadListener {
             }
         }
         return -1;
+    }
+
+    public static int getDrinkBaseColor(ResourceKey<Drink> drink) {
+        var baseLoc = drink.location();
+        return DrinkColorManager.INSTANCE.getBaseColor(baseLoc);
     }
 
     private static int getColorFromDrinkComponent(DrinkComponent drink) {

@@ -43,12 +43,15 @@ public class EspressoTranslationProvider extends LanguageProvider {
         this.addItem(EspressoItems.CRUSHED_ICE, "Crushed Ice");
         this.addBottle(Drink.Type.COFFEE, "Coffee Bottle");
         this.addBottle(Drink.Type.TEA, "Tea Bottle");
+        this.addBottle(Drink.Type.JUICE, "Juice Bottle");
         this.addMug(Drink.Type.NONE, "Mug");
         this.addMug(Drink.Type.COFFEE, "Coffee Mug");
         this.addMug(Drink.Type.TEA, "Tea Mug");
+        this.addMug(Drink.Type.JUICE, "Juice Mug");
         this.addTallGlass(Drink.Type.NONE, "Tall Glass");
         this.addTallGlass(Drink.Type.COFFEE, "Tall Coffee Glass");
         this.addTallGlass(Drink.Type.TEA, "Tall Tea Glass");
+        this.addTallGlass(Drink.Type.JUICE, "Tall Juice Glass");
         // fluids
         this.add("fluid_type.create_espresso.hot_water", "Hot Water");
         this.add("fluid_type.create_espresso.espresso", "Coffee");
@@ -59,6 +62,12 @@ public class EspressoTranslationProvider extends LanguageProvider {
         this.addDrink(BuiltinEspressoDrinks.COLD_BREW, "Cold Brew");
         this.addDrink(BuiltinEspressoDrinks.POUR_OVER, "Pour Over");
         this.addDrink(BuiltinEspressoDrinks.ESPRESSO, "Espresso");
+        this.addDrink(BuiltinEspressoDrinks.COFFEE_TEA, "Coffee Tea");
+        this.addDrink(BuiltinEspressoDrinks.GREEN_TEA, "Green Tea");
+        this.addDrink(BuiltinEspressoDrinks.BLACK_TEA, "Black Tea");
+        this.addDrink(BuiltinEspressoDrinks.HERBAL_TEA, "Herbal Tea");
+        this.addDrink(BuiltinEspressoDrinks.APPLE_JUICE, "Apple Juice");
+        this.addDrink(BuiltinEspressoDrinks.FRUIT_PUNCH, "Fruit Punch");
         // levels
         this.addDrinkLevel(DrinkComponent.BaseLevel.SINGLE, "Single");
         this.addDrinkLevel(DrinkComponent.BaseLevel.DOUBLE, "Double");

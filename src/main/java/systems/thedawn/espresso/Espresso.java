@@ -19,6 +19,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -94,14 +95,32 @@ public class Espresso {
             output.accept(drinkBottle(BuiltinEspressoDrinks.COLD_BREW, registries));
             output.accept(drinkBottle(BuiltinEspressoDrinks.POUR_OVER, registries));
             output.accept(drinkBottle(BuiltinEspressoDrinks.ESPRESSO, registries));
+            output.accept(drinkBottle(BuiltinEspressoDrinks.COFFEE_TEA, registries));
+            output.accept(drinkBottle(BuiltinEspressoDrinks.GREEN_TEA, registries));
+            output.accept(drinkBottle(BuiltinEspressoDrinks.BLACK_TEA, registries));
+            output.accept(drinkBottle(BuiltinEspressoDrinks.HERBAL_TEA, registries));
+            output.accept(drinkBottle(BuiltinEspressoDrinks.APPLE_JUICE, registries));
+            output.accept(drinkBottle(BuiltinEspressoDrinks.FRUIT_PUNCH, registries));
             // drink mugs
             output.accept(drinkMug(BuiltinEspressoDrinks.COLD_BREW, registries));
             output.accept(drinkMug(BuiltinEspressoDrinks.POUR_OVER, registries));
             output.accept(drinkMug(BuiltinEspressoDrinks.ESPRESSO, registries));
+            output.accept(drinkMug(BuiltinEspressoDrinks.COFFEE_TEA, registries));
+            output.accept(drinkMug(BuiltinEspressoDrinks.GREEN_TEA, registries));
+            output.accept(drinkMug(BuiltinEspressoDrinks.BLACK_TEA, registries));
+            output.accept(drinkMug(BuiltinEspressoDrinks.HERBAL_TEA, registries));
+            output.accept(drinkMug(BuiltinEspressoDrinks.APPLE_JUICE, registries));
+            output.accept(drinkMug(BuiltinEspressoDrinks.FRUIT_PUNCH, registries));
             // tall glasses
             output.accept(tallDrinkGlass(BuiltinEspressoDrinks.COLD_BREW, registries));
             output.accept(tallDrinkGlass(BuiltinEspressoDrinks.POUR_OVER, registries));
             output.accept(tallDrinkGlass(BuiltinEspressoDrinks.ESPRESSO, registries));
+            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.COFFEE_TEA, registries));
+            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.GREEN_TEA, registries));
+            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.BLACK_TEA, registries));
+            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.HERBAL_TEA, registries));
+            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.APPLE_JUICE, registries));
+            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.FRUIT_PUNCH, registries));
         }).build());
 
     private static ItemStack drinkBottle(ResourceKey<Drink> key, HolderLookup.Provider registries) {
@@ -208,6 +227,15 @@ public class Espresso {
                 @Override
                 public int getTintColor() {
                     return 0xff6e400f;
+                }
+
+                @Override
+                public int getTintColor(FluidStack stack) {
+                    var component = stack.get(EspressoDataComponentTypes.DRINK_BASE);
+                    if(component != null) {
+                        return 0xff000000 | DrinkColorManager.getDrinkBaseColor(Objects.requireNonNull(component.getKey()));
+                    }
+                    return this.getTintColor();
                 }
 
                 @Override

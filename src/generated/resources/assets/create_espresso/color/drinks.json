@@ -8,11 +8,35 @@
     "drink": "create_espresso:pour_over"
   },
   {
+    "color": "a4ab24",
+    "drink": "create_espresso:green_tea"
+  },
+  {
+    "color": "632100",
+    "drink": "create_espresso:black_tea"
+  },
+  {
+    "color": "d18408",
+    "drink": "create_espresso:apple_juice"
+  },
+  {
+    "color": "a4ab24",
+    "drink": "create_espresso:herbal_tea"
+  },
+  {
     "color": "492706",
     "drink": "create_espresso:cold_brew"
   },
   {
     "color": "492706",
     "drink": "create_espresso:dirty_cold_brew"
+  },
+  {
+    "color": "632100",
+    "drink": "create_espresso:coffee_tea"
+  },
+  {
+    "color": "991302",
+    "drink": "create_espresso:fruit_punch"
   }
 ]

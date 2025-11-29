@@ -65,6 +65,7 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .withFluidOutputs(new FluidStack(EspressoFluids.SOURCE_HOT_MILK, 10))
             .build(recipeOutput);
         this.buildStandardBottleRecipes(recipeOutput, EspressoFluids.SOURCE_HOT_MILK, EspressoItems.HOT_MILK_BOTTLE);
+        this.buildAllDrinkBottleRecipes(recipeOutput, registries);
 
         this.buildCoffeeToolRecipes(recipeOutput);
         this.buildCoffeePlantRecipes(recipeOutput);
@@ -224,7 +225,6 @@ public class EspressoRecipeProvider extends RecipeProvider {
 
     private void buildColdBrewCoffeeRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries) {
         var dirtyColdBrew = registries.holderOrThrow(BuiltinEspressoDrinks.DIRTY_COLD_BREW);
-        this.buildStandardDrinkBottleRecipes(recipeOutput, "dirty_cold_brew_bottle", dirtyColdBrew);
 
         // mix dirty cold brew
         var dirtyColdBrewFluid = new FluidStack(EspressoFluids.SOURCE_DRINK, 10);
@@ -239,7 +239,6 @@ public class EspressoRecipeProvider extends RecipeProvider {
 
         // compact (clean) cold brew
         var coldBrew = registries.holderOrThrow(BuiltinEspressoDrinks.COLD_BREW);
-        this.buildStandardDrinkBottleRecipes(recipeOutput, "cold_brew_bottle", coldBrew);
         var dirtyColdBrewInput = new FluidStack(EspressoFluids.SOURCE_DRINK, 250);
         dirtyColdBrewInput.set(EspressoDataComponentTypes.DRINK_BASE, dirtyColdBrew);
         var coldBrewFluid = new FluidStack(EspressoFluids.SOURCE_DRINK, 250);
@@ -264,7 +263,6 @@ public class EspressoRecipeProvider extends RecipeProvider {
 
     private void buildPourOverRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries) {
         var pourOver = registries.holderOrThrow(BuiltinEspressoDrinks.POUR_OVER);
-        this.buildStandardDrinkBottleRecipes(recipeOutput, "pour_over_bottle", pourOver);
 
         // sieving pour over
         var outputFluid = new FluidStack(EspressoFluids.SOURCE_DRINK, 250);
@@ -287,7 +285,23 @@ public class EspressoRecipeProvider extends RecipeProvider {
         recipeOutput.accept(Espresso.modLoc("sieving/pour_over"), sievingRecipe, null);
     }
 
-    private void buildStandardDrinkBottleRecipes(RecipeOutput recipeOutput, String name, Holder<Drink> component) {
+    private void buildAllDrinkBottleRecipes(RecipeOutput recipeOutput, HolderLookup.Provider registries) {
+        this.buildStandardDrinkBottleRecipes(recipeOutput, registries, BuiltinEspressoDrinks.DIRTY_COLD_BREW);
+        this.buildStandardDrinkBottleRecipes(recipeOutput, registries, BuiltinEspressoDrinks.COLD_BREW);
+        this.buildStandardDrinkBottleRecipes(recipeOutput, registries, BuiltinEspressoDrinks.POUR_OVER);
+        this.buildStandardDrinkBottleRecipes(recipeOutput, registries, BuiltinEspressoDrinks.ESPRESSO);
+        this.buildStandardDrinkBottleRecipes(recipeOutput, registries, BuiltinEspressoDrinks.COFFEE_TEA);
+        this.buildStandardDrinkBottleRecipes(recipeOutput, registries, BuiltinEspressoDrinks.GREEN_TEA);
+        this.buildStandardDrinkBottleRecipes(recipeOutput, registries, BuiltinEspressoDrinks.BLACK_TEA);
+        this.buildStandardDrinkBottleRecipes(recipeOutput, registries, BuiltinEspressoDrinks.HERBAL_TEA);
+        this.buildStandardDrinkBottleRecipes(recipeOutput, registries, BuiltinEspressoDrinks.APPLE_JUICE);
+        this.buildStandardDrinkBottleRecipes(recipeOutput, registries, BuiltinEspressoDrinks.FRUIT_PUNCH);
+    }
+
+    private void buildStandardDrinkBottleRecipes(RecipeOutput recipeOutput, HolderLookup.Provider registries, ResourceKey<Drink> drink) {
+        var name =  drink.location().getPath() + "_bottle";
+        var component = registries.holderOrThrow(drink);
+
         // drain bottle
         var fluidStack = new FluidStack(EspressoFluids.SOURCE_DRINK, 250);
         fluidStack.set(EspressoDataComponentTypes.DRINK_BASE, component);

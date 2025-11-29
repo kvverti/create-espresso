@@ -1,0 +1,24 @@
+{
+  "type": "create:emptying",
+  "ingredients": [
+    {
+      "type": "neoforge:components",
+      "components": {
+        "create_espresso:drink_base": "create_espresso:black_tea"
+      },
+      "items": "create_espresso:drink_bottle"
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:glass_bottle"
+    },
+    {
+      "amount": 250,
+      "components": {
+        "create_espresso:drink_base": "create_espresso:black_tea"
+      },
+      "id": "create_espresso:drink"
+    }
+  ]
+}

@@ -54,13 +54,25 @@ public class EspressoDrinkColorProvider implements DataProvider {
     }
 
     private void registerColors() {
-        final int coffeeColor = 0x492706;
+        final var coffeeColor = 0x492706;
         this.registerColor(BuiltinEspressoDrinks.DIRTY_COLD_BREW, coffeeColor);
         this.registerColor(BuiltinEspressoDrinks.COLD_BREW, coffeeColor);
         this.registerColor(BuiltinEspressoDrinks.POUR_OVER, coffeeColor);
         this.registerColor(BuiltinEspressoDrinks.ESPRESSO, coffeeColor);
 
-        var latteColor = 0xe7ae6b;
+        final var greenTeaColor = 0xa4ab24;
+        final var blackTeaColor = 0x632100;
+        this.registerColor(BuiltinEspressoDrinks.COFFEE_TEA, blackTeaColor);
+        this.registerColor(BuiltinEspressoDrinks.GREEN_TEA, greenTeaColor);
+        this.registerColor(BuiltinEspressoDrinks.BLACK_TEA, blackTeaColor);
+        this.registerColor(BuiltinEspressoDrinks.HERBAL_TEA, greenTeaColor);
+
+        final var juiceColor = 0x991302;
+        final var appleJuiceColor = 0xd18408;
+        this.registerColor(BuiltinEspressoDrinks.APPLE_JUICE, appleJuiceColor);
+        this.registerColor(BuiltinEspressoDrinks.FRUIT_PUNCH, juiceColor);
+
+        final var latteColor = 0xe7ae6b;
         var milkOverrides = new Object2IntOpenHashMap<ResourceLocation>();
         milkOverrides.put(BuiltinEspressoDrinks.DIRTY_COLD_BREW.location(), latteColor);
         milkOverrides.put(BuiltinEspressoDrinks.COLD_BREW.location(), latteColor);

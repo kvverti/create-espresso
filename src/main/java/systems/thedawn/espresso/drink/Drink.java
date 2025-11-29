@@ -45,7 +45,8 @@ public record Drink(Type type, List<DrinkEffect<?>> effects) {
     public enum Type implements StringRepresentable {
         NONE,
         COFFEE,
-        TEA;
+        TEA,
+        JUICE;
 
         @Override
         public String getSerializedName() {
@@ -53,6 +54,7 @@ public record Drink(Type type, List<DrinkEffect<?>> effects) {
                 case NONE -> "none";
                 case COFFEE -> "coffee";
                 case TEA -> "tea";
+                case JUICE -> "juice";
             };
         }
     }
