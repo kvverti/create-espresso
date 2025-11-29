@@ -16,6 +16,8 @@ public final class EspressoTags {
         TagKey.create(Registries.ITEM, Espresso.modLoc("coarse_filters"));
     public static final TagKey<Item> FINE_FILTERS =
         TagKey.create(Registries.ITEM, Espresso.modLoc("fine_filters"));
+    public static final TagKey<Item> DRINK_HOLDERS =
+        TagKey.create(Registries.ITEM, Espresso.modLoc("drink_holders"));
 
     public static final TagKey<Fluid> STEEPER_ENABLED_FLUIDS =
         TagKey.create(Registries.FLUID, Espresso.modLoc("steeper_enabled"));

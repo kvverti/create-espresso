@@ -32,5 +32,10 @@ public class EspressoItemTagsProvider extends ItemTagsProvider {
             .add(EspressoItems.COFFEE_GROUNDS.value());
         this.tag(EspressoTags.COARSE_FILTERS)
             .add(EspressoItems.COFFEE_FILTER.value());
+        this.tag(EspressoTags.DRINK_HOLDERS)
+            .add(
+                EspressoItems.FILLED_COFFEE_MUG.value(),
+                EspressoItems.FILLED_TALL_GLASS.value()
+            );
     }
 }

@@ -3,6 +3,6 @@
   "amount": 250,
   "drink": "create_espresso:pour_over",
   "holder": {
-    "item": "create_espresso:filled_tall_glass"
+    "tag": "create_espresso:drink_holders"
   }
 }

@@ -25,6 +25,7 @@ import systems.thedawn.espresso.Espresso;
 import systems.thedawn.espresso.EspressoDataComponentTypes;
 import systems.thedawn.espresso.EspressoFluids;
 import systems.thedawn.espresso.EspressoItems;
+import systems.thedawn.espresso.EspressoTags;
 import systems.thedawn.espresso.drink.*;
 import systems.thedawn.espresso.recipe.*;
 
@@ -70,12 +71,14 @@ public class EspressoRecipeProvider extends RecipeProvider {
         this.buildIceRecipes(recipeOutput);
         this.buildColdBrewCoffeeRecipe(recipeOutput, registries);
         this.buildPourOverRecipe(recipeOutput, registries);
-        this.buildMugLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.COLD_BREW, 250);
-        this.buildMugLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.POUR_OVER, 250);
+        this.buildDrinkLevelingRecipe(recipeOutput, registries, BuiltinEspressoDrinks.COLD_BREW, 250);
+        this.buildDrinkLevelingRecipe(recipeOutput, registries, BuiltinEspressoDrinks.POUR_OVER, 250);
+        this.buildMugFillingRecipe(recipeOutput, registries, BuiltinEspressoDrinks.COLD_BREW, 250);
+        this.buildMugFillingRecipe(recipeOutput, registries, BuiltinEspressoDrinks.POUR_OVER, 250);
         this.buildMugModificationRecipe(recipeOutput, registries, EspressoItems.ICE_CUBES, BuiltinDrinkModifiers.ICE);
         this.buildMugModificationRecipe(recipeOutput, registries, EspressoFluids.SOURCE_HOT_MILK, 125, BuiltinDrinkModifiers.MILK);
-        this.buildTallGlassLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.COLD_BREW, 250);
-        this.buildTallGlassLevelingRecipes(recipeOutput, registries, BuiltinEspressoDrinks.POUR_OVER, 250);
+        this.buildTallGlassFillingRecipe(recipeOutput, registries, BuiltinEspressoDrinks.COLD_BREW, 250);
+        this.buildTallGlassFillingRecipe(recipeOutput, registries, BuiltinEspressoDrinks.POUR_OVER, 250);
         this.buildTallGlassModificationRecipe(recipeOutput, registries, EspressoFluids.SOURCE_HOT_MILK, 125, BuiltinDrinkModifiers.MILK);
 
         // coffee_beans -> coffee_grounds
@@ -319,15 +322,15 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .build(recipeOutput);
     }
 
-    private void buildMugLevelingRecipes(RecipeOutput recipeOutput, HolderLookup.Provider registries, ResourceKey<Drink> drinkKey, int amount) {
-        this.buildDrinkLevelingRecipes(recipeOutput, registries, EspressoItems.COFFEE_MUG, EspressoItems.FILLED_COFFEE_MUG, drinkKey, amount);
+    private void buildMugFillingRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries, ResourceKey<Drink> drinkKey, int amount) {
+        this.buildDrinkFillingRecipe(recipeOutput, registries, EspressoItems.COFFEE_MUG, EspressoItems.FILLED_COFFEE_MUG, drinkKey, amount);
     }
 
-    private void buildTallGlassLevelingRecipes(RecipeOutput recipeOutput, HolderLookup.Provider registries, ResourceKey<Drink> drinkKey, int amount) {
-        this.buildDrinkLevelingRecipes(recipeOutput, registries, EspressoItems.TALL_GLASS, EspressoItems.FILLED_TALL_GLASS, drinkKey, amount);
+    private void buildTallGlassFillingRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries, ResourceKey<Drink> drinkKey, int amount) {
+        this.buildDrinkFillingRecipe(recipeOutput, registries, EspressoItems.TALL_GLASS, EspressoItems.FILLED_TALL_GLASS, drinkKey, amount);
     }
 
-    private void buildDrinkLevelingRecipes(RecipeOutput recipeOutput,
+    private void buildDrinkFillingRecipe(RecipeOutput recipeOutput,
                                            HolderLookup.Provider registries,
                                            Holder<? extends Item> emptyContainer,
                                            Holder<? extends Item> filledContainer,
@@ -345,10 +348,12 @@ public class EspressoRecipeProvider extends RecipeProvider {
             .withFluidIngredients(FluidIngredient.fromFluidStack(drinkFluid))
             .withItemOutputs(new ProcessingOutput(filledContainerStack, 1f))
             .build(recipeOutput);
+    }
 
-        // leveling
-        var levelingRecipe = new DrinkLevelingRecipe(Ingredient.of(filledContainer.value()), drinkBase, amount);
-        recipeOutput.accept(Espresso.modLoc("drink_leveling/" + name), levelingRecipe, null);
+    private void buildDrinkLevelingRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries, ResourceKey<Drink> drinkKey, int amount) {
+        var drinkBase = registries.holderOrThrow(drinkKey);
+        var levelingRecipe = new DrinkLevelingRecipe(Ingredient.of(EspressoTags.DRINK_HOLDERS), drinkBase, amount);
+        recipeOutput.accept(Espresso.modLoc("drink_leveling/" + drinkKey.location().getPath()), levelingRecipe, null);
     }
 
     private void buildMugModificationRecipe(RecipeOutput recipeOutput, HolderLookup.Provider registries, Holder<? extends Item> applied, ResourceKey<DrinkModifier> modifier) {
