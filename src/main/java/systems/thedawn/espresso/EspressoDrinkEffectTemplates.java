@@ -9,4 +9,5 @@ public final class EspressoDrinkEffectTemplates {
 
     public static final DeferredHolder<DrinkEffectTemplate<?>, MobEffectTemplate> MOB_EFFECT = DRINK_EFFECT_TEMPLATES.register("potion_effect", MobEffectTemplate::new);
     public static final DeferredHolder<DrinkEffectTemplate<?>, TriggerTemplate> TRIGGER = DRINK_EFFECT_TEMPLATES.register("trigger", TriggerTemplate::new);
+    public static final DeferredHolder<DrinkEffectTemplate<?>, TeleportTemplate> TELEPORT = DRINK_EFFECT_TEMPLATES.register("teleport_in_range", TeleportTemplate::new);
 }
