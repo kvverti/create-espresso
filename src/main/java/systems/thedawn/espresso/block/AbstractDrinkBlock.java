@@ -2,11 +2,15 @@ package systems.thedawn.espresso.block;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
+
 import systems.thedawn.espresso.EspressoBlockEntityTypes;
 import systems.thedawn.espresso.EspressoDataComponentTypes;
 import systems.thedawn.espresso.drink.DrinkComponent;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -28,7 +32,7 @@ import net.minecraft.world.phys.HitResult;
 /**
  * Base class for all drink holding blocks.
  */
-public abstract class AbstractDrinkBlock extends TransparentBlock implements EntityBlock {
+public abstract class AbstractDrinkBlock extends TransparentBlock implements EntityBlock, IWrenchable {
     public static final Property<Boolean> HAS_DRINK = BooleanProperty.create("has_drink");
     public static final Property<HumanoidArm> CHIRALITY = EnumProperty.create("chirality", HumanoidArm.class);
 
@@ -94,5 +98,10 @@ public abstract class AbstractDrinkBlock extends TransparentBlock implements Ent
         level.getBlockEntity(pos, EspressoBlockEntityTypes.DRINK.value())
             .ifPresent(be -> stack.applyComponents(be.collectComponents()));
         return stack;
+    }
+
+    @Override
+    public BlockState getRotatedBlockState(BlockState originalState, Direction targetedFace) {
+        return originalState.cycle(CHIRALITY);
     }
 }

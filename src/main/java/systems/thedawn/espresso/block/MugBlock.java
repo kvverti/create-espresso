@@ -74,4 +74,10 @@ public class MugBlock extends AbstractDrinkBlock {
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
+
+    @Override
+    public BlockState getRotatedBlockState(BlockState originalState, Direction targetedFace) {
+        var mirrored = super.getRotatedBlockState(originalState, targetedFace);
+        return mirrored.setValue(FACING, mirrored.getValue(FACING).getOpposite());
+    }
 }
