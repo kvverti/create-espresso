@@ -8,7 +8,7 @@ import net.neoforged.neoforge.registries.RegistryBuilder;
 import systems.thedawn.espresso.client.condition.ConditionTemplate;
 import systems.thedawn.espresso.drink.Drink;
 import systems.thedawn.espresso.drink.DrinkModifier;
-
+import systems.thedawn.espresso.drink.effect.DrinkEffectTemplate;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 
@@ -20,6 +20,8 @@ public final class EspressoRegistries {
         ResourceKey.createRegistryKey(Espresso.modLoc("drink_modifiers"));
     public static final ResourceKey<Registry<ConditionTemplate<?>>> DRINK_CONDITION_TEMPLATES =
         ResourceKey.createRegistryKey(Espresso.modLoc("drink_condition_templates"));
+    public static final ResourceKey<Registry<DrinkEffectTemplate<?>>> DRINK_EFFECT_TEMPLATES =
+        ResourceKey.createRegistryKey(Espresso.modLoc("drink_effect_templates"));
 
     @SubscribeEvent
     public static void dataPackRegistries(DataPackRegistryEvent.NewRegistry ev) {
@@ -35,10 +37,15 @@ public final class EspressoRegistries {
             new RegistryBuilder<>(EspressoRegistries.DRINK_CONDITION_TEMPLATES)
                 .sync(true)
                 .create();
+        public static final Registry<DrinkEffectTemplate<?>> DRINK_EFFECT_TEMPLATES =
+            new RegistryBuilder<>(EspressoRegistries.DRINK_EFFECT_TEMPLATES)
+                .sync(true)
+                .create();
     }
 
     @SubscribeEvent
     public static void staticRegistries(NewRegistryEvent ev) {
         ev.register(Static.DRINK_CONDITION_TEMPLATES);
+        ev.register(Static.DRINK_EFFECT_TEMPLATES);
     }
 }
