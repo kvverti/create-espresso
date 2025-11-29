@@ -1,5 +1,6 @@
 package systems.thedawn.espresso.item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
@@ -46,9 +47,16 @@ public class DrinkItem extends BlockItem {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
         if(!level.isClientSide() && livingEntity instanceof Player player) {
             var component = stack.get(EspressoDataComponentTypes.DRINK);
-            var drinkLevel = component.level().levelIndex();
-            var strength = 1; // TODO: modifiers
-            for(var effect : component.base().value().effects()) {
+            var effects = new ArrayList<>(component.base().value().effects());
+            var drinkLevel = Math.max(1, component.level().levelIndex());
+            var strength = 1d;
+            for(var modifierHolder : component.modifiers()) {
+                var modifier = modifierHolder.value();
+                drinkLevel += modifier.levelOffset();
+                strength *= modifier.strengthScale();
+                effects.addAll(modifier.additionalEffects());
+            }
+            for(var effect : effects) {
                 effect.apply(player, drinkLevel, strength);
             }
         }

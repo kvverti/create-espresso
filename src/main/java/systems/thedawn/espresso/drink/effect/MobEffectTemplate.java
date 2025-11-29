@@ -15,9 +15,9 @@ import net.minecraft.world.entity.player.Player;
 public final class MobEffectTemplate implements DrinkEffectTemplate<MobEffectTemplate.Parameters> {
     @Override
     public void apply(Player drinker, int level, double strength, Parameters params) {
-        var durationScale = (int) Math.min(strength, 3);
+        var durationScale = Math.min(strength, 3);
         var amplifierOffset = Math.min(level - 1, 5);
-        var effectInstance = new MobEffectInstance(params.effect(), durationScale * params.duration(), amplifierOffset + params.amplifier());
+        var effectInstance = new MobEffectInstance(params.effect(), (int) (durationScale * params.duration()), amplifierOffset + params.amplifier());
         drinker.addEffect(effectInstance);
     }
 
