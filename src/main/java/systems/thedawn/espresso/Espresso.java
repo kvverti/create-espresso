@@ -281,11 +281,22 @@ public class Espresso {
                 EspressoBlocks.TALL_GLASS.value());
         }
 
+        private static final int getBottleColor(ItemStack stack, int tintIndex) {
+            if(tintIndex == 0) {
+                var component = stack.get(EspressoDataComponentTypes.DRINK_BASE);
+                if(component != null) {
+                    return 0xff000000 | DrinkColorManager.getDrinkBaseColor(Objects.requireNonNull(component.getKey()));
+                }
+            }
+            return -1;
+        }
+
         @SubscribeEvent
         public static void onRegisterItemColorHandlers(RegisterColorHandlersEvent.Item ev) {
             ev.register(DrinkColorManager::getItemColor,
                 EspressoItems.FILLED_COFFEE_MUG.value(),
                 EspressoItems.FILLED_TALL_GLASS.value());
+            ev.register(ClientEvents::getBottleColor, EspressoItems.DRINK_BOTTLE);
         }
 
         @SubscribeEvent

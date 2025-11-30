@@ -21,6 +21,7 @@ public class EspressoItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         this.drinkMug();
         this.tallGlass();
+        this.bottle();
 
         this.basicItem(EspressoItems.HOT_WATER_BUCKET.value());
         this.basicItem(EspressoItems.HOT_MILK_BOTTLE.value());
@@ -36,13 +37,17 @@ public class EspressoItemModelProvider extends ItemModelProvider {
         this.simpleBlockItem(EspressoBlocks.COFFEE_BRICK_STAIRS.value());
         this.basicItem(EspressoItems.COFFEE_MUG.value());
         this.basicItem(EspressoItems.COFFEE_FILTER.value());
-        this.basicItem(EspressoItems.DRINK_BOTTLE.value());
         this.basicItem(EspressoItems.ICE_CUBES.value());
         this.basicItem(EspressoItems.CRUSHED_ICE.value());
         this.simpleBlockItem(EspressoBlocks.STEEPER.value());
         this.getBuilder(EspressoItems.SIEVE.getRegisteredName())
             .parent(this.getExistingFile(this.modLoc("block/sieve_none")));
         this.basicItem(EspressoItems.TALL_GLASS.value());
+    }
+
+    private void bottle() {
+        this.getBuilder(EspressoItems.DRINK_BOTTLE.getRegisteredName())
+            .parent(new ModelFile.ExistingModelFile(ResourceLocation.withDefaultNamespace("item/potion"), this.existingFileHelper));
     }
 
     private void dynamic(Holder<Item> item) {
