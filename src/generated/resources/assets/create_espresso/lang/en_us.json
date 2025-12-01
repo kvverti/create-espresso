@@ -52,5 +52,6 @@
   "item.create_espresso.hot_water_bucket": "Hot Water Bucket",
   "item.create_espresso.ice_cubes": "Ice Cubes",
   "item.create_espresso.spent_coffee_grounds": "Spent Coffee Grounds",
-  "itemGroup.create_espresso": "Create: Espresso"
+  "itemGroup.create_espresso": "Create: Espresso",
+  "itemGroup.create_espresso_drinks": "Espresso's Drinks"
 }

@@ -18,6 +18,7 @@ public class EspressoTranslationProvider extends LanguageProvider {
     protected void addTranslations() {
         // tab key
         this.add("itemGroup.create_espresso", "Create: Espresso");
+        this.add("itemGroup.create_espresso_drinks", "Espresso's Drinks");
         // blocks
         this.addBlock(EspressoBlocks.HOT_WATER, "Hot Water");
         //this.addBlock(EspressoBlocks.COFFEE_PLANT, "Coffee Plant");

@@ -20,8 +20,6 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import systems.thedawn.espresso.block.sieve.SieveBlockEntity;
 import systems.thedawn.espresso.client.DrinkColorManager;
@@ -33,8 +31,6 @@ import systems.thedawn.espresso.client.render.SteeperBlockEntityRenderer;
 import systems.thedawn.espresso.datagen.*;
 import systems.thedawn.espresso.drink.BuiltinDrinkModifiers;
 import systems.thedawn.espresso.drink.BuiltinEspressoDrinks;
-import systems.thedawn.espresso.drink.Drink;
-import systems.thedawn.espresso.drink.DrinkComponent;
 import systems.thedawn.espresso.worldgen.BuiltinEspressoBiomeModifiers;
 import systems.thedawn.espresso.worldgen.BuiltinEspressoFeatures;
 
@@ -42,16 +38,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
@@ -60,90 +52,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 public class Espresso {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "create_espresso";
-    // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "create_espresso" namespace
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
-    // Creates a creative tab with the id "create_espresso:example_tab" for the example item, that is placed after the combat tab
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ESPRESSO_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
-        .title(Component.translatable("itemGroup.create_espresso")) //The language key for the title of your CreativeModeTab
-        .withTabsBefore(CreativeModeTabs.COMBAT)
-        .icon(EspressoItems.COFFEE_BEANS::toStack)
-        .displayItems((parameters, output) -> {
-            // blocks
-            output.accept(EspressoItems.COFFEE_BRICKS);
-            output.accept(EspressoItems.COFFEE_BRICK_SLAB);
-            output.accept(EspressoItems.COFFEE_BRICK_STAIRS);
-            output.accept(EspressoItems.COFFEE_MUG);
-            output.accept(EspressoItems.TALL_GLASS);
-            // items
-            output.accept(EspressoItems.COFFEE_CHERRY);
-            output.accept(EspressoItems.COFFEE_PASTE);
-            output.accept(EspressoItems.COFFEE_PIT);
-            output.accept(EspressoItems.COFFEE_BEANS);
-            output.accept(EspressoItems.COFFEE_GROUNDS);
-            output.accept(EspressoItems.SPENT_COFFEE_GROUNDS);
-            output.accept(EspressoItems.COFFEE_FILTER);
-            output.accept(EspressoItems.ICE_CUBES);
-            output.accept(EspressoItems.CRUSHED_ICE);
-            output.accept(EspressoItems.COFFEE_BRICK);
-            output.accept(EspressoItems.HOT_WATER_BUCKET);
-            output.accept(EspressoItems.HOT_MILK_BOTTLE);
-            output.accept(EspressoItems.STEEPER);
-            output.accept(EspressoItems.SIEVE);
-            // drink bottles
-            var registries = parameters.holders();
-            output.accept(drinkBottle(BuiltinEspressoDrinks.DIRTY_COLD_BREW, registries));
-            output.accept(drinkBottle(BuiltinEspressoDrinks.COLD_BREW, registries));
-            output.accept(drinkBottle(BuiltinEspressoDrinks.POUR_OVER, registries));
-            output.accept(drinkBottle(BuiltinEspressoDrinks.ESPRESSO, registries));
-            output.accept(drinkBottle(BuiltinEspressoDrinks.COFFEE_TEA, registries));
-            output.accept(drinkBottle(BuiltinEspressoDrinks.GREEN_TEA, registries));
-            output.accept(drinkBottle(BuiltinEspressoDrinks.BLACK_TEA, registries));
-            output.accept(drinkBottle(BuiltinEspressoDrinks.HERBAL_TEA, registries));
-            output.accept(drinkBottle(BuiltinEspressoDrinks.APPLE_JUICE, registries));
-            output.accept(drinkBottle(BuiltinEspressoDrinks.FRUIT_PUNCH, registries));
-            // drink mugs
-            output.accept(drinkMug(BuiltinEspressoDrinks.COLD_BREW, registries));
-            output.accept(drinkMug(BuiltinEspressoDrinks.POUR_OVER, registries));
-            output.accept(drinkMug(BuiltinEspressoDrinks.ESPRESSO, registries));
-            output.accept(drinkMug(BuiltinEspressoDrinks.COFFEE_TEA, registries));
-            output.accept(drinkMug(BuiltinEspressoDrinks.GREEN_TEA, registries));
-            output.accept(drinkMug(BuiltinEspressoDrinks.BLACK_TEA, registries));
-            output.accept(drinkMug(BuiltinEspressoDrinks.HERBAL_TEA, registries));
-            output.accept(drinkMug(BuiltinEspressoDrinks.APPLE_JUICE, registries));
-            output.accept(drinkMug(BuiltinEspressoDrinks.FRUIT_PUNCH, registries));
-            // tall glasses
-            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.COLD_BREW, registries));
-            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.POUR_OVER, registries));
-            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.ESPRESSO, registries));
-            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.COFFEE_TEA, registries));
-            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.GREEN_TEA, registries));
-            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.BLACK_TEA, registries));
-            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.HERBAL_TEA, registries));
-            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.APPLE_JUICE, registries));
-            output.accept(tallDrinkGlass(BuiltinEspressoDrinks.FRUIT_PUNCH, registries));
-        }).build());
-
-    private static ItemStack drinkBottle(ResourceKey<Drink> key, HolderLookup.Provider registries) {
-        var component = registries.holderOrThrow(key);
-        var stack = new ItemStack(EspressoItems.DRINK_BOTTLE.value());
-        stack.set(EspressoDataComponentTypes.DRINK_BASE, component);
-        return stack;
-    }
-
-    private static ItemStack drinkMug(ResourceKey<Drink> key, HolderLookup.Provider registries) {
-        return drinkHolder(EspressoItems.FILLED_COFFEE_MUG.toStack(), key, registries);
-    }
-
-    private static ItemStack tallDrinkGlass(ResourceKey<Drink> key, HolderLookup.Provider registries) {
-        return drinkHolder(EspressoItems.FILLED_TALL_GLASS.toStack(), key, registries);
-    }
-
-    private static ItemStack drinkHolder(ItemStack stack, ResourceKey<Drink> key, HolderLookup.Provider registries) {
-        var drinkBase = registries.holderOrThrow(key);
-        var component = DrinkComponent.initial(drinkBase);
-        stack.set(EspressoDataComponentTypes.DRINK, component);
-        return stack;
-    }
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
@@ -158,7 +66,7 @@ public class Espresso {
         EspressoRecipeTypes.RECIPE_SERIALIZERS.register(modEventBus);
         EspressoConditionTemplates.CONDITION_TEMPLATES.register(modEventBus);
         EspressoDrinkEffectTemplates.DRINK_EFFECT_TEMPLATES.register(modEventBus);
-        CREATIVE_MODE_TABS.register(modEventBus);
+        EspressoCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
 
         modEventBus.register(DrinkModelManager.INSTANCE);
 
